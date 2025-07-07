@@ -18,9 +18,9 @@ const nextConfig: NextConfig = {
             {
               from: path.resolve(
                 __dirname,
-                "node_modules/.pnpm/bootstrap-italia@2.16.0/node_modules/bootstrap-italia/dist/"
+                "node_modules/.pnpm/bootstrap-italia@2.16.0/node_modules/bootstrap-italia/dist/css/bootstrap-italia.min.css"
               ),
-              to: path.resolve(__dirname, "public/bootstrap-italia/dist"),
+              to: path.resolve(__dirname, "app/bootstrap-italia.css"),
             },
           ],
         })
