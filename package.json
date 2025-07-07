@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "npm run copy-bootstrap && next dev",
+    "build": "npm run copy-bootstrap && next build",
+    "copy-bootstrap": "cp 'node_modules/.pnpm/bootstrap-italia@2.16.0/node_modules/bootstrap-italia/dist/css/bootstrap-italia.min.css' 'app/bootstrap-italia.css' 2>/dev/null || echo 'Bootstrap Italia CSS not found, using fallback'",
     "start": "next start",
     "lint": "next lint"
   },
