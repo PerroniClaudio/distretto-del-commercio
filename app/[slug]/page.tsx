@@ -1,5 +1,6 @@
 import { defineQuery } from "next-sanity";
 import { draftMode } from "next/headers";
+import { notFound } from "next/navigation";
 import { client } from "@/sanity/lib/client";
 
 const query = defineQuery(
@@ -17,17 +18,18 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const { slug } = params;
   const { isEnabled } = await draftMode();
 
-  const data = await client.fetch(
+  const data = await client.fetch<{ title: string } | null>(
     query,
     { slug },
-    isEnabled
-      ? {
-          perspective: "previewDrafts",
-          useCdn: false,
-          stega: true,
-        }
-      : undefined
+    {
+      perspective: isEnabled ? "previewDrafts" : "published",
+      stega: isEnabled,
+    }
   );
+
+  if (!data) {
+    notFound();
+  }
 
   return <h1>{data.title}</h1>;
 }
