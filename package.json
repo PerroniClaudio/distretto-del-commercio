@@ -11,17 +11,24 @@
   },
   "dependencies": {
     "@sanity/client": "^7.6.0",
+    "@sanity/icons": "^3.7.4",
     "@sanity/image-url": "^1.1.0",
+    "@sanity/locale-it-it": "^1.1.19",
     "@sanity/vision": "^3.98.0",
     "bootstrap-italia": "^2.16.0",
     "copy-webpack-plugin": "^13.0.0",
+    "design-react-kit": "^5.8.2",
     "next": "15.3.5",
     "next-sanity": "^9.12.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-icons": "^5.5.0",
     "sanity": "^3.98.0",
     "sass": "^1.89.2",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.1.19",
+    "typeface-lora": "^1.1.13",
+    "typeface-roboto-mono": "^1.1.13",
+    "typeface-titillium-web": "^1.1.13"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",

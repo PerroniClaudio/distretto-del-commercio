@@ -30,7 +30,7 @@ export function DisableDraftMode() {
       {pending ? (
         "Disabilitando modalità bozza..."
       ) : (
-        <button type="button" onClick={disable}>
+        <button type="button" onClick={disable} className="btn btn-primary">
           Disabilita modalità bozza
         </button>
       )}
