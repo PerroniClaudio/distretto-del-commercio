@@ -6,12 +6,15 @@ const query = defineQuery(
   `*[_type == "page" && slug.current == $slug][0]{title}`
 );
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
+export async function generateStaticParams() {
+  const slugs = await client.fetch<string[]>(
+    `*[_type == "page" && defined(slug.current)][].slug.current`
+  );
+  return slugs.map((slug) => ({ slug }));
+}
+
+export default async function Page({ params }: { params: { slug: string } }) {
+  const { slug } = params;
   const { isEnabled } = await draftMode();
 
   const data = await client.fetch(
