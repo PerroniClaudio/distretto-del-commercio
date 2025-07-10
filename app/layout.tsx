@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { VisualEditing } from "next-sanity";
 import { draftMode } from "next/headers";
 import { DisableDraftMode } from "@/components/DisableDraftMode";
-import "bootstrap-italia/dist/css/bootstrap-italia.min.css";
+import "./bootstrap-italia.css";
+import "./distretto-custom.css";
 import "typeface-titillium-web";
 import "typeface-roboto-mono";
 import "typeface-lora";
 import "./globals.css";
-import Navigation from "@/components/Navigation";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,8 +23,7 @@ export default async function RootLayout({
     <html lang="it">
       <head></head>
       <body>
-        <Navigation />
-        <div className="container">{children}</div>
+        {children}
 
         {(await draftMode()).isEnabled && (
           <>
