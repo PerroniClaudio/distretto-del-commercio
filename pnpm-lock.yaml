@@ -23,6 +23,9 @@ importers:
       '@sanity/vision':
         specifier: ^3.98.0
         version: 3.98.0(@babel/runtime@7.27.6)(@codemirror/lint@6.8.5)(@codemirror/theme-one-dark@6.1.3)(@emotion/is-prop-valid@1.2.2)(codemirror@6.0.2)(react-dom@19.1.0(react@19.1.0))(react-is@18.3.1)(react@19.1.0)(styled-components@6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
+      '@splidejs/splide':
+        specifier: ^4.1.4
+        version: 4.1.4
       bootstrap-italia:
         specifier: ^2.16.0
         version: 2.16.0
@@ -65,6 +68,12 @@ importers:
       typeface-titillium-web:
         specifier: ^1.1.13
         version: 1.1.13
+      video.js:
+        specifier: ^8.23.3
+        version: 8.23.3
+      videojs-font:
+        specifier: ^4.2.0
+        version: 4.2.0
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.3.1

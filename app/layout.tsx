@@ -2,12 +2,10 @@ import type { Metadata } from "next";
 import { VisualEditing } from "next-sanity";
 import { draftMode } from "next/headers";
 import { DisableDraftMode } from "@/components/DisableDraftMode";
-import "./bootstrap-italia.css";
-import "./distretto-custom.css";
 import "typeface-titillium-web";
 import "typeface-roboto-mono";
 import "typeface-lora";
-import "./globals.css";
+import "./globals.scss";
 
 export const metadata: Metadata = {
   title: "Create Next App",

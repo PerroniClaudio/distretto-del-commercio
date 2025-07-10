@@ -3,7 +3,7 @@ import { draftMode } from "next/headers";
 import { client } from "@/sanity/lib/client";
 
 const query = defineQuery(
-  `*[_type == "page" && slug.current == $slug][0]{title}`
+  `*[_type == "post" && slug.current == $slug][0]{title, content}`
 );
 
 export default async function Page({
@@ -25,6 +25,10 @@ export default async function Page({
         }
       : undefined
   );
+
+  if (!data) {
+    return <h1>Pagina non trovata</h1>;
+  }
 
   return <h1>{data.title}</h1>;
 }

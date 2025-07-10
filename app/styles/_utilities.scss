@@ -1,0 +1,102 @@
+/* ========================================
+   BOOTSTRAP UTILITIES OVERRIDE
+   ======================================== */
+
+@use "mixins" as *;
+
+/* Background colors */
+.bg-primary {
+  background-color: var(--bs-primary) !important;
+}
+.bg-secondary {
+  background-color: var(--bs-secondary) !important;
+}
+.bg-success {
+  background-color: var(--bs-success) !important;
+}
+.bg-warning {
+  background-color: var(--bs-warning) !important;
+}
+.bg-danger {
+  background-color: var(--bs-danger) !important;
+}
+
+/* Text colors */
+.text-primary {
+  color: var(--bs-primary) !important;
+}
+.text-secondary {
+  color: var(--bs-secondary) !important;
+}
+.text-success {
+  color: var(--bs-success) !important;
+}
+.text-warning {
+  color: var(--bs-warning) !important;
+}
+.text-danger {
+  color: var(--bs-danger) !important;
+}
+
+/* Border colors */
+.border-primary {
+  border-color: var(--bs-primary) !important;
+}
+.border-secondary {
+  border-color: var(--bs-secondary) !important;
+}
+.border-success {
+  border-color: var(--bs-success) !important;
+}
+.border-warning {
+  border-color: var(--bs-warning) !important;
+}
+.border-danger {
+  border-color: var(--bs-danger) !important;
+}
+
+/* Links */
+.link-primary {
+  @include link-variant(var(--bs-primary), var(--bs-primary-hover));
+}
+
+.link-secondary {
+  @include link-variant(var(--bs-secondary), var(--bs-secondary-hover));
+}
+
+/* Alerts */
+.alert-primary {
+  background-color: var(--bs-primary-light) !important;
+  border-color: var(--bs-primary) !important;
+  color: var(--bs-primary-hover) !important;
+}
+
+.alert-success {
+  background-color: color-mix(
+    in srgb,
+    var(--bs-success) 10%,
+    transparent
+  ) !important;
+  border-color: var(--bs-success) !important;
+  color: var(--bs-success-hover) !important;
+}
+
+.alert-warning {
+  background-color: color-mix(
+    in srgb,
+    var(--bs-warning) 10%,
+    transparent
+  ) !important;
+  border-color: var(--bs-warning) !important;
+  color: var(--bs-warning-hover) !important;
+}
+
+.alert-danger {
+  background-color: color-mix(
+    in srgb,
+    var(--bs-danger) 10%,
+    transparent
+  ) !important;
+  border-color: var(--bs-danger) !important;
+  color: var(--bs-danger-hover) !important;
+}

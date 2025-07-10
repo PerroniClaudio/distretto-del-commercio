@@ -1,0 +1,36 @@
+/* ========================================
+   TOOLTIP E POPOVER COMPONENTS
+   ======================================== */
+
+/* Tooltip */
+.tooltip .tooltip-inner {
+  background-color: var(--bs-primary);
+}
+
+.tooltip {
+  &.bs-tooltip-top .tooltip-arrow::before,
+  &.bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::before {
+    border-top-color: var(--bs-primary);
+  }
+
+  &.bs-tooltip-end .tooltip-arrow::before,
+  &.bs-tooltip-auto[data-popper-placement^="right"] .tooltip-arrow::before {
+    border-right-color: var(--bs-primary);
+  }
+
+  &.bs-tooltip-bottom .tooltip-arrow::before,
+  &.bs-tooltip-auto[data-popper-placement^="bottom"] .tooltip-arrow::before {
+    border-bottom-color: var(--bs-primary);
+  }
+
+  &.bs-tooltip-start .tooltip-arrow::before,
+  &.bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow::before {
+    border-left-color: var(--bs-primary);
+  }
+}
+
+/* Popover */
+.popover-header {
+  background-color: var(--bs-primary-light);
+  border-bottom-color: var(--bs-primary);
+}

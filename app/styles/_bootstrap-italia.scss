@@ -1,0 +1,179 @@
+/* ========================================
+   BOOTSTRAP ITALIA SPECIFIC COMPONENTS
+   ======================================== */
+
+/* Header components */
+.it-header-wrapper {
+  background-color: var(--bs-primary);
+
+  .navbar-brand,
+  .nav-link {
+    color: white;
+
+    &:hover,
+    &:focus {
+      color: color-mix(in srgb, var(--bs-primary) 70%, white);
+    }
+  }
+}
+
+/* Header slim wrapper theme-light */
+.it-header-slim-wrapper.theme-light {
+  .it-header-slim-wrapper-content {
+    .it-header-slim-right-zone .btn:hover,
+    .header-slim-right-zone .btn:hover {
+      background: var(--bs-primary);
+    }
+
+    a {
+      color: var(--bs-primary);
+
+      .icon {
+        fill: var(--bs-primary);
+      }
+
+      &.it-opener[aria-expanded="true"] .icon {
+        fill: var(--bs-primary);
+      }
+    }
+
+    .navbar-brand {
+      color: var(--bs-primary);
+    }
+  }
+}
+
+/* Header center wrapper theme-light */
+.it-header-center-wrapper.theme-light {
+  .it-header-center-content-wrapper {
+    .it-brand-wrapper a .icon {
+      fill: var(--bs-primary);
+    }
+
+    .it-right-zone {
+      color: var(--bs-primary);
+
+      .it-socials ul .icon {
+        fill: var(--bs-primary);
+      }
+    }
+
+    .it-search-wrapper a.rounded-icon svg {
+      fill: var(--bs-primary);
+    }
+
+    @media (min-width: 992px) {
+      .it-right-zone .it-socials ul a:hover svg {
+        fill: var(--bs-primary-hover);
+      }
+
+      .it-search-wrapper a {
+        background: var(--bs-primary);
+      }
+    }
+  }
+}
+
+/* Navbar nav wrapper */
+.it-header-navbar-wrapper.theme-light {
+  .navbar-nav {
+    .nav-link {
+      color: var(--bs-primary);
+
+      &.disabled {
+        color: var(--bs-primary-muted);
+      }
+
+      &:hover,
+      &:focus {
+        color: var(--bs-primary-hover);
+      }
+
+      &.active {
+        background: var(--bs-primary);
+        border-bottom: 2px solid var(--bs-primary);
+      }
+    }
+
+    /* Megamenu */
+    .dropdown
+      .dropdown-menu
+      .link-list
+      .link-list-item
+      .list-item:not(.header)
+      a {
+      color: var(--bs-primary);
+
+      &:hover,
+      &:focus {
+        background-color: var(--bs-primary);
+        fill: var(--bs-primary);
+        border-bottom-color: var(--bs-primary);
+      }
+    }
+  }
+}
+
+/* Footer */
+.it-footer {
+  background-color: var(--bs-primary-dark);
+
+  .footer-link {
+    color: white;
+
+    &:hover {
+      color: color-mix(in srgb, var(--bs-primary) 70%, white);
+    }
+  }
+}
+
+.it-footer-main {
+  background-color: var(--bs-primary);
+}
+
+/* Menu wrapper - questo è il più problematico con i colori hardcodati */
+.navbar .navbar-collapsable .menu-wrapper {
+  background: var(--bs-primary) !important;
+  background-color: var(--bs-primary) !important;
+
+  .navbar-nav,
+  .navbar-nav .dropdown-menu {
+    background: var(--bs-primary) !important;
+    background-color: var(--bs-primary) !important;
+  }
+
+  .nav-item.megamenu .dropdown-menu {
+    background: var(--bs-primary) !important;
+    background-color: var(--bs-primary) !important;
+  }
+}
+
+/* Autocomplete components */
+.autocomplete-wrapper-big .autocomplete-icon .icon,
+.autocomplete-list a:hover {
+  color: var(--bs-primary) !important;
+  fill: var(--bs-primary) !important;
+
+  .icon,
+  .autocomplete-list-text em,
+  mark,
+  .mark {
+    color: var(--bs-primary) !important;
+  }
+}
+
+/* Theme-light generic styles */
+.theme-light {
+  a {
+    color: var(--bs-primary);
+  }
+
+  .icon {
+    fill: var(--bs-primary);
+  }
+
+  .btn:hover {
+    background: var(--bs-primary);
+    border-color: var(--bs-primary);
+  }
+}

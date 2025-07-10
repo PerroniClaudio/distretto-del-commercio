@@ -23,7 +23,7 @@ function Navigation() {
     setOpenNav(!openNav);
   };
   return (
-    <Navbar expand="lg" className="has-megamenu">
+    <Navbar expand="lg" className="has-megamenu navbar-primary">
       <NavbarBrand />
       <NavbarToggler className="custom-navbar-toggler" onClick={toggle}>
         <Icon icon="it-list" size="sm" />

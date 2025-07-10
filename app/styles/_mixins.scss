@@ -1,0 +1,63 @@
+/* ========================================
+   MIXINS UTILI
+   ======================================== */
+
+/* Mixin per buttons con varianti colore */
+@mixin button-variant($color, $hover-color) {
+  background-color: $color;
+  border-color: $color;
+  color: white;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: $hover-color;
+    border-color: $hover-color;
+    color: white;
+  }
+}
+
+/* Mixin per button outline */
+@mixin button-outline-variant($color, $hover-color) {
+  color: $color;
+  border-color: $color;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: $color;
+    border-color: $color;
+    color: white;
+  }
+}
+
+/* Mixin per background e border */
+@mixin color-variant($color) {
+  &.bg-#{$color} {
+    background-color: var(--bs-#{$color});
+  }
+
+  &.text-#{$color} {
+    color: var(--bs-#{$color});
+  }
+
+  &.border-#{$color} {
+    border-color: var(--bs-#{$color});
+  }
+}
+
+/* Mixin per focus states */
+@mixin focus-shadow($color) {
+  border-color: $color;
+  box-shadow: 0 0 0 0.25rem color-mix(in srgb, $color 25%, transparent);
+}
+
+/* Mixin per link hover states */
+@mixin link-variant($color, $hover-color) {
+  color: $color;
+
+  &:hover,
+  &:focus {
+    color: $hover-color;
+  }
+}

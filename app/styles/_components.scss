@@ -1,0 +1,87 @@
+/* ========================================
+   BOOTSTRAP COMPONENTS
+   ======================================== */
+
+@use "mixins" as *;
+
+/* Accordion */
+.accordion-button {
+  &:not(.collapsed) {
+    background-color: var(--bs-primary-light);
+    color: var(--bs-primary);
+  }
+
+  &:focus {
+    @include focus-shadow(var(--bs-primary));
+  }
+}
+
+/* Modal */
+.modal-header {
+  border-bottom-color: color-mix(in srgb, var(--bs-primary) 20%, transparent);
+}
+
+.modal-footer {
+  border-top-color: color-mix(in srgb, var(--bs-primary) 20%, transparent);
+}
+
+/* Dropdown */
+.dropdown-item {
+  &:active {
+    background-color: var(--bs-primary);
+    color: white;
+  }
+
+  &:hover,
+  &:focus {
+    background-color: var(--bs-primary-light);
+    color: var(--bs-primary);
+  }
+}
+
+/* Carousel */
+.carousel-indicators [data-bs-target] {
+  background-color: var(--bs-primary);
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1) sepia(1) saturate(5) hue-rotate(120deg);
+}
+
+/* Offcanvas */
+.offcanvas-header {
+  border-bottom-color: color-mix(in srgb, var(--bs-primary) 20%, transparent);
+}
+
+/* List Group */
+.list-group-item {
+  &.active {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: white;
+  }
+}
+
+.list-group-item-action {
+  &:hover,
+  &:focus {
+    background-color: var(--bs-primary-lighter);
+    color: var(--bs-primary);
+  }
+}
+
+/* Card */
+.card-header.bg-primary {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  color: white;
+}
+
+/* Table */
+.table-primary {
+  --bs-table-bg: var(--bs-primary-light);
+  --bs-table-striped-bg: color-mix(in srgb, var(--bs-primary) 15%, transparent);
+  --bs-table-hover-bg: color-mix(in srgb, var(--bs-primary) 20%, transparent);
+  border-color: var(--bs-primary);
+}

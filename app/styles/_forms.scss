@@ -1,0 +1,70 @@
+/* ========================================
+   BOOTSTRAP FORM COMPONENTS OVERRIDE
+   ======================================== */
+
+@use "mixins" as *;
+
+/* Form controls */
+.form-control,
+.form-select {
+  &:focus {
+    @include focus-shadow(var(--bs-primary));
+  }
+}
+
+/* Checkboxes and radios */
+.form-check-input {
+  &:checked {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+  }
+
+  &:focus {
+    @include focus-shadow(var(--bs-primary));
+  }
+}
+
+/* Progress bars */
+.progress-bar {
+  background-color: var(--bs-primary);
+
+  &.bg-secondary {
+    background-color: var(--bs-secondary);
+  }
+  &.bg-success {
+    background-color: var(--bs-success);
+  }
+  &.bg-warning {
+    background-color: var(--bs-warning);
+  }
+  &.bg-danger {
+    background-color: var(--bs-danger);
+  }
+}
+
+/* Badges */
+.badge {
+  &.bg-primary {
+    background-color: var(--bs-primary);
+  }
+  &.bg-secondary {
+    background-color: var(--bs-secondary);
+  }
+  &.bg-success {
+    background-color: var(--bs-success);
+  }
+  &.bg-warning {
+    background-color: var(--bs-warning);
+  }
+  &.bg-danger {
+    background-color: var(--bs-danger);
+  }
+}
+
+/* Spinners */
+.spinner-border,
+.spinner-grow {
+  &.text-primary {
+    color: var(--bs-primary);
+  }
+}

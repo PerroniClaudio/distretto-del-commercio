@@ -3,9 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run copy-bootstrap && next dev",
-    "build": "npm run copy-bootstrap && next build",
-    "copy-bootstrap": "cp 'node_modules/.pnpm/bootstrap-italia@2.16.0/node_modules/bootstrap-italia/dist/css/bootstrap-italia.min.css' 'app/bootstrap-italia.css' 2>/dev/null || echo 'Bootstrap Italia CSS not found, using fallback'",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -15,6 +14,7 @@
     "@sanity/image-url": "^1.1.0",
     "@sanity/locale-it-it": "^1.1.19",
     "@sanity/vision": "^3.98.0",
+    "@splidejs/splide": "^4.1.4",
     "bootstrap-italia": "^2.16.0",
     "copy-webpack-plugin": "^13.0.0",
     "design-react-kit": "^5.8.2",
@@ -28,7 +28,13 @@
     "styled-components": "^6.1.19",
     "typeface-lora": "^1.1.13",
     "typeface-roboto-mono": "^1.1.13",
-    "typeface-titillium-web": "^1.1.13"
+    "typeface-titillium-web": "^1.1.13",
+    "video.js": "^8.23.3",
+    "videojs-font": "^4.2.0"
+  },
+  "overrides": {
+    "sass": "1.86.3",
+    "video.js": "8.21.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",

@@ -1,0 +1,37 @@
+/* ========================================
+   BOOTSTRAP BUTTONS OVERRIDE
+   ======================================== */
+
+@use "mixins" as *;
+
+.btn-primary {
+  @include button-variant(var(--bs-primary), var(--bs-primary-hover));
+}
+
+.btn-secondary {
+  @include button-variant(var(--bs-secondary), var(--bs-secondary-hover));
+}
+
+.btn-success {
+  @include button-variant(var(--bs-success), var(--bs-success-hover));
+}
+
+.btn-warning {
+  @include button-variant(var(--bs-warning), var(--bs-warning-hover));
+}
+
+.btn-danger {
+  @include button-variant(var(--bs-danger), var(--bs-danger-hover));
+}
+
+/* Outline buttons */
+.btn-outline-primary {
+  @include button-outline-variant(var(--bs-primary), var(--bs-primary-hover));
+}
+
+.btn-outline-secondary {
+  @include button-outline-variant(
+    var(--bs-secondary),
+    var(--bs-secondary-hover)
+  );
+}

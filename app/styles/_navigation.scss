@@ -1,0 +1,79 @@
+/* ========================================
+   BOOTSTRAP NAVIGATION COMPONENTS
+   ======================================== */
+
+@use "mixins" as *;
+
+/* Navbar */
+.navbar-primary {
+  background-color: var(--bs-primary);
+
+  .navbar-brand {
+    color: white;
+
+    &:hover,
+    &:focus {
+      color: white;
+    }
+  }
+
+  .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+
+    &:hover,
+    &:focus,
+    &.active {
+      color: white;
+    }
+  }
+
+  .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.85%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  }
+}
+
+/* Breadcrumb */
+.breadcrumb-item {
+  &.active {
+    color: var(--bs-primary);
+  }
+
+  a {
+    @include link-variant(var(--bs-primary), var(--bs-primary-hover));
+  }
+}
+
+/* Pagination */
+.page-link {
+  color: var(--bs-primary);
+
+  &:hover,
+  &:focus {
+    color: var(--bs-primary-hover);
+    background-color: var(--bs-primary-light);
+    border-color: var(--bs-primary);
+  }
+}
+
+.page-item.active .page-link {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  color: white;
+}
+
+/* Tabs */
+.nav-tabs .nav-link {
+  &.active {
+    color: var(--bs-primary);
+    border-color: var(--bs-primary) var(--bs-primary) white;
+  }
+
+  &:hover,
+  &:focus {
+    color: var(--bs-primary);
+  }
+}
