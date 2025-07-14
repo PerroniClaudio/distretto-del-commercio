@@ -132,21 +132,21 @@
 }
 
 /* Menu wrapper - questo è il più problematico con i colori hardcodati */
-.navbar .navbar-collapsable .menu-wrapper {
-  background: var(--bs-primary) !important;
-  background-color: var(--bs-primary) !important;
+// .navbar .navbar-collapsable .menu-wrapper {
+//   background: var(--bs-primary) !important;
+//   background-color: var(--bs-primary) !important;
 
-  .navbar-nav,
-  .navbar-nav .dropdown-menu {
-    background: var(--bs-primary) !important;
-    background-color: var(--bs-primary) !important;
-  }
+//   .navbar-nav,
+//   .navbar-nav .dropdown-menu {
+//     background: var(--bs-primary) !important;
+//     background-color: var(--bs-primary) !important;
+//   }
 
-  .nav-item.megamenu .dropdown-menu {
-    background: var(--bs-primary) !important;
-    background-color: var(--bs-primary) !important;
-  }
-}
+//   .nav-item.megamenu .dropdown-menu {
+//     background: var(--bs-primary) !important;
+//     background-color: var(--bs-primary) !important;
+//   }
+// }
 
 /* Autocomplete components */
 .autocomplete-wrapper-big .autocomplete-icon .icon,

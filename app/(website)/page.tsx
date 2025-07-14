@@ -1,8 +1,13 @@
+import ArticleList from "@/components/ArticleList";
+import HeroSection from "@/components/ui/HeroSection";
+
 export default function Home() {
   return (
-    <div className="container">
-      <p className="text-danger">Ciao!</p>
-      <p className="text-primary">Testo primario</p>
+    <div>
+      <HeroSection />
+      <div className="container">
+        <ArticleList />
+      </div>
     </div>
   );
 }

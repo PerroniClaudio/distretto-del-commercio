@@ -24,14 +24,20 @@ export default {
     {
       name: "category",
       title: "Categoria",
-      type: "reference",
-      to: [{ type: "category" }],
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "category" }] }],
     },
     {
-      name: "comune",
-      title: "Comune",
-      type: "reference",
-      to: [{ type: "comune" }],
+      name: "comuni",
+      title: "Comuni",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "comune" }] }],
+    },
+    {
+      name: "excerpt",
+      title: "Estratto",
+      type: "text",
+      description: "Breve descrizione del post, usata per i riassunti.",
     },
     {
       name: "content",

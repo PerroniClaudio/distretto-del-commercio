@@ -4,24 +4,33 @@
 
 :root {
   /* Colori principali */
-  --bs-primary: #00cc22;
-  --bs-primary-rgb: 0, 204, 34;
-  --bs-secondary: #5c6f82;
-  --bs-secondary-rgb: 92, 111, 130;
+  --bs-primary: #10b981;
+  --bs-primary-rgb: 16, 185, 129;
+  --bs-secondary: #a3b2c5;
+  --bs-secondary-rgb: 163, 178, 197;
+  --bs-body-color: #0f100f;
   --bs-success: #008055;
   --bs-success-rgb: 0, 128, 85;
   --bs-warning: #a66300;
   --bs-warning-rgb: 166, 99, 0;
   --bs-danger: #d9364f;
   --bs-danger-rgb: 217, 54, 79;
+  --bs-link-color: #10b981;
+  --bs-link-color-rgb: 16, 185, 129;
+  --bs-link-hover-color: #0f9c6e;
+  --bs-link-hover-color-rgb: 15, 156, 110;
 
   /* Variazioni del colore primario */
   --bs-primary-hover: color-mix(in srgb, var(--bs-primary) 85%, black);
   --bs-primary-light: color-mix(in srgb, var(--bs-primary) 10%, transparent);
   --bs-primary-lighter: color-mix(in srgb, var(--bs-primary) 5%, transparent);
-  --bs-primary-dark: color-mix(in srgb, var(--bs-primary) 95%, black);
+  --bs-primary-dark: color-mix(in srgb, var(--bs-primary) 75%, black);
   --bs-primary-muted: color-mix(in srgb, var(--bs-primary) 50%, transparent);
-
+  --bs-primary-overlay: color-mix(
+    in srgb,
+    var(--bs-primary-dark) 80%,
+    transparent
+  );
   /* Shadow colori */
   --bs-primary-shadow: color-mix(in srgb, var(--bs-primary) 25%, transparent);
 

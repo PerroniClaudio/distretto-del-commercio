@@ -1,4 +1,5 @@
-import Navigation from "@/components/Navigation";
+import FooterSection from "@/components/ui/FooterSection";
+import Navigation from "@/components/ui/Navigation";
 
 export default function WebsiteLayout({
   children,
@@ -9,7 +10,8 @@ export default function WebsiteLayout({
   return (
     <>
       <Navigation />
-      <div className="container">{children}</div>
+      <div>{children}</div>
+      <FooterSection />
     </>
   );
 }

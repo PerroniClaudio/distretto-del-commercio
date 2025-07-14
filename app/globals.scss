@@ -7,3 +7,30 @@
 
 /* Bootstrap Italia CSS */
 @import "bootstrap-italia/dist/css/bootstrap-italia.min.css";
+
+.navbar .dropdown-menu a.it-heading-link,
+.navbar .dropdown-menu a.it-footer-link,
+.navbar .dropdown-menu .link-list-wrapper ul li a span {
+  color: var(--bs-body-color) !important;
+}
+
+.navbar .icon-primary {
+  fill: var(--bs-body-color) !important;
+}
+
+.it-hero-wrapper {
+  background-color: var(--bs-primary) !important;
+}
+
+.it-hero-wrapper.it-overlay.it-dark .img-responsive-wrapper:after {
+  background: var(--bs-primary-overlay);
+  opacity: 0.8;
+}
+
+.it-footer-small-prints {
+  background-color: var(--bs-primary-dark) !important;
+}
+
+.card.border-bottom-card::before {
+  background-color: var(--bs-primary) !important;
+}

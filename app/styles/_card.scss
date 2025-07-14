@@ -1,0 +1,25 @@
+/* ========================================
+   CARD COMPONENT STYLES
+   ======================================== */
+
+/* Rimuovi la decorazione dei link globalmente */
+a {
+  text-decoration: none;
+}
+
+/* Stili per i titoli delle card */
+.card .card-body a h5.card-title,
+.card .card-body a .card-title.h5 {
+  color: var(--bs-primary) !important;
+}
+
+/* Hover sui link stretched */
+.stretched-link:hover {
+  color: var(--bs-link-hover-color) !important;
+  text-decoration: underline;
+}
+
+/* Icone delle categorie nelle card */
+.card .categoryicon-top .icon {
+  fill: var(--bs-primary) !important;
+}
