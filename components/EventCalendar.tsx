@@ -142,7 +142,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
 
                       {dayEvents.length > 0 && (
                         <div className="events-preview">
-                          {dayEvents.slice(0, 2).map((event, index) => (
+                          {dayEvents.slice(0, 2).map((event) => (
                             <div
                               key={event._id}
                               className="event-dot mb-1 p-1 rounded text-truncate cursor-pointer"

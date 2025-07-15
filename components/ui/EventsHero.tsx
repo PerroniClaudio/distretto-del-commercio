@@ -4,7 +4,6 @@ import {
   Hero,
   HeroBackground,
   HeroBody,
-  HeroButton,
   HeroCategory,
   HeroTitle,
 } from "design-react-kit";

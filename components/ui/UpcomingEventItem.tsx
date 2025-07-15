@@ -1,11 +1,9 @@
 "use client";
 
 import { PopulatedEvent } from "@/types/event";
-import Link from "next/link";
 
 import {
   Icon,
-  LinkList,
   LinkListItem,
   Badge,
 } from "design-react-kit";

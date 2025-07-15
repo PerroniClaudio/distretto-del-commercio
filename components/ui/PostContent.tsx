@@ -1,8 +1,6 @@
 "use client";
 import {
   Container,
-  Row,
-  Col,
   Button,
   Icon,
   Breadcrumb,
@@ -10,11 +8,11 @@ import {
   Hero,
   HeroBackground,
   HeroBody,
-  HeroCategory,
   HeroTitle,
 } from "design-react-kit";
 import { PortableText } from "next-sanity";
 import { PopulatedPost } from "@/types/post";
+import Link from "next/link";
 
 interface PostContentProps {
   post: PopulatedPost;
@@ -54,7 +52,7 @@ function PostContent({ post }: PostContentProps) {
                 icon="it-link"
                 size="sm"
               />
-              <a href="/">Home</a>
+              <Link href="/">Home</Link>
               <span className="separator">/</span>
             </BreadcrumbItem>
             <BreadcrumbItem>
@@ -65,7 +63,7 @@ function PostContent({ post }: PostContentProps) {
                 icon="it-link"
                 size="sm"
               />
-              <a href="/notizie">Notizie</a>
+              <Link href="/notizie">Notizie</Link>
               <span className="separator">/</span>
             </BreadcrumbItem>
             <BreadcrumbItem active>

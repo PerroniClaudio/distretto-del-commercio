@@ -19,6 +19,7 @@ import {
 } from "design-react-kit";
 import { PortableText } from "next-sanity";
 import { PopulatedEvent } from "@/types/event";
+import Link from "next/link";
 
 interface EventContentProps {
     event: PopulatedEvent;
@@ -97,7 +98,7 @@ function EventContent({ event }: EventContentProps) {
                                 icon="it-link"
                                 size="sm"
                             />
-                            <a href="/">Home</a>
+                            <Link href="/">Home</Link>
                             <span className="separator">/</span>
                         </BreadcrumbItem>
                         <BreadcrumbItem>
@@ -108,7 +109,7 @@ function EventContent({ event }: EventContentProps) {
                                 icon="it-link"
                                 size="sm"
                             />
-                            <a href="/eventi">Eventi</a>
+                            <Link href="/eventi">Eventi</Link>
                             <span className="separator">/</span>
                         </BreadcrumbItem>
                         <BreadcrumbItem active>

@@ -2,6 +2,7 @@
 
 import { PopulatedEvent } from "@/types/event";
 import UpcomingEventItem from "./UpcomingEventItem";
+import Link from "next/link";
 
 import {
   Card,
@@ -82,7 +83,7 @@ export default function UpcomingEventsList({
         </CardTitle>
         
         {showAllLink && events.length > maxEvents && (
-          <a 
+          <Link 
             href="/eventi" 
             className="btn btn-outline-primary btn-xs"
           >
@@ -92,13 +93,13 @@ export default function UpcomingEventsList({
               icon="it-arrow-right"
               padding={false}
             />
-          </a>
+          </Link>
         )}
       </CardHeader>
       
       <CardBody className="p-0">
         <LinkList>
-          {upcomingEvents.map((event, index) => (
+          {upcomingEvents.map((event) => (
             <UpcomingEventItem
               key={event._id}
               event={event}
@@ -111,7 +112,7 @@ export default function UpcomingEventsList({
         {/* Footer con link a tutti gli eventi */}
         {showAllLink && (
           <div className="card-footer text-center">
-            <a 
+            <Link 
               href="/eventi" 
               className="btn btn-primary btn-sm"
             >
@@ -121,7 +122,7 @@ export default function UpcomingEventsList({
                 padding={false}
               />
               Visualizza calendario completo
-            </a>
+            </Link>
           </div>
         )}
       </CardBody>

@@ -32,11 +32,6 @@ async function EventList({ view = 'both' }: EventListProps) {
     query: eventsQuery,
   });
 
-  const upcomingEvents = events.filter((event: PopulatedEvent) => {
-    if (!event.date) return false;
-    return new Date(event.date) >= new Date();
-  });
-
   if (view === 'calendar') {
     return (
       <div className="events-section">
@@ -74,7 +69,7 @@ async function EventList({ view = 'both' }: EventListProps) {
   return (
     <div className="events-section">
       {/* Hero Section */}
-   
+      <EventsHero />
       
       {/* Sezione Calendario e Prossimi Eventi */}
       <div className="container my-5" id="calendario">

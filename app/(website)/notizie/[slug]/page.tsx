@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import PostContent from "@/components/ui/PostContent";
 
 interface PageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 async function getPost(slug: string): Promise<PopulatedPost | null> {
@@ -35,7 +35,8 @@ async function getPost(slug: string): Promise<PopulatedPost | null> {
 }
 
 export default async function PostPage({ params }: PageProps) {
-  const post = await getPost(params.slug);
+  const { slug } = await params;
+  const post = await getPost(slug);
 
   if (!post) {
     notFound();

@@ -36,8 +36,5 @@ export default async function EventPage({ params }: EventPageProps) {
     notFound();
   }
 
-  const eventDate = event.date ? new Date(event.date) : null;
-  const isUpcoming = eventDate ? eventDate >= new Date() : false;
-
   return <EventContent event={event} />;
 }
