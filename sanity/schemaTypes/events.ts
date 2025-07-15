@@ -1,5 +1,4 @@
 import { CalendarIcon } from "@sanity/icons";
-import { describe } from "node:test";
 
 export default {
   name: "event",

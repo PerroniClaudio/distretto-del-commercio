@@ -20,7 +20,7 @@ function HeroSection() {
       <HeroBody>
         <HeroCategory>Notizie e Attività</HeroCategory>
         <HeroTitle tag="h2">Distretto del Commercio</HeroTitle>
-        <p className="d-none d-lg-block">
+        <p className="d-none d-lg-block font-sans-serif">
           Scopri le notizie e le novità delle aziende e attività commerciali di
           Pessano, Cambiago, Gessate, Bellinzago e Pozzuolo Martesana. Il tuo
           punto di riferimento per il commercio locale.
