@@ -46,3 +46,11 @@
 .btn-outline-primary {
   box-shadow: inset 0 0 0 2px var(--bs-primary) !important;
 }
+
+.link-list-wrapper ul li a span {
+  color: var(--bs-secondary) !important;
+  text-decoration: none !important;
+}
+.link-list-wrapper ul li a span.badge.bg-primary {
+  color: #fff !important;
+}
