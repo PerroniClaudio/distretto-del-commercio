@@ -3,7 +3,7 @@ import { PopulatedEvent } from "@/types/event";
 import EventCalendar from "./EventCalendar";
 import EventCard from "./ui/EventCard";
 import UpcomingEventsList from "./ui/UpcomingEventsList";
-import EventsHero from "./ui/EventsHero";
+
 
 interface EventListProps {
   view?: 'calendar' | 'grid' | 'both';
@@ -68,9 +68,7 @@ async function EventList({ view = 'both' }: EventListProps) {
 
   return (
     <div className="events-section">
-      {/* Hero Section */}
-      <EventsHero />
-      
+
       {/* Sezione Calendario e Prossimi Eventi */}
       <div className="container my-5" id="calendario">
         <div className="row">
