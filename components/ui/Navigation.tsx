@@ -36,7 +36,10 @@ function Navigation() {
   };
 
   return (
-    <Header theme="" type="navbar" className="it-header navbar-primary">
+    <Header
+      theme=""
+      type="navbar"
+      className="it-header navbar-primary sticky-top">
       <HeaderContent expand="lg" megamenu>
         <HeaderToggler
           aria-controls="nav1"

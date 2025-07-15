@@ -1,4 +1,4 @@
-import ArticleList from "@/components/ArticleList";
+import PostList from "@/components/PostList";
 import HeroSection from "@/components/ui/HeroSection";
 
 export default function Home() {
@@ -6,7 +6,7 @@ export default function Home() {
     <div>
       <HeroSection />
       <div className="container">
-        <ArticleList />
+        <PostList />
       </div>
     </div>
   );

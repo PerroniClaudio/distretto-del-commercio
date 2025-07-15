@@ -1,8 +1,8 @@
 import { sanityFetch } from "@/sanity/lib/live";
 import { PopulatedPost } from "@/types/post";
-import ArticleCard from "./ui/ArticleCard";
+import PostCard from "./ui/PostCard";
 
-async function ArticleList() {
+async function PostList() {
   const postsQuery = `*[_type == "post"] | order(publishedAt desc) {
     _id,
     title,
@@ -32,7 +32,7 @@ async function ArticleList() {
         <div className="articles-grid row">
           {posts.map((post: PopulatedPost) => (
             <div key={post._id} className="col-12 col-md-6 col-lg-4 mb-4">
-              <ArticleCard post={post} />
+              <PostCard post={post} />
             </div>
           ))}
         </div>
@@ -41,4 +41,4 @@ async function ArticleList() {
   );
 }
 
-export default ArticleList;
+export default PostList;

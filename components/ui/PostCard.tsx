@@ -9,7 +9,7 @@ import {
 } from "design-react-kit";
 import { PopulatedPost } from "@/types/post";
 
-function ArticleCard({ post }: { post: PopulatedPost }) {
+function PostCard({ post }: { post: PopulatedPost }) {
   return (
     <Card className="card-bg  border-bottom-card">
       <CardImg
@@ -34,7 +34,7 @@ function ArticleCard({ post }: { post: PopulatedPost }) {
           </span>
         </div>
         <a
-          href={post.slug?.current ? `/articles/${post.slug.current}` : "#"}
+          href={post.slug?.current ? `/notizie/${post.slug.current}` : "#"}
           className="stretched-link">
           <CardTitle tag="h5">{post.title || "Titolo dell'articolo"}</CardTitle>
         </a>
@@ -74,4 +74,4 @@ function ArticleCard({ post }: { post: PopulatedPost }) {
     </Card>
   );
 }
-export default ArticleCard;
+export default PostCard;
