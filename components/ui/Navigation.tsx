@@ -51,9 +51,10 @@ function Navigation() {
         </HeaderContent>
       </Header>
       <Header
-      theme=""
-      type="navbar"
-      className="it-header navbar-primary sticky-top">
+        theme=""
+        type="navbar"
+        className="it-header navbar-primary"
+      >
       <HeaderContent expand="lg" megamenu>
         
         <HeaderToggler

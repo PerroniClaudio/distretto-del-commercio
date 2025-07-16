@@ -25,7 +25,7 @@ function HeroSection() {
           Pessano, Cambiago, Gessate, Bellinzago e Pozzuolo Martesana. Il tuo
           punto di riferimento per il commercio locale.
         </p>
-        <HeroButton color="primary" outline>
+        <HeroButton color="secondary">
           Leggi le ultime notizie
         </HeroButton>
       </HeroBody>

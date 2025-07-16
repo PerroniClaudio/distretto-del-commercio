@@ -75,3 +75,17 @@
       padding: .5rem;
   }
 }
+
+.it-header-sticky{
+  position: sticky !important;
+}
+
+.bg-dark .btn-secondary {
+  background-color: var(--bs-secondary-dark);
+}
+
+.bg-dark .btn-secondary:hover{
+  background-color: var(--bs-secondary-hover);
+  color: #fff;
+  border-color: hsl(0, 0%, 90%);
+}
