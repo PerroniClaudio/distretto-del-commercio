@@ -257,6 +257,22 @@
   }
 }
 
+/* Stili per le card dei comuni */
+.comune-card {
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: var(--bs-primary) !important;
+  }
+  
+  .badge-sm {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
 /* Animazioni per il modal */
 .modal.show {
   animation: fadeIn 0.3s ease;

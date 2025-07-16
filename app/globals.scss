@@ -19,6 +19,10 @@
   fill: var(--bs-body-color) !important;
 }
 
+.nav-tabs .nav-link.active .icon {
+  fill: var(--bs-primary) !important;
+}
+
 .it-hero-wrapper {
   background-color: var(--bs-primary) !important;
 }

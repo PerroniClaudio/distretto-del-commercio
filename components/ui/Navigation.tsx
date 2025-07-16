@@ -57,8 +57,6 @@ function Navigation() {
                 </NavLink>
               </NavItem>
 
-             
-
               {loading ? (
                 <NavItem>
                   <NavLink disabled href="#">
@@ -81,7 +79,7 @@ function Navigation() {
                       {comuni.map((comune) => (
                         <LinkListItem
                           key={comune._id}
-                          href={`/${comune.slug.current}`}
+                          href={`/comuni/${comune.slug.current}`}
                           inDropdown>
                           <span>{comune.title}</span>
                         </LinkListItem>
