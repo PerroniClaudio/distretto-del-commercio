@@ -1,13 +1,26 @@
 "use client";
 
-import { Collapse, Dropdown, DropdownMenu, DropdownToggle, Header, HeaderBrand, HeaderContent, HeaderRightZone, Headers, HeaderToggler, Icon, LinkList, LinkListItem, Nav, NavItem, NavLink } from "design-react-kit";
-import Logo from "./Logo";
-import Link from "next/link";
 import { useState } from "react";
 import { useComuni } from "../../hooks/useComuni";
+import Logo from "./Logo";
+
+import {
+  Icon,
+  Collapse,
+  Nav,
+  LinkList,
+  LinkListItem,
+  Header,
+  HeaderContent,
+  HeaderToggler,
+  NavItem,
+  NavLink,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+} from "design-react-kit";
 
 function Navigation() {
-
   const [openNav, setOpenNav] = useState(false);
   const { comuni, loading, error } = useComuni();
 
@@ -19,38 +32,8 @@ function Navigation() {
     setOpenNav(false);
   };
 
-
   return (
-    <Headers sticky>
-      <Header
-        theme="light"
-        type="slim"
-      >
-        <HeaderContent>
-          <HeaderBrand responsive>
-              <Logo width={100} height={56} priority />
-          </HeaderBrand>
-          <HeaderRightZone>
-              <span>Seguici su</span>
-                  <Link
-                    aria-label="Facebook"
-                    href="#"
-                    target="_blank"
-                  >
-                    <Icon icon="it-facebook" />
-                  </Link>
-              
-                  <Link
-                    aria-label="Instagram"
-                    href="#"
-                    target="_blank"
-                  >
-                    <Icon icon="it-instagram" />
-                  </Link>
-          </HeaderRightZone>
-        </HeaderContent>
-      </Header>
-      <Header
+    <Header
       theme=""
       type="navbar"
       className="it-header navbar-primary sticky-top">
@@ -70,6 +53,13 @@ function Navigation() {
           onOverlayClick={handleOverlayClick}>
           <div className="menu-wrapper">
             <Nav navbar>
+
+              <NavItem>
+                <div className="it-brand-wrapper">
+                    <Logo width={100} height={56} priority />
+                </div>
+              </NavItem>
+
               <NavItem>
                 <NavLink href="/">
                   <span>Home</span>
@@ -126,8 +116,6 @@ function Navigation() {
         </Collapse>
       </HeaderContent>
     </Header>
-    </Headers>
-  )
+  );
 }
-
-export default Navigation
+export default Navigation;

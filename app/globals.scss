@@ -58,3 +58,20 @@
 .link-list-wrapper ul li a span.badge.bg-primary {
   color: #fff !important;
 }
+
+@media (max-width: 991.98px) {
+  .navbar .navbar-collapsable .navbar-nav li a.nav-link {
+    color: var(--bs-primary) !important;
+  }
+
+  .it-header-slim-wrapper .it-header-slim-wrapper-content .it-header-slim-right-zone, .it-header-slim-wrapper .it-header-slim-wrapper-content .header-slim-right-zone {
+    align-self: center !important
+  }
+}
+
+@media (min-width: 992px) {
+  .it-header-slim-wrapper {
+      height: 4rem;
+      padding: .5rem;
+  }
+}

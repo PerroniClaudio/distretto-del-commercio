@@ -1,5 +1,6 @@
 "use client";
 
+import Logo from "./Logo";
 import {
   Button,
   Col,
@@ -23,7 +24,7 @@ function FooterSection() {
               <Col sm={12}>
                 <div className="it-brand-wrapper">
                   <a className="" href="#">
-                    <Icon icon="it-pa" />
+                    <Logo width={80} height={45} />
                     <div className="it-brand-text">
                       <h2>Nome del Comune</h2>
                       <h3 className="d-none d-md-block">
