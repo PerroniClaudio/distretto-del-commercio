@@ -1,6 +1,6 @@
 "use client";
 
-import { Collapse, Dropdown, DropdownMenu, DropdownToggle, Header, HeaderBrand, HeaderContent, HeaderRightZone, Headers, HeaderToggler, Icon, LinkList, LinkListItem, Nav, NavItem, NavLink } from "design-react-kit";
+import { Collapse, Dropdown, DropdownMenu, DropdownToggle, Header, HeaderContent, Headers, HeaderToggler, Icon, LinkList, LinkListItem, Nav, NavItem, NavLink } from "design-react-kit";
 import Logo from "./Logo";
 import Link from "next/link";
 import { useState } from "react";
@@ -22,34 +22,35 @@ function Navigation() {
 
   return (
     <Headers sticky>
-      <Header
-        theme="light"
-        type="slim"
-      >
-        <HeaderContent>
-          <HeaderBrand responsive>
-              <Logo width={100} height={56} priority />
-          </HeaderBrand>
-          <HeaderRightZone>
-              <span>Seguici su</span>
-                  <Link
-                    aria-label="Facebook"
-                    href="#"
-                    target="_blank"
-                  >
-                    <Icon icon="it-facebook" />
-                  </Link>
-              
-                  <Link
-                    aria-label="Instagram"
-                    href="#"
-                    target="_blank"
-                  >
-                    <Icon icon="it-instagram" />
-                  </Link>
-          </HeaderRightZone>
-        </HeaderContent>
-      </Header>
+      <div className="custom-header">
+        <div className="container">
+          <div className="header-content">
+            <div className="logo-wrapper">
+              <Logo width={200} height={120} priority className="logo-image" />
+            </div>
+            <div className="social-links">
+              <span className="follow-text">Seguici su</span>
+              <Link
+                aria-label="Facebook"
+                href="#"
+                target="_blank"
+                className="social-link"
+              >
+                <Icon icon="it-facebook" />
+              </Link>
+              <Link
+                aria-label="Instagram"
+                href="#"
+                target="_blank"
+                className="social-link"
+              >
+                <Icon icon="it-instagram" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <Header
         theme=""
         type="navbar"

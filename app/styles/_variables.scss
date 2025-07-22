@@ -2,119 +2,119 @@
    VARIABILI CSS PERSONALIZZATE
    ======================================== */
 
-:root {
-  /* Colori base */
-  --bs-body-color: #0f100f;
-  --bs-link-color: #10b981;
-  --bs-link-color-rgb: 16, 185, 129;
-  --bs-link-hover-color: #0f9c6e;
-  --bs-link-hover-color-rgb: 15, 156, 110;
-
-  /* PRIMARY - Verde principale */
-  --bs-primary: #10b981;
-  --bs-primary-rgb: 16, 185, 129;
-  --bs-primary-bg-subtle: color-mix(in srgb, #10b981 15%, white);
-  --bs-primary-border-subtle: color-mix(in srgb, #10b981 25%, white);
-  --bs-primary-text-subtle: color-mix(in srgb, #10b981 85%, black);
-  --bs-primary-hover: color-mix(in srgb, #10b981 85%, black);
-  --bs-primary-active: color-mix(in srgb, #10b981 75%, black);
-  --bs-primary-focus: color-mix(in srgb, #10b981 90%, black);
-  --bs-primary-light: color-mix(in srgb, #10b981 30%, white);
-  --bs-primary-lighter: color-mix(in srgb, #10b981 15%, white);
-  --bs-primary-dark: color-mix(in srgb, #10b981 75%, black);
-  --bs-primary-darker: color-mix(in srgb, #10b981 85%, black);
-  --bs-primary-10: color-mix(in srgb, #10b981 10%, transparent);
-  --bs-primary-25: color-mix(in srgb, #10b981 25%, transparent);
-  --bs-primary-50: color-mix(in srgb, #10b981 50%, transparent);
-  --bs-primary-75: color-mix(in srgb, #10b981 75%, transparent);
-  --bs-primary-shadow: 0 0.125rem 0.25rem color-mix(in srgb, #10b981 25%, transparent);
-  --bs-primary-shadow-lg: 0 0.5rem 1rem color-mix(in srgb, #10b981 15%, transparent);
-
-  /* SECONDARY - Grigio blu */
-  --bs-secondary: #a3b2c5;
-  --bs-secondary-rgb: 163, 178, 197;
-  --bs-secondary-bg-subtle: color-mix(in srgb, #a3b2c5 15%, white);
-  --bs-secondary-border-subtle: color-mix(in srgb, #a3b2c5 25%, white);
-  --bs-secondary-text-subtle: color-mix(in srgb, #a3b2c5 85%, black);
-  --bs-secondary-hover: color-mix(in srgb, #a3b2c5 85%, black);
-  --bs-secondary-active: color-mix(in srgb, #a3b2c5 75%, black);
-  --bs-secondary-focus: color-mix(in srgb, #a3b2c5 90%, black);
-  --bs-secondary-light: color-mix(in srgb, #a3b2c5 30%, white);
-  --bs-secondary-dark: color-mix(in srgb, #a3b2c5 75%, black);
-
-  /* SUCCESS - Verde scuro */
-  --bs-success: #008055;
-  --bs-success-rgb: 0, 128, 85;
-  --bs-success-bg-subtle: color-mix(in srgb, #008055 15%, white);
-  --bs-success-border-subtle: color-mix(in srgb, #008055 25%, white);
-  --bs-success-text-subtle: color-mix(in srgb, #008055 85%, black);
-  --bs-success-hover: color-mix(in srgb, #008055 85%, black);
-  --bs-success-active: color-mix(in srgb, #008055 75%, black);
-  --bs-success-focus: color-mix(in srgb, #008055 90%, black);
-  --bs-success-light: color-mix(in srgb, #008055 30%, white);
-  --bs-success-dark: color-mix(in srgb, #008055 75%, black);
-
-  /* WARNING - Arancione */
-  --bs-warning: #a66300;
-  --bs-warning-rgb: 166, 99, 0;
-  --bs-warning-bg-subtle: color-mix(in srgb, #a66300 15%, white);
-  --bs-warning-border-subtle: color-mix(in srgb, #a66300 25%, white);
-  --bs-warning-text-subtle: color-mix(in srgb, #a66300 85%, black);
-  --bs-warning-hover: color-mix(in srgb, #a66300 85%, black);
-  --bs-warning-active: color-mix(in srgb, #a66300 75%, black);
-  --bs-warning-focus: color-mix(in srgb, #a66300 90%, black);
-  --bs-warning-light: color-mix(in srgb, #a66300 30%, white);
-  --bs-warning-dark: color-mix(in srgb, #a66300 75%, black);
-
-  /* DANGER - Rosso */
-  --bs-danger: #d9364f;
-  --bs-danger-rgb: 217, 54, 79;
-  --bs-danger-bg-subtle: color-mix(in srgb, #d9364f 15%, white);
-  --bs-danger-border-subtle: color-mix(in srgb, #d9364f 25%, white);
-  --bs-danger-text-subtle: color-mix(in srgb, #d9364f 85%, black);
-  --bs-danger-hover: color-mix(in srgb, #d9364f 85%, black);
-  --bs-danger-active: color-mix(in srgb, #d9364f 75%, black);
-  --bs-danger-focus: color-mix(in srgb, #d9364f 90%, black);
-  --bs-danger-light: color-mix(in srgb, #d9364f 30%, white);
-  --bs-danger-dark: color-mix(in srgb, #d9364f 75%, black);
-
-  /* INFO - Blu */
-  --bs-info: #0ea5e9;
-  --bs-info-rgb: 14, 165, 233;
-  --bs-info-bg-subtle: color-mix(in srgb, #0ea5e9 15%, white);
-  --bs-info-border-subtle: color-mix(in srgb, #0ea5e9 25%, white);
-  --bs-info-text-subtle: color-mix(in srgb, #0ea5e9 85%, black);
-  --bs-info-hover: color-mix(in srgb, #0ea5e9 85%, black);
-  --bs-info-active: color-mix(in srgb, #0ea5e9 75%, black);
-  --bs-info-focus: color-mix(in srgb, #0ea5e9 90%, black);
-  --bs-info-light: color-mix(in srgb, #0ea5e9 30%, white);
-  --bs-info-dark: color-mix(in srgb, #0ea5e9 75%, black);
-
-  /* LIGHT - Grigio chiaro */
-  --bs-light: #f8f9fa;
-  --bs-light-rgb: 248, 249, 250;
-  --bs-light-bg-subtle: color-mix(in srgb, #f8f9fa 15%, white);
-  --bs-light-border-subtle: color-mix(in srgb, #f8f9fa 25%, black);
-  --bs-light-text-subtle: color-mix(in srgb, #f8f9fa 85%, black);
-  --bs-light-hover: color-mix(in srgb, #f8f9fa 85%, black);
-  --bs-light-active: color-mix(in srgb, #f8f9fa 75%, black);
-
-  /* DARK - Grigio scuro */
-  --bs-dark: #212529;
-  --bs-dark-rgb: 33, 37, 41;
-  --bs-dark-bg-subtle: color-mix(in srgb, #212529 15%, white);
-  --bs-dark-border-subtle: color-mix(in srgb, #212529 25%, white);
-  --bs-dark-text-subtle: color-mix(in srgb, #212529 85%, black);
-  --bs-dark-hover: color-mix(in srgb, #212529 85%, white);
-  --bs-dark-active: color-mix(in srgb, #212529 75%, white);
-
-  /* Variazioni speciali per il primario (per compatibilità con il codice esistente) */
-  --bs-primary-overlay: color-mix(in srgb, var(--bs-primary-dark) 80%, transparent);
-  --bs-primary-muted: var(--bs-primary-50);
-
-  /* Variabili aggiuntive per Bootstrap Italia */
-  --bs-border-color: #dee2e6;
-  --bs-border-radius: 0.375rem;
-  --bs-border-radius-sm: 0.25rem;
-  --bs-border-radius-lg: 0.5rem;
-}
+   :root {
+    /* Colori base */
+    --bs-body-color: #0f100f;
+    --bs-link-color: #e30613;
+    --bs-link-color-rgb: 16, 185, 129;
+    --bs-link-hover-color: #0f9c6e;
+    --bs-link-hover-color-rgb: 15, 156, 110;
+  
+    /* PRIMARY - Verde principale */
+    --bs-primary: #e30613;
+    --bs-primary-rgb: 16, 185, 129;
+    --bs-primary-bg-subtle: color-mix(in srgb, #e30613 15%, white);
+    --bs-primary-border-subtle: color-mix(in srgb, #e30613 25%, white);
+    --bs-primary-text-subtle: color-mix(in srgb, #e30613 85%, black);
+    --bs-primary-hover: color-mix(in srgb, #e30613 85%, black);
+    --bs-primary-active: color-mix(in srgb, #e30613 75%, black);
+    --bs-primary-focus: color-mix(in srgb, #e30613 90%, black);
+    --bs-primary-light: color-mix(in srgb, #e30613 30%, white);
+    --bs-primary-lighter: color-mix(in srgb, #e30613 15%, white);
+    --bs-primary-dark: color-mix(in srgb, #e30613 75%, black);
+    --bs-primary-darker: color-mix(in srgb, #e30613 85%, black);
+    --bs-primary-10: color-mix(in srgb, #e30613 10%, transparent);
+    --bs-primary-25: color-mix(in srgb, #e30613 25%, transparent);
+    --bs-primary-50: color-mix(in srgb, #e30613 50%, transparent);
+    --bs-primary-75: color-mix(in srgb, #e30613 75%, transparent);
+    --bs-primary-shadow: 0 0.125rem 0.25rem color-mix(in srgb, #e30613 25%, transparent);
+    --bs-primary-shadow-lg: 0 0.5rem 1rem color-mix(in srgb, #e30613 15%, transparent);
+  
+    /* SECONDARY - Grigio blu */
+    --bs-secondary: #009fe3;
+    --bs-secondary-rgb: 163, 178, 197;
+    --bs-secondary-bg-subtle: color-mix(in srgb, #009fe3 15%, white);
+    --bs-secondary-border-subtle: color-mix(in srgb, #009fe3 25%, white);
+    --bs-secondary-text-subtle: color-mix(in srgb, #009fe3 85%, black);
+    --bs-secondary-hover: color-mix(in srgb, #009fe3 85%, black);
+    --bs-secondary-active: color-mix(in srgb, #009fe3 75%, black);
+    --bs-secondary-focus: color-mix(in srgb, #009fe3 90%, black);
+    --bs-secondary-light: color-mix(in srgb, #009fe3 30%, white);
+    --bs-secondary-dark: color-mix(in srgb, #009fe3 75%, black);
+  
+    /* SUCCESS - Verde scuro */
+    --bs-success: #008055;
+    --bs-success-rgb: 0, 128, 85;
+    --bs-success-bg-subtle: color-mix(in srgb, #008055 15%, white);
+    --bs-success-border-subtle: color-mix(in srgb, #008055 25%, white);
+    --bs-success-text-subtle: color-mix(in srgb, #008055 85%, black);
+    --bs-success-hover: color-mix(in srgb, #008055 85%, black);
+    --bs-success-active: color-mix(in srgb, #008055 75%, black);
+    --bs-success-focus: color-mix(in srgb, #008055 90%, black);
+    --bs-success-light: color-mix(in srgb, #008055 30%, white);
+    --bs-success-dark: color-mix(in srgb, #008055 75%, black);
+  
+    /* WARNING - Arancione */
+    --bs-warning: #a66300;
+    --bs-warning-rgb: 166, 99, 0;
+    --bs-warning-bg-subtle: color-mix(in srgb, #a66300 15%, white);
+    --bs-warning-border-subtle: color-mix(in srgb, #a66300 25%, white);
+    --bs-warning-text-subtle: color-mix(in srgb, #a66300 85%, black);
+    --bs-warning-hover: color-mix(in srgb, #a66300 85%, black);
+    --bs-warning-active: color-mix(in srgb, #a66300 75%, black);
+    --bs-warning-focus: color-mix(in srgb, #a66300 90%, black);
+    --bs-warning-light: color-mix(in srgb, #a66300 30%, white);
+    --bs-warning-dark: color-mix(in srgb, #a66300 75%, black);
+  
+    /* DANGER - Rosso */
+    --bs-danger: #d9364f;
+    --bs-danger-rgb: 217, 54, 79;
+    --bs-danger-bg-subtle: color-mix(in srgb, #d9364f 15%, white);
+    --bs-danger-border-subtle: color-mix(in srgb, #d9364f 25%, white);
+    --bs-danger-text-subtle: color-mix(in srgb, #d9364f 85%, black);
+    --bs-danger-hover: color-mix(in srgb, #d9364f 85%, black);
+    --bs-danger-active: color-mix(in srgb, #d9364f 75%, black);
+    --bs-danger-focus: color-mix(in srgb, #d9364f 90%, black);
+    --bs-danger-light: color-mix(in srgb, #d9364f 30%, white);
+    --bs-danger-dark: color-mix(in srgb, #d9364f 75%, black);
+  
+    /* INFO - Blu */
+    --bs-info: #0ea5e9;
+    --bs-info-rgb: 14, 165, 233;
+    --bs-info-bg-subtle: color-mix(in srgb, #0ea5e9 15%, white);
+    --bs-info-border-subtle: color-mix(in srgb, #0ea5e9 25%, white);
+    --bs-info-text-subtle: color-mix(in srgb, #0ea5e9 85%, black);
+    --bs-info-hover: color-mix(in srgb, #0ea5e9 85%, black);
+    --bs-info-active: color-mix(in srgb, #0ea5e9 75%, black);
+    --bs-info-focus: color-mix(in srgb, #0ea5e9 90%, black);
+    --bs-info-light: color-mix(in srgb, #0ea5e9 30%, white);
+    --bs-info-dark: color-mix(in srgb, #0ea5e9 75%, black);
+  
+    /* LIGHT - Grigio chiaro */
+    --bs-light: #f8f9fa;
+    --bs-light-rgb: 248, 249, 250;
+    --bs-light-bg-subtle: color-mix(in srgb, #f8f9fa 15%, white);
+    --bs-light-border-subtle: color-mix(in srgb, #f8f9fa 25%, black);
+    --bs-light-text-subtle: color-mix(in srgb, #f8f9fa 85%, black);
+    --bs-light-hover: color-mix(in srgb, #f8f9fa 85%, black);
+    --bs-light-active: color-mix(in srgb, #f8f9fa 75%, black);
+  
+    /* DARK - Grigio scuro */
+    --bs-dark: #212529;
+    --bs-dark-rgb: 33, 37, 41;
+    --bs-dark-bg-subtle: color-mix(in srgb, #212529 15%, white);
+    --bs-dark-border-subtle: color-mix(in srgb, #212529 25%, white);
+    --bs-dark-text-subtle: color-mix(in srgb, #212529 85%, black);
+    --bs-dark-hover: color-mix(in srgb, #212529 85%, white);
+    --bs-dark-active: color-mix(in srgb, #212529 75%, white);
+  
+    /* Variazioni speciali per il primario (per compatibilità con il codice esistente) */
+    --bs-primary-overlay: color-mix(in srgb, var(--bs-primary-dark) 80%, transparent);
+    --bs-primary-muted: var(--bs-primary-50);
+  
+    /* Variabili aggiuntive per Bootstrap Italia */
+    --bs-border-color: #dee2e6;
+    --bs-border-radius: 0.375rem;
+    --bs-border-radius-sm: 0.25rem;
+    --bs-border-radius-lg: 0.5rem;
+  }
