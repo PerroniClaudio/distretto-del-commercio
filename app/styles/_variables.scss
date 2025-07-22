@@ -5,30 +5,30 @@
    :root {
     /* Colori base */
     --bs-body-color: #0f100f;
-    --bs-link-color: #e30613;
+    --bs-link-color: #B6B09F;
     --bs-link-color-rgb: 16, 185, 129;
-    --bs-link-hover-color: #0f9c6e;
+    --bs-link-hover-color: #009fe3;
     --bs-link-hover-color-rgb: 15, 156, 110;
   
     /* PRIMARY - Verde principale */
-    --bs-primary: #e30613;
+    --bs-primary: #B6B09F;
     --bs-primary-rgb: 16, 185, 129;
-    --bs-primary-bg-subtle: color-mix(in srgb, #e30613 15%, white);
-    --bs-primary-border-subtle: color-mix(in srgb, #e30613 25%, white);
-    --bs-primary-text-subtle: color-mix(in srgb, #e30613 85%, black);
-    --bs-primary-hover: color-mix(in srgb, #e30613 85%, black);
-    --bs-primary-active: color-mix(in srgb, #e30613 75%, black);
-    --bs-primary-focus: color-mix(in srgb, #e30613 90%, black);
-    --bs-primary-light: color-mix(in srgb, #e30613 30%, white);
-    --bs-primary-lighter: color-mix(in srgb, #e30613 15%, white);
-    --bs-primary-dark: color-mix(in srgb, #e30613 75%, black);
-    --bs-primary-darker: color-mix(in srgb, #e30613 85%, black);
-    --bs-primary-10: color-mix(in srgb, #e30613 10%, transparent);
-    --bs-primary-25: color-mix(in srgb, #e30613 25%, transparent);
-    --bs-primary-50: color-mix(in srgb, #e30613 50%, transparent);
-    --bs-primary-75: color-mix(in srgb, #e30613 75%, transparent);
-    --bs-primary-shadow: 0 0.125rem 0.25rem color-mix(in srgb, #e30613 25%, transparent);
-    --bs-primary-shadow-lg: 0 0.5rem 1rem color-mix(in srgb, #e30613 15%, transparent);
+    --bs-primary-bg-subtle: color-mix(in srgb, #B6B09F 15%, white);
+    --bs-primary-border-subtle: color-mix(in srgb, #B6B09F 25%, white);
+    --bs-primary-text-subtle: color-mix(in srgb, #B6B09F 85%, black);
+    --bs-primary-hover: color-mix(in srgb, #B6B09F 85%, black);
+    --bs-primary-active: color-mix(in srgb, #B6B09F 75%, black);
+    --bs-primary-focus: color-mix(in srgb, #B6B09F 90%, black);
+    --bs-primary-light: color-mix(in srgb, #B6B09F 30%, white);
+    --bs-primary-lighter: color-mix(in srgb, #B6B09F 15%, white);
+    --bs-primary-dark: color-mix(in srgb, #B6B09F 75%, black);
+    --bs-primary-darker: color-mix(in srgb, #B6B09F 85%, black);
+    --bs-primary-10: color-mix(in srgb, #B6B09F 10%, transparent);
+    --bs-primary-25: color-mix(in srgb, #B6B09F 25%, transparent);
+    --bs-primary-50: color-mix(in srgb, #B6B09F 50%, transparent);
+    --bs-primary-75: color-mix(in srgb, #B6B09F 75%, transparent);
+    --bs-primary-shadow: 0 0.125rem 0.25rem color-mix(in srgb, #B6B09F 25%, transparent);
+    --bs-primary-shadow-lg: 0 0.5rem 1rem color-mix(in srgb, #B6B09F 15%, transparent);
   
     /* SECONDARY - Grigio blu */
     --bs-secondary: #009fe3;
