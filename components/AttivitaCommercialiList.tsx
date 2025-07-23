@@ -1,0 +1,292 @@
+"use client";
+
+import { Card, CardBody, CardText, CardTitle, Col, Row, Button, Icon, CardImg } from "design-react-kit";
+import Link from "next/link";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
+interface Settore {
+  _id: string;
+  title: string;
+}
+
+interface Comune {
+  _id: string;
+  title: string;
+}
+
+interface AttivitaCommerciale {
+  _id: string;
+  title: string;
+  slug: {
+    current: string;
+  };
+  description?: string;
+  mainImage?: {
+    asset?: {
+      _id: string;
+      url: string;
+    };
+    alt?: string;
+  };
+  indirizzo?: {
+    via?: string;
+    civico?: string;
+    cap?: string;
+  };
+  comune?: {
+    _id: string;
+    title: string;
+    slug: {
+      current: string;
+    };
+  };
+  settore?: {
+    _id: string;
+    title: string;
+    slug: {
+      current: string;
+    };
+  };
+}
+
+interface AttivitaCommercialiListProps {
+  attivitaCommerciali: AttivitaCommerciale[];
+  settori: Settore[];
+  comuni: Comune[];
+}
+
+// Componente interno che utilizza useSearchParams
+function AttivitaCommercialiListContent({ 
+  attivitaCommerciali, 
+  settori, 
+  comuni 
+}: AttivitaCommercialiListProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  const [selectedSettore, setSelectedSettore] = useState<string>(
+    searchParams.get("settore") || ""
+  );
+  const [selectedComune, setSelectedComune] = useState<string>(
+    searchParams.get("comune") || ""
+  );
+  
+  const [filteredAttivita, setFilteredAttivita] = useState<AttivitaCommerciale[]>(attivitaCommerciali);
+
+  // Aggiorna l'URL quando cambiano i filtri
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (selectedSettore) params.set("settore", selectedSettore);
+    if (selectedComune) params.set("comune", selectedComune);
+    
+    const queryString = params.toString();
+    router.push(queryString ? `?${queryString}` : "", { scroll: false });
+  }, [selectedSettore, selectedComune, router]);
+
+  // Filtra le attività quando cambiano i filtri
+  useEffect(() => {
+    let filtered = [...attivitaCommerciali];
+    
+    if (selectedSettore) {
+      filtered = filtered.filter(
+        (attivita) => attivita.settore?.title === selectedSettore
+      );
+    }
+    
+    if (selectedComune) {
+      filtered = filtered.filter(
+        (attivita) => attivita.comune?.title === selectedComune
+      );
+    }
+    
+    setFilteredAttivita(filtered);
+  }, [attivitaCommerciali, selectedSettore, selectedComune]);
+
+  // Funzione per gestire il click su un settore
+  const handleSettoreClick = (settoreTitle: string) => {
+    setSelectedSettore(selectedSettore === settoreTitle ? "" : settoreTitle);
+  };
+
+  // Funzione per gestire il click su un comune
+  const handleComuneClick = (comuneTitle: string) => {
+    setSelectedComune(selectedComune === comuneTitle ? "" : comuneTitle);
+  };
+
+  return (
+    <Row>
+      {/* Colonna sinistra con i filtri */}
+      <Col md={3}>
+        <div className="sidebar-wrapper">
+             {/* Filtro per comune */}
+          <div className="filter-section">
+            <h4 className="filter-title">Comuni</h4>
+            <div className="link-list-wrapper">
+              <ul className="link-list">
+                <li>
+                  <a 
+                    href="#" 
+                    className={`list-item ${!selectedComune ? 'active' : ''}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSelectedComune("");
+                    }}
+                  >
+                    <span>Tutti i comuni</span>
+                    {!selectedComune && <Icon icon="it-check" size="sm" />}
+                  </a>
+                </li>
+                {comuni.map((comune) => (
+                  <li key={comune._id}>
+                    <a 
+                      href="#" 
+                      className={`list-item ${selectedComune === comune.title ? 'active' : ''}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleComuneClick(comune.title);
+                      }}
+                    >
+                      <span>{comune.title}</span>
+                      {selectedComune === comune.title && <Icon icon="it-check" size="sm" />}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          {/* Filtro per settore */}
+          <div className="filter-section mb-4">
+            <h4 className="filter-title">Settori</h4>
+            <div className="link-list-wrapper">
+              <ul className="link-list">
+                <li>
+                  <a 
+                    href="#" 
+                    className={`list-item ${!selectedSettore ? 'active' : ''}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSelectedSettore("");
+                    }}
+                  >
+                    <span>Tutti i settori</span>
+                    {!selectedSettore && <Icon icon="it-check" size="sm" />}
+                  </a>
+                </li>
+                {settori.map((settore) => (
+                  <li key={settore._id}>
+                    <a 
+                      href="#" 
+                      className={`list-item ${selectedSettore === settore.title ? 'active' : ''}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleSettoreClick(settore.title);
+                      }}
+                    >
+                      <span>{settore.title}</span>
+                      {selectedSettore === settore.title && <Icon icon="it-check" size="sm" />}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </Col>
+
+      {/* Colonna destra con le attività commerciali */}
+      <Col md={9}>
+        {/* Intestazione con filtri attivi */}
+        <div className="mb-4">
+          <h2>Attività Commerciali</h2>
+          {(selectedSettore || selectedComune) && (
+            <div className="filter-summary mt-2">
+              <p className="font-weight-semibold">
+                Filtri attivi:
+                {selectedSettore && (
+                  <span className="badge badge-primary mx-1">{selectedSettore}</span>
+                )}
+                {selectedComune && (
+                  <span className="badge badge-secondary mx-1">{selectedComune}</span>
+                )}
+                <Button 
+                  color="link" 
+                  size="sm" 
+                  className="p-0 ml-2"
+                  onClick={() => {
+                    setSelectedSettore("");
+                    setSelectedComune("");
+                  }}
+                >
+                  Rimuovi filtri
+                </Button>
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Lista attività */}
+        {filteredAttivita.length === 0 ? (
+          <div className="alert alert-info">
+            Nessuna attività commerciale trovata con i filtri selezionati.
+          </div>
+        ) : (
+          <Row>
+            {filteredAttivita.map((attivita) => (
+              <Col key={attivita._id} md={6} lg={4} className="mb-4">
+                <Card className="card-bg">
+                  {attivita.mainImage?.asset?.url ? (
+                    <CardImg
+                      className="img-fluid"
+                      src={attivita.mainImage.asset.url || "https://picsum.photos/1920/1080"}
+                      alt={attivita.mainImage.alt || attivita.title || "Titolo dell'articolo"}
+                      width={480}
+                      height={270}
+                    />
+                  ) : (
+                    <div className="placeholder-image bg-light d-flex align-items-center justify-content-center" style={{ height: "200px" }}>
+                      <Icon icon="it-image" size="xl" />
+                    </div>
+                  )}
+                  <CardBody>
+                    <CardTitle tag="h5">{attivita.title}</CardTitle>
+                    <div className="category-top">
+                      <span className="category">{attivita.settore?.title}</span>
+                      <span className="data">{attivita.comune?.title}</span>
+                    </div>
+                    <CardText>{attivita.description?.substring(0, 100)}{attivita.description && attivita.description.length > 100 ? '...' : ''}</CardText>
+                    <Link href={`/attivita-commerciali/${attivita.slug.current}`} passHref>
+                      <Button color="primary" outline className="mt-2">
+                        Scopri di più
+                      </Button>
+                    </Link>
+                  </CardBody>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        )}
+      </Col>
+    </Row>
+  );
+}
+
+// Componente di fallback durante il caricamento
+function AttivitaCommercialiListFallback() {
+  return (
+    <div className="text-center py-5">
+      <div className="spinner-border" role="status">
+        <span className="visually-hidden">Caricamento...</span>
+      </div>
+      <p className="mt-2">Caricamento attività commerciali...</p>
+    </div>
+  );
+}
+
+// Componente principale che avvolge il contenuto in un Suspense boundary
+export default function AttivitaCommercialiList(props: AttivitaCommercialiListProps) {
+  return (
+    <Suspense fallback={<AttivitaCommercialiListFallback />}>
+      <AttivitaCommercialiListContent {...props} />
+    </Suspense>
+  );
+}

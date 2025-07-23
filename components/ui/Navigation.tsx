@@ -122,6 +122,11 @@ function Navigation() {
                 </NavLink>
               </NavItem>
 
+              <NavItem>
+                <NavLink href="/attivita-commerciali">
+                  <span>Attività commerciali</span>
+                </NavLink>
+              </NavItem>
             
             </Nav>
           </div>

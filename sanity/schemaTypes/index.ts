@@ -5,7 +5,9 @@ import category from "./categories";
 import comuni from "./comuni";
 import events from "./events";
 import staticPage from "./staticPage";
+import settore from "./settore";
+import attivitaCommerciali from "./attivita_commerciali";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [post, category, comuni, events, staticPage],
+  types: [post, events, attivitaCommerciali, category, comuni, settore, staticPage],
 };
