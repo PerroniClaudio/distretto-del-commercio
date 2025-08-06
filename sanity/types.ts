@@ -13,6 +13,87 @@
  */
 
 // Source: schema.json
+export type StaticPage = {
+  _id: string;
+  _type: "static_page";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  content?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+  publishedAt?: string;
+  lastModified?: string;
+};
+
+export type AttivitaCommerciale = {
+  _id: string;
+  _type: "attivita_commerciale";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: string;
+  mainImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  indirizzo?: {
+    via?: string;
+    civico?: string;
+    cap?: string;
+  };
+  comune?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "comune";
+  };
+  settore?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "settore";
+  };
+};
+
+export type Settore = {
+  _id: string;
+  _type: "settore";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: string;
+};
+
 export type Event = {
   _id: string;
   _type: "event";
@@ -65,6 +146,18 @@ export type Event = {
     crop?: SanityImageCrop;
     _type: "image";
   };
+  files?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+    };
+    media?: unknown;
+    title?: string;
+    _type: "file";
+    _key: string;
+  }>;
 };
 
 export type Comune = {
@@ -141,6 +234,18 @@ export type Post = {
     crop?: SanityImageCrop;
     _type: "image";
   };
+  files?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+    };
+    media?: unknown;
+    title?: string;
+    _type: "file";
+    _key: string;
+  }>;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -261,12 +366,12 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = Event | Comune | Category | Post | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = StaticPage | AttivitaCommerciale | Settore | Event | Comune | Category | Post | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./app/(website)/[slug]/page.tsx
-// Variable: query
-// Query: *[_type == "post" && slug.current == $slug][0]{title, content}
-export type QueryResult = {
+// Variable: staticPageQuery
+// Query: *[_type == "static_page" && slug.current == $slug][0]{title, content}
+export type StaticPageQueryResult = {
   title: string | null;
   content: Array<{
     children?: Array<{
@@ -292,6 +397,6 @@ export type QueryResult = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"post\" && slug.current == $slug][0]{title, content}": QueryResult;
+    "*[_type == \"static_page\" && slug.current == $slug][0]{title, content}": StaticPageQueryResult;
   }
 }

@@ -37,6 +37,11 @@ export default async function Home() {
           <div className="col-12">
             <PostList />
           </div>
+          <div className="col-12 text-center mt-3">
+            <Link href="/notizie" className="btn btn-primary">
+              Vedi tutte le notizie
+            </Link>
+          </div>
         </div>
 
         <div className="row">

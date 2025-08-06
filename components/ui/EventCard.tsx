@@ -27,7 +27,7 @@ export default function EventCard({ event }: EventCardProps) {
 
       {/* Immagine evento */}
       <CardImg
-        className="img-fluid"
+        className="img-fluid event-card-image"
         src={event.image?.asset?.url || "https://picsum.photos/1920/1080"}
         alt={event.image?.alt || event.title}
         width={480}
@@ -46,7 +46,9 @@ export default function EventCard({ event }: EventCardProps) {
             <span className="badge bg-secondary">Passato</span>
           )}
         </div>
-        <CardText className="font-sans-serif">
+        {/* Card text non può contenere div */}
+        {/* <CardText className="font-sans-serif"> */}
+        <div>
           {/* Data completa */}
           {eventDate && (
             <div className="d-flex align-items-center mb-2 text-muted">
@@ -114,7 +116,8 @@ export default function EventCard({ event }: EventCardProps) {
           {event.category && (
             <span className="badge bg-primary">{event.category.title}</span>
           )}
-        </CardText>
+        </div>
+        {/* </CardText> */}
 
         {/* Footer con categoria e link */}
         <div className="d-flex justify-content-end align-items-center mt-3">

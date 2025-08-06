@@ -9,6 +9,8 @@ import {
   HeroBackground,
   HeroBody,
   HeroTitle,
+  List,
+  ListItem,
 } from "design-react-kit";
 import { PortableText } from "next-sanity";
 import { PopulatedPost } from "@/types/post";
@@ -18,7 +20,33 @@ interface PostContentProps {
   post: PopulatedPost;
 }
 
+type FileItem = {
+  asset?: {
+    _id: string;
+    url: string;
+    originalFilename?: string;
+  };
+  title?: string;
+  _key: string;
+  _type: "file";
+};
+
 function PostContent({ post }: PostContentProps) {
+
+  const handleDownload = (fileItem: FileItem) => {
+    if (fileItem.asset?.url) {
+      const link = document.createElement('a');
+      link.href = fileItem.asset.url;
+      link.download = fileItem.asset.originalFilename || 'file';
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+  
+
   return (
     <>
       {/* Hero con immagine principale e titolo */}
@@ -138,6 +166,35 @@ function PostContent({ post }: PostContentProps) {
               <PortableText value={post.content} />
             </div>
           </article>
+        )}
+
+        {/* Sezione Allegati */}
+        {post.files && post.files.length > 0 && (
+          <section className="mb-5 border-top pt-4">
+            <h3 className="h4 mb-3">
+              <Icon icon="it-clip" className="me-2" />
+              Allegati
+            </h3>
+            <div className="d-flex flex-column gap-2">
+              <List>
+                {post.files.map((fileItem) => (
+                  <ListItem key={fileItem._key}>
+                    <div className="file-list-item">
+                      <Button
+                        size="xs"
+                        className="flex-shrink-0 mb-2 btn-secondary"
+                        onClick={() => handleDownload(fileItem)}>
+                        <Icon icon="it-download" className="me-1 white" />
+                        Scarica
+                      </Button>
+                      {/* <Icon icon="it-file" className="icon-sm me-2" /> */}
+                      <span>{fileItem.title || fileItem.asset?.originalFilename || "File senza nome"}</span>
+                    </div>
+                  </ListItem>
+                ))}
+              </List>
+            </div>
+          </section>
         )}
 
         {/* Azioni */}

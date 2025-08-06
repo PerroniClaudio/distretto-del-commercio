@@ -33,7 +33,7 @@ async function getComuneData(slug: string): Promise<ComuneData | null> {
   }
 
   // Query per i post del comune
-  const postsQuery = `*[_type == "post" && references($comuneId)] | order(publishedAt desc) {
+  const postsQuery = `*[_type == "post" && references($comuneId) && defined(publishedAt) && publishedAt <= now()] | order(publishedAt desc) {
     _id,
     title,
     slug,

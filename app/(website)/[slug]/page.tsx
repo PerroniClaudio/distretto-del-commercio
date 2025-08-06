@@ -5,7 +5,7 @@ import { PortableText } from "next-sanity";
 
 
 const staticPageQuery = defineQuery(
-  `*[_type == "staticPage" && slug.current == $slug][0]{title, content}`
+  `*[_type == "static_page" && slug.current == $slug][0]{title, content}`
 );
 
 export default async function Page({

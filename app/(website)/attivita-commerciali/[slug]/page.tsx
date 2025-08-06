@@ -1,29 +1,16 @@
 import { sanityFetch } from "@/sanity/lib/live";
 import { notFound } from "next/navigation";
 import AttivitaCommercialeDetail from "@/components/ui/AttivitaCommercialeDetail";
+import type { AttivitaCommerciale } from "@/sanity/types";
 
-interface PageProps {
-  params: Promise<{ slug: string }>;
-}
-
-interface AttivitaCommerciale {
-  _id: string;
-  title: string;
-  slug: {
-    current: string;
-  };
-  description?: string;
+// Tipo esteso per dati popolati dalla query GROQ
+type PopulatedAttivitaCommerciale = Omit<AttivitaCommerciale, 'mainImage' | 'comune' | 'settore'> & {
   mainImage?: {
     asset?: {
       _id: string;
       url: string;
     };
     alt?: string;
-  };
-  indirizzo?: {
-    via?: string;
-    civico?: string;
-    cap?: string;
   };
   comune?: {
     _id: string;
@@ -39,9 +26,13 @@ interface AttivitaCommerciale {
       current: string;
     };
   };
+};
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
 }
 
-async function getAttivitaCommerciale(slug: string): Promise<AttivitaCommerciale | null> {
+async function getAttivitaCommerciale(slug: string): Promise<PopulatedAttivitaCommerciale | null> {
   const query = `*[_type == "attivita_commerciale" && slug.current == $slug][0] {
     _id,
     title,

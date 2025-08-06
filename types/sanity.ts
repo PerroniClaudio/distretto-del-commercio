@@ -1,7 +1,7 @@
 // Custom types for Sanity documents
 export interface StaticPage {
   _id: string;
-  _type: "staticPage";
+  _type: "static_page";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;

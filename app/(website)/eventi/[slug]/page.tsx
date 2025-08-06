@@ -24,6 +24,14 @@ export default async function EventPage({ params }: EventPageProps) {
         url
       },
       alt
+    },
+    files[]{
+      asset->{
+        url,
+        originalFilename
+      },
+      title,
+      _key
     }
   }`;
 

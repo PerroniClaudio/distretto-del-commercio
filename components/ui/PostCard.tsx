@@ -3,6 +3,7 @@ import {
   Card,
   CardBody,
   CardImg,
+  CardTagsHeader,
   CardText,
   CardTitle,
   Icon,
@@ -13,7 +14,7 @@ function PostCard({ post }: { post: PopulatedPost }) {
   return (
     <Card className="card-bg  border-bottom-card">
       <CardImg
-        className="img-fluid"
+        className="img-fluid post-card-image"
         src={post.image?.asset.url || "https://picsum.photos/1920/1080"}
         alt={post.image?.alt || post.title || "Titolo dell'articolo"}
         width={480}
@@ -21,16 +22,17 @@ function PostCard({ post }: { post: PopulatedPost }) {
       />
       <CardBody>
         <div className="text-muted d-flex align-items-center gap-1">
-          <Icon
+          {/* <Icon
             className="icon-sm"
             color="secondary"
             icon="it-calendar"
             padding
-          />
+          /> */}
+          Data pubblicazione:
           <span>
             {post.publishedAt
               ? new Date(post.publishedAt).toLocaleDateString("it-IT")
-              : "01 Gennaio 2023"}
+              : "Non specificata"}
           </span>
         </div>
         <a
@@ -38,7 +40,7 @@ function PostCard({ post }: { post: PopulatedPost }) {
           className="stretched-link">
           <CardTitle tag="h5">{post.title || "Titolo dell'articolo"}</CardTitle>
         </a>
-        <CardText className="font-sans-serif">
+        <CardTagsHeader>
           {(post.category && post.category.length > 0) ||
           (post.comuni && post.comuni.length > 0) ? (
             <div className="d-flex flex-wrap gap-1 mb-2 font-sans-serif">
@@ -67,6 +69,8 @@ function PostCard({ post }: { post: PopulatedPost }) {
               )}
             </div>
           ) : null}
+        </CardTagsHeader>
+        <CardText className="font-sans-serif">
           {post.excerpt ||
             "Breve descrizione dell'articolo. Scopri di più cliccando sul titolo."}
         </CardText>

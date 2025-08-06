@@ -23,6 +23,16 @@ async function getPost(slug: string): Promise<PopulatedPost | null> {
         url
       },
       alt
+    },
+    files[]{
+      _key,
+      _type,
+      title,
+      asset->{
+        _id,
+        url,
+        originalFilename
+      }
     }
   }`;
 

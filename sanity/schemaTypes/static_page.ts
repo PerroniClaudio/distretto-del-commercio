@@ -1,7 +1,7 @@
 import { DocumentIcon } from "@sanity/icons";
 
 export default {
-  name: "staticPage",
+  name: "static_page",
   title: "Pagina Statica",
   type: "document",
   icon: DocumentIcon,

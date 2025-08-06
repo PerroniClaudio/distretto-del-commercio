@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { PopulatedEvent } from "@/types/event";
 import { Icon } from "design-react-kit";
+import Link from "next/link";
 
 interface EventCalendarProps {
   events: PopulatedEvent[];
@@ -222,6 +223,17 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                 )}
               </div>
               <div className="modal-footer">
+                <Link
+                  href={`/eventi/${selectedEvent.slug?.current}`}
+                  className="btn btn-outline-primary btn-sm"
+                >
+                  Dettagli
+                  <Icon
+                    className="icon-sm ms-1"
+                    icon="it-arrow-right"
+                    padding={false}
+                  />
+                </Link>
                 <button
                   type="button"
                   className="btn btn-secondary"

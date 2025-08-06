@@ -57,5 +57,22 @@ export default {
         hotspot: true, // Enables image cropping and focal point selection
       },
     },
+    {
+      name: "files",
+      title: "Allegati",
+      type: "array",
+      of: [
+        {
+          type: "file",
+          fields: [
+            {
+              name: "title",
+              title: "Titolo",
+              type: "string",
+            },
+          ],
+        },
+      ],
+    },
   ],
 };

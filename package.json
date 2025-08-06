@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typegen": "sanity schema extract --path=./sanity/schema.json && sanity typegen generate"
+    "typegen": "sanity schema extract --path=./sanity/schema.json && sanity typegen generate && node scripts/transform-types.js"
   },
   "dependencies": {
     "@sanity/client": "^7.6.0",

@@ -3,12 +3,12 @@ import { client } from "@/sanity/lib/client";
 import Link from "next/link";
 
 const sitemapQuery = defineQuery(`{
-  "staticPages": *[_type == "staticPage" && defined(slug.current)] | order(title asc) {
+  "staticPages": *[_type == "static_page" && defined(slug.current)] | order(title asc) {
     title,
     "slug": slug.current,
     publishedAt
   },
-  "posts": *[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
+  "posts": *[_type == "post" && defined(slug.current) && defined(publishedAt) && publishedAt <= now()] | order(publishedAt desc) {
     title,
     "slug": slug.current,
     publishedAt,

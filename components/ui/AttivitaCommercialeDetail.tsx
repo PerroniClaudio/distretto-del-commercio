@@ -2,25 +2,16 @@
 
 import { Row, Col, Icon, Button } from "design-react-kit";
 import Link from "next/link";
+import type { AttivitaCommerciale } from "@/sanity/types";
 
-interface AttivitaCommerciale {
-  _id: string;
-  title: string;
-  slug: {
-    current: string;
-  };
-  description?: string;
+// Tipo esteso per dati popolati dalla query GROQ
+type PopulatedAttivitaCommerciale = Omit<AttivitaCommerciale, 'mainImage' | 'comune' | 'settore'> & {
   mainImage?: {
     asset?: {
       _id: string;
       url: string;
     };
     alt?: string;
-  };
-  indirizzo?: {
-    via?: string;
-    civico?: string;
-    cap?: string;
   };
   comune?: {
     _id: string;
@@ -36,10 +27,10 @@ interface AttivitaCommerciale {
       current: string;
     };
   };
-}
+};
 
 interface AttivitaCommercialeDetailProps {
-  attivita: AttivitaCommerciale;
+  attivita: PopulatedAttivitaCommerciale;
 }
 
 export default function AttivitaCommercialeDetail({ attivita }: AttivitaCommercialeDetailProps) {

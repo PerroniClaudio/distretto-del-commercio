@@ -16,6 +16,8 @@ import {
     Card,
     CardBody,
     Badge,
+    List,
+    ListItem
 } from "design-react-kit";
 import { PortableText } from "next-sanity";
 import { PopulatedEvent } from "@/types/event";
@@ -25,9 +27,35 @@ interface EventContentProps {
     event: PopulatedEvent;
 }
 
+// type FileItem = NonNullable<PopulatedEvent['files']>[number];
+type FileItem = {
+  asset?: {
+    _id: string;
+    url: string;
+    originalFilename?: string;
+  };
+  title?: string;
+  _key: string;
+  _type: "file";
+};
+
 function EventContent({ event }: EventContentProps) {
     const eventDate = event.date ? new Date(event.date) : null;
     const isUpcoming = eventDate ? eventDate >= new Date() : false;
+
+    const handleDownload = (fileItem: FileItem) => {
+        if (fileItem.asset?.url) {
+        const link = document.createElement('a');
+        link.href = fileItem.asset.url;
+        link.download = fileItem.asset.originalFilename || 'file';
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        }
+    };
+  
 
     return (
         <>
@@ -196,6 +224,35 @@ function EventContent({ event }: EventContentProps) {
                                     <PortableText value={event.description} />
                                 </div>
                             </article>
+                        )}
+
+                        {/* Sezione Allegati */}
+                        {event.files && event.files.length > 0 && (
+                        <section className="mb-5 border-top pt-4">
+                            <h3 className="h4 mb-3">
+                            <Icon icon="it-clip" className="me-2" />
+                            Allegati
+                            </h3>
+                            <div className="d-flex flex-column gap-2">
+                            <List>
+                                {event.files.map((fileItem) => (
+                                <ListItem key={fileItem._key}>
+                                    <div className="file-list-item">
+                                    <Button
+                                        size="xs"
+                                        className="flex-shrink-0 mb-2 btn-secondary"
+                                        onClick={() => handleDownload(fileItem)}>
+                                        <Icon icon="it-download" className="me-1 white" />
+                                        Scarica
+                                    </Button>
+                                    {/* <Icon icon="it-file" className="icon-sm me-2" /> */}
+                                    <span>{fileItem.title || fileItem.asset?.originalFilename || "File senza nome"}</span>
+                                    </div>
+                                </ListItem>
+                                ))}
+                            </List>
+                            </div>
+                        </section>
                         )}
 
                         {/* Azioni */}
