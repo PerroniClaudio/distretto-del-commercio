@@ -17,7 +17,12 @@ import {
     CardBody,
     Badge,
     List,
-    ListItem
+    ListItem,
+    Dropdown,
+    DropdownToggle,
+    DropdownMenu,
+    LinkList,
+    LinkListItem
 } from "design-react-kit";
 import { PortableText } from "next-sanity";
 import { PopulatedEvent } from "@/types/event";
@@ -53,6 +58,102 @@ function EventContent({ event }: EventContentProps) {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        }
+    };
+
+    const getCalendarUrl = () => {
+        if (!eventDate) return '';
+
+        // Formato data per ICS (YYYYMMDDTHHMMSSZ)
+        const formatDateForICS = (date: Date) => {
+            return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+        };
+
+        // Data di fine (assumiamo 2 ore dal momento che non esiste il campo nell'evento)
+        const endDate = new Date(eventDate.getTime() + 2 * 60 * 60 * 1000);
+
+        const startDateICS = formatDateForICS(eventDate);
+        const endDateICS = formatDateForICS(endDate);
+
+        // Contenuto del file ICS
+        const icsContent = [
+            'BEGIN:VCALENDAR',
+            'VERSION:2.0',
+            'PRODID:-//Distretto del Commercio//Event//IT',
+            'BEGIN:VEVENT',
+            `DTSTART:${startDateICS}`,
+            `DTEND:${endDateICS}`,
+            `SUMMARY:${event.title}`,
+            `DESCRIPTION:${event.description ? 'Evento del Distretto del Commercio' : ''}`,
+            `LOCATION:${event.location || ''}`,
+            `UID:event-${event._id}@distretto-commercio.it`,
+            'STATUS:CONFIRMED',
+            'END:VEVENT',
+            'END:VCALENDAR'
+        ].join('\r\n');
+
+        // Crea data URL per il file ICS
+        const dataUrl = `data:text/calendar;charset=utf-8,${encodeURIComponent(icsContent)}`;
+        return dataUrl;
+    };
+
+    const getGoogleCalendarUrl = () => {
+        if (!eventDate) return '';
+
+        const formatDateForGoogle = (date: Date) => {
+            return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+        };
+
+        const endDate = new Date(eventDate.getTime() + 2 * 60 * 60 * 1000);
+        const startDateFormatted = formatDateForGoogle(eventDate);
+        const endDateFormatted = formatDateForGoogle(endDate);
+
+        const params = new URLSearchParams({
+            action: 'TEMPLATE',
+            text: event.title || '',
+            dates: `${startDateFormatted}/${endDateFormatted}`,
+            details: event.description ? 'Evento del Distretto del Commercio' : '',
+            location: event.location || '',
+            trp: 'false'
+        });
+
+        return `https://calendar.google.com/calendar/render?${params.toString()}`;
+    };
+
+    const getOutlookUrl = () => {
+        if (!eventDate) return '';
+
+        const formatDateForOutlook = (date: Date) => {
+            return date.toISOString();
+        };
+
+        const endDate = new Date(eventDate.getTime() + 2 * 60 * 60 * 1000);
+
+        // Per mobile, usiamo outlook.live.com che ha migliore supporto app
+        const isMobile = typeof window !== 'undefined' && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            // URL per mobile (può aprire l'app Outlook mobile)
+            const params = new URLSearchParams({
+                subject: event.title || '',
+                startdt: formatDateForOutlook(eventDate),
+                enddt: formatDateForOutlook(endDate),
+                body: event.description ? 'Evento del Distretto del Commercio' : '',
+                location: event.location || ''
+            });
+            return `https://outlook.live.com/calendar/0/deeplink/compose?${params.toString()}`;
+        } else {
+            // URL per desktop - outlook.office.com funziona meglio
+            const params = new URLSearchParams({
+                path: '/calendar/action/compose',
+                rru: 'addevent',
+                subject: event.title || '',
+                startdt: formatDateForOutlook(eventDate),
+                enddt: formatDateForOutlook(endDate),
+                body: event.description ? 'Evento del Distretto del Commercio' : '',
+                location: event.location || ''
+            });
+            return `https://outlook.office.com/calendar/0/deeplink/compose?${params.toString()}`;
         }
     };
   
@@ -263,10 +364,42 @@ function EventContent({ event }: EventContentProps) {
                             </Button>
 
                             {isUpcoming && (
-                                <Button color="primary" size="sm">
-                                    <Icon icon="it-bookmark" className="me-1" />
-                                    Aggiungi al calendario
-                                </Button>
+                                <Dropdown direction="up">
+                                    <DropdownToggle color="primary" className="btn-sm">
+                                        <Icon icon="it-bookmark" className="me-1" />
+                                        Aggiungi al calendario
+                                    </DropdownToggle>
+                                    <DropdownMenu className="dropdown-menu-end -mt-4">
+                                        <LinkList>
+                                            <LinkListItem 
+                                                href={getGoogleCalendarUrl()}
+                                                className="w-100"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <Icon icon="it-external-link" className="me-2" />
+                                                Google Calendar
+                                            </LinkListItem>
+                                            <LinkListItem
+                                                href={getOutlookUrl()}
+                                                className="w-100"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <Icon icon="it-external-link" className="me-2" />
+                                                Outlook
+                                            </LinkListItem>
+                                            <LinkListItem
+                                                href={getCalendarUrl()}
+                                                className="w-100"
+                                                download={`evento-${event.title?.replace(/[^a-zA-Z0-9]/g, '-')}.ics`}
+                                            >
+                                                <Icon icon="it-download" className="me-2" />
+                                                File ICS (Apple, altri)
+                                            </LinkListItem>
+                                        </LinkList>
+                                    </DropdownMenu>
+                                </Dropdown>
                             )}
 
                             <Button color="outline-primary" size="sm" href="/eventi">
@@ -385,10 +518,51 @@ function EventContent({ event }: EventContentProps) {
                                     {/* Azioni rapide */}
                                     {isUpcoming && (
                                         <div className="mt-4 pt-3 border-top">
-                                            <Button color="primary" size="sm" className="w-100 mb-2">
+                                            {/* <Button 
+                                                color="primary" 
+                                                size="sm" 
+                                                className="w-100 mb-2"
+                                                href={getCalendarUrl()}
+                                            >
                                                 <Icon icon="it-bookmark" className="me-1" />
                                                 Aggiungi al calendario
-                                            </Button>
+                                            </Button> */}
+                                            <Dropdown className="w-100 mb-2" direction="up">
+                                                <DropdownToggle color="primary" className="w-100 btn-sm">
+                                                    <Icon icon="it-bookmark" className="me-1" />
+                                                    Aggiungi al calendario
+                                                </DropdownToggle>
+                                                <DropdownMenu className="w-100">
+                                                    <LinkList>
+                                                        <LinkListItem 
+                                                            href={getGoogleCalendarUrl()}
+                                                            className="w-100"
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                        >
+                                                            <Icon icon="it-external-link" className="me-2" />
+                                                            Google Calendar
+                                                        </LinkListItem>
+                                                        <LinkListItem
+                                                            href={getOutlookUrl()}
+                                                            className="w-100"
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                        >
+                                                            <Icon icon="it-external-link" className="me-2" />
+                                                            Outlook
+                                                        </LinkListItem>
+                                                        <LinkListItem
+                                                            href={getCalendarUrl()}
+                                                            className="w-100"
+                                                            download={`evento-${event.title?.replace(/[^a-zA-Z0-9]/g, '-')}.ics`}
+                                                        >
+                                                            <Icon icon="it-download" className="me-2" />
+                                                            File ICS (Apple, altri)
+                                                        </LinkListItem>
+                                                    </LinkList>
+                                                </DropdownMenu>
+                                            </Dropdown>
                                             <Button color="outline-primary" size="sm" className="w-100">
                                                 <Icon icon="it-share" className="me-1" />
                                                 Condividi evento

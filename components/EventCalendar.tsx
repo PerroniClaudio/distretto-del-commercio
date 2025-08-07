@@ -188,7 +188,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                   <img
                     src={selectedEvent.image.asset.url}
                     alt={selectedEvent.image.alt || selectedEvent.title}
-                    className="img-fluid mb-3 rounded"
+                    className="img-fluid mb-3 rounded event-modal-image"
                   />
                 )}
 
