@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { client } from "@/sanity/lib/client";
 import { PopulatedPost } from "@/types/post";
 import PostCard from "./ui/PostCard";
@@ -11,7 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 const POSTS_PER_PAGE = 6;
 
-function PostListPaginated() {
+function PostListPaginatedContent() {
   const [posts, setPosts] = useState<PopulatedPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -111,7 +111,7 @@ function PostListPaginated() {
     const maxVisiblePages = 5;
     
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
     
     // Aggiusta l'inizio se siamo vicini alla fine
     if (endPage - startPage + 1 < maxVisiblePages && totalPages > 1) {
@@ -300,8 +300,11 @@ function PostListPaginated() {
           }}
         >
           <>
-            <option value="">Scegli un'opzione</option>
-            {categories.map(category => (
+            {loadingCategories ? <option value="" disabled>Caricamento categorie...</option>
+              : (errorCategories ? <option value="" disabled>Errore nel caricamento categorie</option>
+                : <option value="">Scegli un&apos;opzione</option>)
+            }
+            {!!categories && categories.map(category => (
               <option key={category._id} value={category.slug.current}>
                 {category.title}
               </option>
@@ -319,8 +322,11 @@ function PostListPaginated() {
           }}
         >
           <>
-            <option value="">Scegli un'opzione</option>
-            {comuni.map(comune => (
+            {loadingComuni ? <option value="" disabled>Caricamento comuni...</option>
+              : (errorComuni ? <option value="" disabled>Errore nel caricamento comuni</option>
+                : <option value="">Scegli un&apos;opzione</option>)
+            }
+            {!!comuni && comuni.map(comune => (
               <option key={comune._id} value={comune.slug.current}>
                 {comune.title}
               </option>
@@ -360,4 +366,24 @@ function PostListPaginated() {
   );
 }
 
-export default PostListPaginated;
+// Componente di fallback durante il caricamento
+function PostListPaginatedFallback() {
+  return (
+    <div className="text-center py-5">
+      <div className="spinner-border" role="status">
+        <span className="visually-hidden">Caricamento...</span>
+      </div>
+      <p className="mt-2">Caricamento attività commerciali...</p>
+    </div>
+  );
+}
+
+// Componente principale che avvolge il contenuto in un Suspense boundary
+export default function PostListPaginated() {
+  return (
+    <Suspense fallback={<PostListPaginatedFallback />}>
+      <PostListPaginatedContent />
+    </Suspense>
+  );
+}
+

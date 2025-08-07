@@ -13,10 +13,12 @@ export type PopulatedEvent = Omit<Event, "category" | "comune" | "image" | "file
   };
   files?: Array<{
     asset?: {
+      _id: string;
       url: string;
       originalFilename?: string;
     };
     title?: string;
     _key: string;
+    _type: "file";
   }>;
 };

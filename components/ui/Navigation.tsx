@@ -1,6 +1,6 @@
 "use client";
 
-import { Collapse, Dropdown, DropdownMenu, DropdownToggle, Header, HeaderBrand, HeaderContent, HeaderRightZone, Headers, HeaderSearch, HeaderSocialsZone, HeaderToggler, Icon, LinkList, LinkListItem, Nav, NavItem, NavLink } from "design-react-kit";
+import { Collapse, Dropdown, DropdownMenu, DropdownToggle, Header, HeaderContent, HeaderRightZone, Headers, HeaderToggler, Icon, LinkList, LinkListItem, Nav, NavItem, NavLink } from "design-react-kit";
 import Logo from "./Logo";
 import Link from "next/link";
 import { useState, useEffect } from "react";

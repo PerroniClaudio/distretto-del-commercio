@@ -7,7 +7,6 @@ import {
   Card,
   CardBody,
   CardImg,
-  CardText,
   CardTitle,
   Icon,
 } from "design-react-kit";

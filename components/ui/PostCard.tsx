@@ -6,7 +6,6 @@ import {
   CardTagsHeader,
   CardText,
   CardTitle,
-  Icon,
 } from "design-react-kit";
 import { PopulatedPost } from "@/types/post";
 
