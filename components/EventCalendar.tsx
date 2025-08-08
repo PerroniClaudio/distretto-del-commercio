@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo } from "react";
 import { PopulatedEvent } from "@/types/event";
 import { Icon, UncontrolledTooltip } from "design-react-kit";
 import Link from "next/link";
@@ -230,7 +230,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
 
                             return levelSlots.slice(0, 3).map((eventWithLevel, levelIndex) => {
                               // Determina lo stato dell'evento per questo giorno
-                              let eventState = {
+                              const eventState = {
                                 isStart: false,
                                 isEnd: false,
                                 isContinuation: false

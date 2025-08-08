@@ -5,7 +5,7 @@ import { PopulatedEvent } from "@/types/event";
 import EventCard from "./ui/EventCard";
 import { Button, Icon } from "design-react-kit";
 import { useComuni } from "@/hooks/useComuni";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 const EVENTS_PER_PAGE = 6;
 
@@ -24,7 +24,6 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
   const [dateTo, setDateTo] = useState<string>("");
   const [selectedComune, setSelectedComune] = useState<string>("");
 
-  const router = useRouter();
   const searchParams = useSearchParams();
   const { comuni, loading: loadingComuni, error: errorComuni } = useComuni();
 
