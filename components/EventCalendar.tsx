@@ -14,7 +14,7 @@ const MONTHS = [
   "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"
 ];
 
-const DAYS = ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"];
+const DAYS = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
 
 export default function EventCalendar({ events }: EventCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -31,10 +31,15 @@ export default function EventCalendar({ events }: EventCalendarProps) {
 
     // Giorni da mostrare nel calendario
     const startDate = new Date(firstDay);
-    startDate.setDate(startDate.getDate() - firstDay.getDay());
+    // Calcola i giorni da sottrarre: domenica = 0, lunedì = 1, ecc.
+    // Per iniziare dal lunedì: domenica diventa 6, lunedì diventa 0
+    const daysToSubtract = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+    startDate.setDate(startDate.getDate() - daysToSubtract);
 
     const endDate = new Date(lastDay);
-    endDate.setDate(endDate.getDate() + (6 - lastDay.getDay()));
+    // Calcola i giorni da aggiungere per arrivare alla domenica
+    const daysToAdd = lastDay.getDay() === 0 ? 0 : 7 - lastDay.getDay();
+    endDate.setDate(endDate.getDate() + daysToAdd);
 
     const days = [];
     const eventsMap = new Map<string, Array<{event: PopulatedEvent, level: number}>>();
