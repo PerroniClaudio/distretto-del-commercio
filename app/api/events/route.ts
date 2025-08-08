@@ -8,6 +8,7 @@ export async function GET() {
       title,
       slug,
       date,
+      dateEnd,
       location,
       description,
       category->{title},

@@ -12,6 +12,7 @@ export default async function Home() {
     title,
     slug,
     date,
+    dateEnd,
     location,
     description,
     category->{title},

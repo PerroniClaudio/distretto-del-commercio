@@ -638,6 +638,27 @@
         },
         "optional": true
       },
+      "dateEnd": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "publishedFrom": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "publishedTo": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
       "location": {
         "type": "objectAttribute",
         "value": {
@@ -964,6 +985,13 @@
               }
             }
           }
+        },
+        "optional": true
+      },
+      "hidden": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
         },
         "optional": true
       }
@@ -1544,6 +1572,13 @@
               }
             }
           }
+        },
+        "optional": true
+      },
+      "hidden": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
         },
         "optional": true
       }

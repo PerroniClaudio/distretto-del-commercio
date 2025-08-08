@@ -35,8 +35,27 @@ export default {
     },
     {
       name: "date",
-      title: "Data",
+      title: "Data di inizio",
       type: "datetime",
+      description: "Data e ora di inizio dell'evento.",
+    },
+    {
+      name: "dateEnd",
+      title: "Data di fine",
+      type: "datetime",
+      description: "Data e ora di fine dell'evento.",
+    },
+    {
+      name: "publishedFrom",
+      title: "Data di pubblicazione",
+      type: "datetime",
+      description: "Data e ora di pubblicazione dell'evento (da questa data si vedrà sul sito). Se non specificata, l'evento sarà visibile immediatamente.",
+    },
+    {
+      name: "publishedTo",
+      title: "Data di fine pubblicazione",
+      type: "datetime",
+      description: "Data e ora di fine pubblicazione dell'evento (da questa data non si vedrà più sul sito). Se non specificata, l'evento rimarrà visibile indefinitamente.",
     },
     {
       name: "location",
@@ -73,6 +92,13 @@ export default {
           ],
         },
       ],
+    },
+    {
+      name: "hidden",
+      title: "Nascosto",
+      type: "boolean",
+      initialValue: false,
+      description: "Se selezionato, l'evento non sarà visibile sul sito.",
     },
   ],
 };

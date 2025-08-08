@@ -59,10 +59,12 @@
   }
   
   .events-preview {
+    padding-top: 1px !important;
+
     .event-dot {
       background-color: var(--bs-primary-bg-subtle);
       color: var(--bs-primary);
-      border: 1px solid var(--bs-primary-border-subtle);
+      border-color:  var(--bs-primary);
       border-radius: var(--bs-border-radius-sm);
       padding: 0.125rem 0.375rem;
       font-size: 0.75rem;
@@ -71,12 +73,59 @@
       transition: all 0.2s ease;
       display: block;
       text-decoration: none;
+
+      // Sempre bordi sopra e sotto di 1px
+      border-top: 1px solid;
+      border-bottom: 1px solid;
+      // Bordi laterali dipendono dallo stato
+      border-left: none;
+      border-right: none;
+
+      /* Evento che inizia e finisce nello stesso giorno */
+      &.event-start-end {
+        border-left: 3px solid !important;
+        border-right: 3px solid !important;
+        border-radius: 4px !important;
+      }
+
+      /* Evento che inizia in questo giorno */
+      &.event-start {
+        border-left: 3px solid !important;
+        border-top-left-radius: 4px !important;
+        border-bottom-left-radius: 4px !important;
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+      }
+
+      /* Evento che finisce in questo giorno */
+      &.event-end {
+        border-right: 3px solid !important;
+        border-top-right-radius: 4px !important;
+        border-bottom-right-radius: 4px !important;
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+      }
+
+      /* Evento che continua (nel mezzo di un evento multi-giorno) */
+      &.event-continue {
+        border-radius: 0 !important;
+      }
       
       &:hover {
         background-color: var(--bs-primary);
+        border-color: var(--bs-primary-dark) !important;
         color: white;
         transform: translateY(-1px);
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+
+      // Classe per evidenziare tutti gli event-dot dello stesso evento
+      &.event-highlighted {
+        background-color: var(--bs-primary) !important;
+        border-color: var(--bs-primary-dark) !important;
+        color: white !important;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
       }
     }
   }

@@ -61,6 +61,7 @@ async function getComuneData(slug: string): Promise<ComuneData | null> {
     title,
     slug,
     date,
+    dateEnd,
     location,
     description,
     category->{title},

@@ -15,6 +15,7 @@ async function EventList({ view = 'both' }: EventListProps) {
     title,
     slug,
     date,
+    dateEnd,
     location,
     description,
     category->{title},

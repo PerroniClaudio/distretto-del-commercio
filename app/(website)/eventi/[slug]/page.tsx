@@ -14,6 +14,7 @@ export default async function EventPage({ params }: EventPageProps) {
     title,
     slug,
     date,
+    dateEnd,
     location,
     description,
     category->{title},

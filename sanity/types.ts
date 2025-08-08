@@ -115,6 +115,9 @@ export type Event = {
     [internalGroqTypeReferenceTo]?: "comune";
   };
   date?: string;
+  dateEnd?: string;
+  publishedFrom?: string;
+  publishedTo?: string;
   location?: string;
   description?: Array<{
     children?: Array<{
@@ -158,6 +161,7 @@ export type Event = {
     _type: "file";
     _key: string;
   }>;
+  hidden?: boolean;
 };
 
 export type Comune = {
@@ -246,6 +250,7 @@ export type Post = {
     _type: "file";
     _key: string;
   }>;
+  hidden?: boolean;
 };
 
 export type SanityImagePaletteSwatch = {

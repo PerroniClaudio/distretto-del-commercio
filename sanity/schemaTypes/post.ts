@@ -75,5 +75,12 @@ export default {
         },
       ],
     },
+    {
+      name: "hidden",
+      title: "Nascosto",
+      type: "boolean",
+      initialValue: false,
+      description: "Se selezionato, il post non sarà visibile sul sito.",
+    },
   ],
 };
