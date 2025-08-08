@@ -2,13 +2,14 @@ import { sanityFetch } from "@/sanity/lib/live";
 import { PopulatedPost } from "@/types/post";
 import { notFound } from "next/navigation";
 import PostContent from "@/components/ui/PostContent";
+import { NEWS_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
 async function getPost(slug: string): Promise<PopulatedPost | null> {
-  const postQuery = `*[_type == "post" && slug.current == $slug][0] {
+  const postQuery = `*[_type == "post" && slug.current == $slug  && ${NEWS_VISIBILITY_CONDITIONS}][0] {
     _id,
     title,
     slug,

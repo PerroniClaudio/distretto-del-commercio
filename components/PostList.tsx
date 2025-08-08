@@ -1,11 +1,12 @@
 import { sanityFetch } from "@/sanity/lib/live";
 import { PopulatedPost } from "@/types/post";
 import PostCard from "./ui/PostCard";
+import { NEWS_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
 
 const POSTS_TO_SHOW = 6;
 
 async function PostList() {
-  const postsQuery = `*[_type == "post" && defined(publishedAt) && publishedAt <= now()] | order(publishedAt desc)[0...${POSTS_TO_SHOW}] {
+  const postsQuery = `*[_type == "post" && ${NEWS_VISIBILITY_CONDITIONS}] | order(publishedAt desc)[0...${POSTS_TO_SHOW}] {
     _id,
     title,
     slug,

@@ -1432,6 +1432,13 @@
         },
         "optional": true
       },
+      "publishedTo": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
       "image": {
         "type": "objectAttribute",
         "value": {

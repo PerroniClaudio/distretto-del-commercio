@@ -226,6 +226,7 @@ export type Post = {
     _key: string;
   }>;
   publishedAt?: string;
+  publishedTo?: string;
   image?: {
     asset?: {
       _ref: string;

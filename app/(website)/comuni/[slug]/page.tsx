@@ -4,7 +4,7 @@ import ComuneContent from "@/components/ui/ComuneContent";
 import { Comune } from "@/types/comune";
 import { PopulatedPost } from "@/types/post";
 import { PopulatedEvent } from "@/types/event";
-import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
+import { EVENT_VISIBILITY_CONDITIONS, NEWS_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -34,7 +34,7 @@ async function getComuneData(slug: string): Promise<ComuneData | null> {
   }
 
   // Query per i post del comune
-  const postsQuery = `*[_type == "post" && references($comuneId) && defined(publishedAt) && publishedAt <= now()] | order(publishedAt desc) {
+  const postsQuery = `*[_type == "post" && references($comuneId) && ${NEWS_VISIBILITY_CONDITIONS}] | order(publishedAt desc) {
     _id,
     title,
     slug,

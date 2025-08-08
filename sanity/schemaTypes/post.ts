@@ -47,7 +47,12 @@ export default {
     },
     {
       name: "publishedAt",
-      title: "Data di pubblicazione",
+      title: "Data di pubblicazione (da questa data si vedrà sul sito). Se non specificata il post non sarà visibile.",
+      type: "datetime",
+    },
+    {
+      name: "publishedTo",
+      title: "Data di fine pubblicazione (non sarà visibile dopo questa data), se non specificata rimarrà visibile indefinitamente.",
       type: "datetime",
     },
     {

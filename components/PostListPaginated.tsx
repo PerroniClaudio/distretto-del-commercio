@@ -8,6 +8,7 @@ import { Button, Icon, Select } from "design-react-kit";
 import { useComuni } from "@/hooks/useComuni";
 import { useCategories } from "@/hooks/useCategories";
 import { useRouter, useSearchParams } from "next/navigation";
+import { NEWS_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
 
 const POSTS_PER_PAGE = 6;
 
@@ -50,7 +51,7 @@ function PostListPaginatedContent() {
       const filterQuery = filters.length > 0 ? `&& ${filters.join(" && ")}` : "";
 
       // Query per ottenere i post paginati
-      const postsQuery = `*[_type == "post"${filterQuery} && defined(publishedAt) && publishedAt <= now()] | order(publishedAt desc) [${offset}...${offset + POSTS_PER_PAGE}] {
+      const postsQuery = `*[_type == "post"${filterQuery} && ${NEWS_VISIBILITY_CONDITIONS}] | order(publishedAt desc) [${offset}...${offset + POSTS_PER_PAGE}] {
         _id,
         title,
         slug,
@@ -68,7 +69,7 @@ function PostListPaginatedContent() {
       }`;
 
       // Query per contare il totale dei post (con gli stessi filtri)
-      const countQuery = `count(*[_type == "post"${filterQuery} && defined(publishedAt) && publishedAt <= now()])`;
+      const countQuery = `count(*[_type == "post"${filterQuery} && ${NEWS_VISIBILITY_CONDITIONS}])`;
 
       const [postsData, totalCount] = await Promise.all([
         client.fetch(postsQuery),
