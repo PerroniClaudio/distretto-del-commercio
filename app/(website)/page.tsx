@@ -4,10 +4,13 @@ import { sanityFetch } from "@/sanity/lib/live";
 import EventCard from "@/components/ui/EventCard";
 import { PopulatedEvent } from "@/types/event";
 import Link from "next/link";
+import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
 
 export default async function Home() {
   // Query per ottenere gli eventi
-  const eventsQuery = `*[_type == "event"] | order(date asc) {
+  const eventsQuery = `*[_type == "event" &&
+    ${EVENT_VISIBILITY_CONDITIONS}
+  ] | order(date asc) {
     _id,
     title,
     slug,
@@ -52,7 +55,7 @@ export default async function Home() {
 
           {events
             .filter((event: PopulatedEvent) => event.date ? new Date(event.date) >= new Date() : false)
-            .slice(0, 3)
+            .slice(0, 6)
             .map((event: PopulatedEvent) => (
               <div key={event._id} className="col-md-4 mb-4">
                 <EventCard event={event} />

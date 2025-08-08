@@ -1,6 +1,7 @@
 import { defineQuery } from "next-sanity";
 import { client } from "@/sanity/lib/client";
 import Link from "next/link";
+import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
 
 const sitemapQuery = defineQuery(`{
   "staticPages": *[_type == "static_page" && defined(slug.current)] | order(title asc) {
@@ -14,7 +15,7 @@ const sitemapQuery = defineQuery(`{
     publishedAt,
     excerpt
   },
-  "events": *[_type == "event" && defined(slug.current)] | order(date desc) {
+  "events": *[_type == "event" && defined(slug.current) && ${EVENT_VISIBILITY_CONDITIONS}] | order(date desc) {
     title,
     "slug": slug.current,
     date,

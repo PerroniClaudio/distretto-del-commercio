@@ -1,9 +1,10 @@
 import { sanityFetch } from "@/sanity/lib/live";
 import { NextResponse } from "next/server";
+import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
 
 export async function GET() {
   try {
-    const eventsQuery = `*[_type == "event"] | order(date asc) {
+    const eventsQuery = `*[_type == "event" && ${EVENT_VISIBILITY_CONDITIONS}] | order(date asc) {
       _id,
       title,
       slug,

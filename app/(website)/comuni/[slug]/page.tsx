@@ -4,6 +4,7 @@ import ComuneContent from "@/components/ui/ComuneContent";
 import { Comune } from "@/types/comune";
 import { PopulatedPost } from "@/types/post";
 import { PopulatedEvent } from "@/types/event";
+import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -56,7 +57,7 @@ async function getComuneData(slug: string): Promise<ComuneData | null> {
   });
 
   // Query per gli eventi del comune
-  const eventsQuery = `*[_type == "event" && references($comuneId)] | order(date asc) {
+  const eventsQuery = `*[_type == "event" && references($comuneId) && ${EVENT_VISIBILITY_CONDITIONS}] | order(date asc) {
     _id,
     title,
     slug,

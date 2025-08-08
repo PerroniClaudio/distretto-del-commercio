@@ -1,6 +1,7 @@
 import { sanityFetch } from "@/sanity/lib/live";
 import { notFound } from "next/navigation";
 import EventContent from "@/components/ui/EventContent";
+import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
 
 interface EventPageProps {
   params: Promise<{ slug: string }>;
@@ -9,7 +10,7 @@ interface EventPageProps {
 export default async function EventPage({ params }: EventPageProps) {
   const { slug } = await params;
   
-  const eventQuery = `*[_type == "event" && slug.current == $slug][0] {
+  const eventQuery = `*[_type == "event" && slug.current == $slug && ${EVENT_VISIBILITY_CONDITIONS}][0] {
     _id,
     title,
     slug,

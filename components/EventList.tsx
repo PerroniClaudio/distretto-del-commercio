@@ -3,6 +3,8 @@ import { PopulatedEvent } from "@/types/event";
 import EventCalendar from "./EventCalendar";
 import EventCard from "./ui/EventCard";
 import UpcomingEventsList from "./ui/UpcomingEventsList";
+import EventListPaginated from "./EventListPaginated";
+import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
 
 
 interface EventListProps {
@@ -10,12 +12,17 @@ interface EventListProps {
 }
 
 async function EventList({ view = 'both' }: EventListProps) {
-  const eventsQuery = `*[_type == "event"] | order(date asc) {
+  const eventsQuery = `*[
+    _type == "event" &&
+    ${EVENT_VISIBILITY_CONDITIONS}
+  ] | order(date asc) {
     _id,
     title,
     slug,
     date,
     dateEnd,
+    publishedFrom,
+    publishedTo,
     location,
     description,
     category->{title},
@@ -89,26 +96,16 @@ async function EventList({ view = 'both' }: EventListProps) {
         </div>
       </div>
       
-      {/* Sezione griglia eventi */}
+      {/* Sezione griglia eventi con filtri e paginazione */}
       <div className="container mb-5">
         <div className="row">
           <div className="col-12">
             <h3 className="mb-4 text-center">Tutti gli Eventi</h3>
           </div>
-          
-          {events.length === 0 ? (
-            <div className="col-12">
-              <p className="text-muted text-center py-5">Nessun evento disponibile.</p>
-            </div>
-          ) : (
-            events.map((event: PopulatedEvent) => (
-              <div key={event._id} className="col-12 col-md-6 col-lg-4 mb-4">
-                <EventCard event={event} />
-              </div>
-            ))
-          )}
         </div>
+        <EventListPaginated events={events} />
       </div>
+
     </div>
   );
 }
