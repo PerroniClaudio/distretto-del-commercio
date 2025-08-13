@@ -6,6 +6,9 @@ import { PopulatedEvent } from "@/types/event";
 import Link from "next/link";
 import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/utils";
 
+// Le informazioni devono aggiornarsi dinamicamente. O così o usando il revalidate in sanityFetch
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   // Query per ottenere gli eventi
   const eventsQuery = `*[_type == "event" &&

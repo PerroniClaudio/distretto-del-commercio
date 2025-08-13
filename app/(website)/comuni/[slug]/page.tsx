@@ -6,6 +6,8 @@ import { PopulatedPost } from "@/types/post";
 import { PopulatedEvent } from "@/types/event";
 import { EVENT_VISIBILITY_CONDITIONS, NEWS_VISIBILITY_CONDITIONS } from "@/lib/utils";
 
+// Le informazioni devono aggiornarsi dinamicamente. O così o usando il revalidate in sanityFetch
+export const dynamic = "force-dynamic";
 interface PageProps {
   params: Promise<{ slug: string }>;
 }

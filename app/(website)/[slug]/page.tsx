@@ -3,6 +3,8 @@ import { draftMode } from "next/headers";
 import { client } from "@/sanity/lib/client";
 import { PortableText } from "next-sanity";
 
+// Le informazioni devono aggiornarsi dinamicamente. O così o usando il revalidate in sanityFetch
+export const dynamic = "force-dynamic";
 
 const staticPageQuery = defineQuery(
   `*[_type == "static_page" && slug.current == $slug][0]{title, content}`

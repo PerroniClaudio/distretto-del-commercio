@@ -3,6 +3,9 @@ import AttivitaCommercialiHero from "@/components/ui/AttivitaCommercialiHero";
 import { sanityFetch } from "@/sanity/lib/live";
 import { Metadata } from "next";
 
+// Le informazioni devono aggiornarsi dinamicamente. O così o usando il revalidate in sanityFetch
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Attività Commerciali",
   description: "Esplora le attività commerciali del distretto",
