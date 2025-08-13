@@ -8,10 +8,11 @@ export async function POST(req: Request) {
     // Parsing del file Excel con Web API nativa
     const formData = await req.formData();
     const file = formData.get("file");
-    if (!file || !(file instanceof File)) {
-      return NextResponse.json({ success: false, errors: ["Nessun file caricato."] }, { status: 400 });
+    // In ambiente Node.js (produzione), File non esiste: controlla solo che sia un oggetto compatibile con Blob
+    if (!file || typeof (file as Blob).arrayBuffer !== "function") {
+      return NextResponse.json({ success: false, errors: ["Nessun file caricato o file non valido."] }, { status: 400 });
     }
-    const buffer = await file.arrayBuffer();
+    const buffer = await (file as Blob).arrayBuffer();
     const workbook = XLSX.read(buffer, { type: "array" });
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     // Imposta raw: false per riconoscere la formattazione e convertire automaticamente date/orari in stringa
