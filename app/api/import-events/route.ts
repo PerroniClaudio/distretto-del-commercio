@@ -14,30 +14,34 @@ export async function POST(req: Request) {
   const workbook = XLSX.read(buffer, { type: "array" });
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
   // Imposta raw: false per riconoscere la formattazione e convertire automaticamente date/orari in stringa
-  const rows = XLSX.utils.sheet_to_json(sheet, { defval: "", raw: false }) as Record<string, any>[];
+  const rows = XLSX.utils.sheet_to_json(sheet, { defval: "", raw: false }) as Record<string, string | number>[];
 
   // Validazione: tutti gli eventi devono avere nome, data inizio e comune esistente
   const errors: string[] = [];
-  const eventDocs: any[] = [];
+  const eventDocs: Array<{ _type: string; [key: string]: unknown }> = [];
   
   for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-    const title = row["Nome Evento"]?.trim();
+  const row = rows[i];
+  const title = typeof row["Nome Evento"] === "string" ? row["Nome Evento"].trim() : String(row["Nome Evento"] ?? "").trim();
     const rawDate = row["Data inizio"];
     const rawTime = row["Ora inizio"];
     // Conversione seriale Excel a stringa
     const dateStr = typeof rawDate === "number" ? excelDateToString(rawDate) : rawDate;
     const timeStr = typeof rawTime === "number" ? excelTimeToString(rawTime) : rawTime;
-    let date;
+    let date: string | undefined;
     try {
       date = formatDate(dateStr, timeStr);
-    } catch (err: any) {
-      errors.push(`Riga ${i + 2}: Errore data inizio: ${err?.message || err}`);
+    } catch (err) {
+      if (err instanceof Error) {
+        errors.push(`Riga ${i + 2}: Errore data inizio: ${err.message}`);
+      } else {
+        errors.push(`Riga ${i + 2}: Errore data inizio: ${String(err)}`);
+      }
       date = undefined;
     }
 
-    const comuneName = row["Comune  (singolo)"]?.trim();
-    const categoryName = row["Categoria (singola)"]?.trim();
+  const comuneName = typeof row["Comune  (singolo)"] === "string" ? row["Comune  (singolo)"]?.trim() : String(row["Comune  (singolo)"] ?? "").trim();
+  const categoryName = typeof row["Categoria (singola)"] === "string" ? row["Categoria (singola)"]?.trim() : String(row["Categoria (singola)"] ?? "").trim();
 
     if (!title) {
       errors.push(`Riga ${i + 2}: Nome evento mancante.`);
@@ -67,7 +71,7 @@ export async function POST(req: Request) {
     }
 
     // Genera slug base
-    let baseSlug = title
+    const baseSlug = title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "");
@@ -83,14 +87,14 @@ export async function POST(req: Request) {
       title,
       slug: { _type: "slug", current: slug },
       date,
-      dateEnd: row["Data fine"] ? formatDate(row["Data fine"], row["Ora fine"]) : undefined,
+      dateEnd: row["Data fine"] ? formatDate(String(row["Data fine"]), String(row["Ora fine"])) : undefined,
       comune: comuneId ? { _type: "reference", _ref: comuneId } : undefined,
       location: row["Luogo"],
       category: categoryId ? { _type: "reference", _ref: categoryId } : undefined,
       description: typeof row["Descrizione"] === "string"
         ? textToSanityBlocks(row["Descrizione"])
         : [],
-    });
+    } as { _type: string; [key: string]: unknown });
   }
 
   if (errors.length > 0) {
@@ -139,9 +143,9 @@ function textToSanityBlocks(text: string) {
   if (!text || typeof text !== "string") return [];
   const lines = text.split(/\r?\n/);
   const blocks = [];
-  let currentList: any[] = [];
+  let currentList: Array<Record<string, unknown>> = [];
   // Funzione per generare un ID unico (simile a nanoid, ma senza moduli esterni)
-  function uniqueKey(existingKeys: Set<string>) {
+  function uniqueKey(existingKeys: Set<string>): string {
     let key;
     do {
       key = (
@@ -165,7 +169,7 @@ function textToSanityBlocks(text: string) {
         listItem: "bullet",
         children: [{ _type: "span", _key: uniqueKey(existingKeys), text: trimmed.replace(/^[-*]\s*/, "") }],
         markDefs: []
-      });
+      } as Record<string, unknown>);
     } else if (trimmed) {
       // Paragrafo
       if (currentList.length) {
@@ -178,7 +182,7 @@ function textToSanityBlocks(text: string) {
         style: "normal",
         children: [{ _type: "span", _key: uniqueKey(existingKeys), text: trimmed }],
         markDefs: []
-      });
+      } as Record<string, unknown>);
     } else {
       // Riga vuota: chiudi eventuale lista
       if (currentList.length) {
@@ -239,12 +243,12 @@ function formatDate(dateStr: string, timeStr: string) {
 }
 
 async function getComuneId(nome: string) {
-  const res = await editorClient.fetch(`*[_type == "comune" && title == $nome][0]{_id}`, { nome });
+  const res = await editorClient.fetch<{ _id: string } | null>(`*[_type == "comune" && title == $nome][0]{_id}`, { nome });
   return res?._id;
 }
 
 async function getCategoryId(nome: string) {
-  const res = await editorClient.fetch(`*[_type == "category" && title == $nome][0]{_id}`, { nome });
+  const res = await editorClient.fetch<{ _id: string } | null>(`*[_type == "category" && title == $nome][0]{_id}`, { nome });
   return res?._id;
 }
 
