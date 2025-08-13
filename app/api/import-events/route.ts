@@ -41,6 +41,38 @@ export async function POST(req: Request) {
         date = undefined;
       }
 
+      const rawDateEnd = row["Data fine"];
+      const rawTimeEnd = row["Ora fine"];
+      let dateEnd: string | undefined;
+      if (rawDateEnd) { 
+        // Conversione seriale Excel a stringa
+        const dateEndStr = typeof rawDateEnd === "number" ? excelDateToString(rawDateEnd) : rawDateEnd;
+        const timeEndStr = typeof rawTimeEnd === "number" ? excelTimeToString(rawTimeEnd) : rawTimeEnd;
+        try {
+          // Se la data di fine è definita e l'orario anche allora calcoli dateEnd.
+          // Se manca solo l'orario e la data di inizio è diversa allora crei un altro orario a fine giornata e lo usi per creare la data di fine.
+          // Se la data di fine è uguale alla data di inizio, non impostare dateEnd
+          if(timeEndStr){
+            dateEnd = formatDate(dateEndStr, timeEndStr);
+          } else if (dateEndStr === dateStr) {
+            dateEnd = undefined;
+          } else {
+            dateEnd = formatDate(dateEndStr, "23:59");
+          }
+          // controlla se dateEnd è successiva a date, altrimenti restituisce errore con errors.push
+          if (dateEnd && date && new Date(dateEnd) <= new Date(date)) {
+            errors.push(`Riga ${i + 2}: La data di fine deve essere successiva alla data di inizio.`);
+          }
+        } catch (err) {
+          if (err instanceof Error) {
+            errors.push(`Riga ${i + 2}: Errore data fine: ${err.message}`);
+          } else {
+            errors.push(`Riga ${i + 2}: Errore data fine: ${String(err)}`);
+          }
+          dateEnd = undefined;
+        }
+      }
+
       const comuneName = typeof row["Comune  (singolo)"] === "string" ? row["Comune  (singolo)"]?.trim() : String(row["Comune  (singolo)"] ?? "").trim();
       const categoryName = typeof row["Categoria (singola)"] === "string" ? row["Categoria (singola)"]?.trim() : String(row["Categoria (singola)"] ?? "").trim();
 
@@ -88,7 +120,7 @@ export async function POST(req: Request) {
         title,
         slug: { _type: "slug", current: slug },
         date,
-        dateEnd: row["Data fine"] ? formatDate(String(row["Data fine"]), String(row["Ora fine"])) : undefined,
+        dateEnd,
         comune: comuneId ? { _type: "reference", _ref: comuneId } : undefined,
         location: row["Luogo"],
         category: categoryId ? { _type: "reference", _ref: categoryId } : undefined,
@@ -206,6 +238,7 @@ function textToSanityBlocks(text: string) {
   return blocks;
 }
 
+// Al momento viene chiamato sempre utilizzando una stringa
 function formatDate(dateStr: string, timeStr: string) {
   if (!dateStr) return undefined;
   let day, month, year;
@@ -238,17 +271,13 @@ function formatDate(dateStr: string, timeStr: string) {
     hour = timeParts[0]?.padStart(2, "0") || "00";
     min = timeParts[1]?.padStart(2, "0") || "00";
   }
-
-  // Crea la data come UTC, ignorando il fuso orario locale
-  const utcDate = new Date(Date.UTC(
-    Number(year),
-    Number(month) - 1,
-    Number(day),
-    Number(hour),
-    Number(min),
-    0
-  ));
-  return utcDate.toISOString();
+  // ATTENZIONE: la data inserita è in fuso orario italiano (CET/CEST).
+  // Per avere la stessa data/ora in Structure (Sanity), bisogna salvare la data in formato ISO locale (senza Z/fuso orario),
+  // così Structure la mostra esattamente come inserita (senza conversione UTC).
+  // In Vision invece, Sanity interpreta la data come UTC e la mostra "spostata" rispetto all'Italia.
+  // Quindi, restituiamo una stringa ISO senza suffisso Z (es: "2024-06-10T15:00:00").
+  const localIso = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T${hour}:${min}:00`;
+  return localIso;
 }
 
 async function getComuneId(nome: string) {
