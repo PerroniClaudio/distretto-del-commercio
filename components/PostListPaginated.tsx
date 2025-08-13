@@ -8,7 +8,7 @@ import { Button, Icon, Select } from "design-react-kit";
 import { useComuni } from "@/hooks/useComuni";
 import { useCategories } from "@/hooks/useCategories";
 import { useRouter, useSearchParams } from "next/navigation";
-import { NEWS_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
+import { NEWS_VISIBILITY_CONDITIONS } from "@/lib/utils";
 
 const POSTS_PER_PAGE = 6;
 

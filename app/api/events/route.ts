@@ -1,6 +1,6 @@
 import { sanityFetch } from "@/sanity/lib/live";
 import { NextResponse } from "next/server";
-import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
+import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/utils";
 
 export async function GET() {
   try {

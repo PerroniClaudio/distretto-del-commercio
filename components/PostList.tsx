@@ -1,7 +1,7 @@
 import { sanityFetch } from "@/sanity/lib/live";
 import { PopulatedPost } from "@/types/post";
 import PostCard from "./ui/PostCard";
-import { NEWS_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
+import { NEWS_VISIBILITY_CONDITIONS } from "@/lib/utils";
 
 const POSTS_TO_SHOW = 6;
 

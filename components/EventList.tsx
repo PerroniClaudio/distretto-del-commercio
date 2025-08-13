@@ -4,7 +4,7 @@ import EventCalendar from "./EventCalendar";
 import EventCard from "./ui/EventCard";
 import UpcomingEventsList from "./ui/UpcomingEventsList";
 import EventListPaginated from "./EventListPaginated";
-import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
+import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/utils";
 
 
 interface EventListProps {

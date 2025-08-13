@@ -4,7 +4,7 @@ import ComuneContent from "@/components/ui/ComuneContent";
 import { Comune } from "@/types/comune";
 import { PopulatedPost } from "@/types/post";
 import { PopulatedEvent } from "@/types/event";
-import { EVENT_VISIBILITY_CONDITIONS, NEWS_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
+import { EVENT_VISIBILITY_CONDITIONS, NEWS_VISIBILITY_CONDITIONS } from "@/lib/utils";
 
 interface PageProps {
   params: Promise<{ slug: string }>;

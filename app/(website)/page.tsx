@@ -4,7 +4,7 @@ import { sanityFetch } from "@/sanity/lib/live";
 import EventCard from "@/components/ui/EventCard";
 import { PopulatedEvent } from "@/types/event";
 import Link from "next/link";
-import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/eventUtils";
+import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/utils";
 
 export default async function Home() {
   // Query per ottenere gli eventi
