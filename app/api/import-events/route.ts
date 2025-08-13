@@ -4,109 +4,118 @@ import * as XLSX from "xlsx";
 import { editorClient } from "@/sanity/lib/editorClient";
   
 export async function POST(req: Request) {
-  // Parsing del file Excel con Web API nativa
-  const formData = await req.formData();
-  const file = formData.get("file");
-  if (!file || !(file instanceof File)) {
-    return NextResponse.json({ success: false, errors: ["Nessun file caricato."] }, { status: 400 });
-  }
-  const buffer = await file.arrayBuffer();
-  const workbook = XLSX.read(buffer, { type: "array" });
-  const sheet = workbook.Sheets[workbook.SheetNames[0]];
-  // Imposta raw: false per riconoscere la formattazione e convertire automaticamente date/orari in stringa
-  const rows = XLSX.utils.sheet_to_json(sheet, { defval: "", raw: false }) as Record<string, string | number>[];
+  try {
+    // Parsing del file Excel con Web API nativa
+    const formData = await req.formData();
+    const file = formData.get("file");
+    if (!file || !(file instanceof File)) {
+      return NextResponse.json({ success: false, errors: ["Nessun file caricato."] }, { status: 400 });
+    }
+    const buffer = await file.arrayBuffer();
+    const workbook = XLSX.read(buffer, { type: "array" });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    // Imposta raw: false per riconoscere la formattazione e convertire automaticamente date/orari in stringa
+    const rows = XLSX.utils.sheet_to_json(sheet, { defval: "", raw: false }) as Record<string, string | number>[];
 
-  // Validazione: tutti gli eventi devono avere nome, data inizio e comune esistente
-  const errors: string[] = [];
-  const eventDocs: Array<{ _type: string; [key: string]: unknown }> = [];
-  
-  for (let i = 0; i < rows.length; i++) {
-  const row = rows[i];
-  const title = typeof row["Nome Evento"] === "string" ? row["Nome Evento"].trim() : String(row["Nome Evento"] ?? "").trim();
-    const rawDate = row["Data inizio"];
-    const rawTime = row["Ora inizio"];
-    // Conversione seriale Excel a stringa
-    const dateStr = typeof rawDate === "number" ? excelDateToString(rawDate) : rawDate;
-    const timeStr = typeof rawTime === "number" ? excelTimeToString(rawTime) : rawTime;
-    let date: string | undefined;
-    try {
-      date = formatDate(dateStr, timeStr);
-    } catch (err) {
-      if (err instanceof Error) {
-        errors.push(`Riga ${i + 2}: Errore data inizio: ${err.message}`);
-      } else {
-        errors.push(`Riga ${i + 2}: Errore data inizio: ${String(err)}`);
+    // Validazione: tutti gli eventi devono avere nome, data inizio e comune esistente
+    const errors: string[] = [];
+    const eventDocs: Array<{ _type: string; [key: string]: unknown }> = [];
+    
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      const title = typeof row["Nome Evento"] === "string" ? row["Nome Evento"].trim() : String(row["Nome Evento"] ?? "").trim();
+      const rawDate = row["Data inizio"];
+      const rawTime = row["Ora inizio"];
+      // Conversione seriale Excel a stringa
+      const dateStr = typeof rawDate === "number" ? excelDateToString(rawDate) : rawDate;
+      const timeStr = typeof rawTime === "number" ? excelTimeToString(rawTime) : rawTime;
+      let date: string | undefined;
+      try {
+        date = formatDate(dateStr, timeStr);
+      } catch (err) {
+        if (err instanceof Error) {
+          errors.push(`Riga ${i + 2}: Errore data inizio: ${err.message}`);
+        } else {
+          errors.push(`Riga ${i + 2}: Errore data inizio: ${String(err)}`);
+        }
+        date = undefined;
       }
-      date = undefined;
-    }
 
-  const comuneName = typeof row["Comune  (singolo)"] === "string" ? row["Comune  (singolo)"]?.trim() : String(row["Comune  (singolo)"] ?? "").trim();
-  const categoryName = typeof row["Categoria (singola)"] === "string" ? row["Categoria (singola)"]?.trim() : String(row["Categoria (singola)"] ?? "").trim();
+      const comuneName = typeof row["Comune  (singolo)"] === "string" ? row["Comune  (singolo)"]?.trim() : String(row["Comune  (singolo)"] ?? "").trim();
+      const categoryName = typeof row["Categoria (singola)"] === "string" ? row["Categoria (singola)"]?.trim() : String(row["Categoria (singola)"] ?? "").trim();
 
-    if (!title) {
-      errors.push(`Riga ${i + 2}: Nome evento mancante.`);
-    }
-    if (!rawDate || typeof rawDate !== "string" || rawDate.trim() === "") {
-      errors.push(`Riga ${i + 2}: Data inizio mancante o non valida. Valore raw: ${JSON.stringify(rawDate)}`);
-    }
-    if (rawTime && typeof rawTime !== "string") {
-      errors.push(`Riga ${i + 2}: Ora inizio non valida. Valore raw: ${JSON.stringify(rawTime)}`);
-    }
-    if (date && !isValidDate(date)) {
-      errors.push(`Riga ${i + 2}: Data inizio non valida. Data calcolata: ${date}, Valori raw: data=${JSON.stringify(rawDate)}, ora=${JSON.stringify(rawTime)}`);
-    }
-    let comuneId = undefined;
-    if (comuneName){
-      comuneId = await getComuneId(comuneName);
-      if (!comuneId) {
-        errors.push(`Riga ${i + 2}: Comune "${comuneName}" non trovato.`);
+      if (!title) {
+        errors.push(`Riga ${i + 2}: Nome evento mancante.`);
       }
-    }
-    let categoryId = undefined;
-    if (categoryName) {
-      categoryId = await getCategoryId(categoryName);
-      if (!categoryId) {
-        errors.push(`Riga ${i + 2}: Categoria "${categoryName}" non trovata.`);
+      if (!rawDate || typeof rawDate !== "string" || rawDate.trim() === "") {
+        errors.push(`Riga ${i + 2}: Data inizio mancante o non valida. Valore raw: ${JSON.stringify(rawDate)}`);
       }
+      if (rawTime && typeof rawTime !== "string") {
+        errors.push(`Riga ${i + 2}: Ora inizio non valida. Valore raw: ${JSON.stringify(rawTime)}`);
+      }
+      if (date && !isValidDate(date)) {
+        errors.push(`Riga ${i + 2}: Data inizio non valida. Data calcolata: ${date}, Valori raw: data=${JSON.stringify(rawDate)}, ora=${JSON.stringify(rawTime)}`);
+      }
+      let comuneId = undefined;
+      if (comuneName){
+        comuneId = await getComuneId(comuneName);
+        if (!comuneId) {
+          errors.push(`Riga ${i + 2}: Comune "${comuneName}" non trovato.`);
+        }
+      }
+      let categoryId = undefined;
+      if (categoryName) {
+        categoryId = await getCategoryId(categoryName);
+        if (!categoryId) {
+          errors.push(`Riga ${i + 2}: Categoria "${categoryName}" non trovata.`);
+        }
+      }
+
+      // Genera slug base
+      const baseSlug = title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+      let slug = baseSlug;
+      let suffix = 1;
+      // Controlla se lo slug esiste già
+      while (await slugExists(slug)) {
+        slug = `${baseSlug}-${suffix++}`;
+      }
+
+      eventDocs.push({
+        _type: "event",
+        title,
+        slug: { _type: "slug", current: slug },
+        date,
+        dateEnd: row["Data fine"] ? formatDate(String(row["Data fine"]), String(row["Ora fine"])) : undefined,
+        comune: comuneId ? { _type: "reference", _ref: comuneId } : undefined,
+        location: row["Luogo"],
+        category: categoryId ? { _type: "reference", _ref: categoryId } : undefined,
+        description: typeof row["Descrizione"] === "string"
+          ? textToSanityBlocks(row["Descrizione"])
+          : [],
+      } as { _type: string; [key: string]: unknown });
     }
 
-    // Genera slug base
-    const baseSlug = title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-    let slug = baseSlug;
-    let suffix = 1;
-    // Controlla se lo slug esiste già
-    while (await slugExists(slug)) {
-      slug = `${baseSlug}-${suffix++}`;
+    if (errors.length > 0) {
+      return NextResponse.json({ success: false, errors }, { status: 400 });
     }
 
-    eventDocs.push({
-      _type: "event",
-      title,
-      slug: { _type: "slug", current: slug },
-      date,
-      dateEnd: row["Data fine"] ? formatDate(String(row["Data fine"]), String(row["Ora fine"])) : undefined,
-      comune: comuneId ? { _type: "reference", _ref: comuneId } : undefined,
-      location: row["Luogo"],
-      category: categoryId ? { _type: "reference", _ref: categoryId } : undefined,
-      description: typeof row["Descrizione"] === "string"
-        ? textToSanityBlocks(row["Descrizione"])
-        : [],
-    } as { _type: string; [key: string]: unknown });
-  }
+    // Se tutto ok, crea tutti gli eventi
+    for (const eventDoc of eventDocs) {
+      await editorClient.create(eventDoc);
+    }
 
-  if (errors.length > 0) {
-    return NextResponse.json({ success: false, errors }, { status: 400 });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    // Restituisci dettagli dell'errore in risposta
+    return NextResponse.json({
+      success: false,
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    }, { status: 500 });
   }
-
-  // Se tutto ok, crea tutti gli eventi
-  for (const eventDoc of eventDocs) {
-    await editorClient.create(eventDoc);
-  }
-
-  return NextResponse.json({ success: true });
 }
 
 // Converte un seriale Excel (numero) in stringa data dd/mm/yyyy
