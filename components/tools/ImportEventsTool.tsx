@@ -15,7 +15,8 @@ export default function ImportEventsTool() {
         </a>
       </div>
       <div style={{ marginTop: "1rem" }}>
-        <p>Carica il template compilato per importare eventi in Sanity.</p>
+        <p>Carica il template compilato per importare gli eventi.</p>
+        <p>Immagini e allegati vanno caricati dall'evento, dopo averlo generato.</p>
         <ImportEventsForm />
       </div>
     </div>

@@ -31,15 +31,12 @@ export async function POST(req: Request) {
       // Data inizio evento
       const rawDate = row["Data inizio evento *"];
       const rawTime = row["Ora inizio evento"];
-      console.log("Raw Date:", rawDate);
       // Conversione seriale Excel a stringa
       const dateStr = typeof rawDate === "number" ? excelDateToString(rawDate) : rawDate;
       const timeStr = typeof rawTime === "number" ? excelTimeToString(rawTime) : rawTime;
-      console.log("Parsed Date:", dateStr);
       let date: string | undefined;
       try {
         date = formatDate(dateStr, timeStr);
-        console.log("Formatted Date:", date);
       } catch (err) {
         if (err instanceof Error) {
           errors.push(`Riga ${i + 2}: Errore data inizio: ${err.message}`);
