@@ -36,9 +36,9 @@ export default function ImportEventsForm() {
 
   return (
     <form onSubmit={handleSubmit} className="mb-4">
-      <div className="">  {/* dopo aver risolto l'errore nell'api allineare questi elementi. */}
+      <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>  {/* dopo aver risolto l'errore nell'api allineare questi elementi. */}
         <input type="file" accept=".xlsx,.xls" onChange={e => setFile(e.target.files?.[0] || null)} />
-        <Button color="primary" outline className="mt-2" type="submit" disabled={loading || !file} >
+        <Button color="primary" outline type="submit" disabled={loading || !file} >
           {loading ? "Importazione..." : "Importa eventi"}
         </Button>
       </div>

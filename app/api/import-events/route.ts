@@ -24,15 +24,22 @@ export async function POST(req: Request) {
     
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
-      const title = typeof row["Nome Evento"] === "string" ? row["Nome Evento"].trim() : String(row["Nome Evento"] ?? "").trim();
-      const rawDate = row["Data inizio"];
-      const rawTime = row["Ora inizio"];
+
+      // Nome evento
+      const title = typeof row["Nome Evento *"] === "string" ? row["Nome Evento *"].trim() : String(row["Nome Evento *"] ?? "").trim();
+      
+      // Data inizio evento
+      const rawDate = row["Data inizio evento *"];
+      const rawTime = row["Ora inizio evento"];
+      console.log("Raw Date:", rawDate);
       // Conversione seriale Excel a stringa
       const dateStr = typeof rawDate === "number" ? excelDateToString(rawDate) : rawDate;
       const timeStr = typeof rawTime === "number" ? excelTimeToString(rawTime) : rawTime;
+      console.log("Parsed Date:", dateStr);
       let date: string | undefined;
       try {
         date = formatDate(dateStr, timeStr);
+        console.log("Formatted Date:", date);
       } catch (err) {
         if (err instanceof Error) {
           errors.push(`Riga ${i + 2}: Errore data inizio: ${err.message}`);
@@ -41,9 +48,9 @@ export async function POST(req: Request) {
         }
         date = undefined;
       }
-
-      const rawDateEnd = row["Data fine"];
-      const rawTimeEnd = row["Ora fine"];
+      // Data fine evento
+      const rawDateEnd = row["Data fine evento"];
+      const rawTimeEnd = row["Ora fine evento"];
       let dateEnd: string | undefined;
       if (rawDateEnd) { 
         // Conversione seriale Excel a stringa
@@ -74,7 +81,28 @@ export async function POST(req: Request) {
         }
       }
 
-      const comuneName = typeof row["Comune  (singolo)"] === "string" ? row["Comune  (singolo)"]?.trim() : String(row["Comune  (singolo)"] ?? "").trim();
+      // Date inizio e fine pubblicazione
+      let publishedFrom: string | undefined = undefined;
+      let publishedTo: string | undefined = undefined;
+      const rawPublishedFromRaw = row["Data inizio pubblicazione (opzionale, se assente viene pubblicato direttamente)"];
+      const rawPublishedToRaw = row["Data fine pubblicazione (opzionale, se assente rimane sempre visibile)"];
+      // Conversione seriale Excel a stringa
+      const publishedFromRaw = typeof rawPublishedFromRaw === "number" ? excelDateToString(rawPublishedFromRaw) : rawPublishedFromRaw;
+      const publishedToRaw = typeof rawPublishedToRaw === "number" ? excelDateToString(rawPublishedToRaw) : rawPublishedToRaw;
+      try {
+        if (publishedFromRaw) {
+          publishedFrom = formatDate(publishedFromRaw, "00:00");
+        }
+        if (publishedToRaw) {
+          publishedTo = formatDate(publishedToRaw, "23:59");
+        }
+      } catch (err) {
+        errors.push(`Riga ${i + 2}: Errore nelle date di pubblicazione: ${err instanceof Error ? err.message : String(err)}`);
+      }
+
+      // Comune
+      const comuneName = typeof row["Comune (singolo) *"] === "string" ? row["Comune (singolo) *"]?.trim() : String(row["Comune (singolo) *"] ?? "").trim();
+      // Categoria
       const categoryName = typeof row["Categoria (singola)"] === "string" ? row["Categoria (singola)"]?.trim() : String(row["Categoria (singola)"] ?? "").trim();
 
       if (!title) {
@@ -128,6 +156,8 @@ export async function POST(req: Request) {
         description: typeof row["Descrizione"] === "string"
           ? textToSanityBlocks(row["Descrizione"])
           : [],
+        publishedFrom,
+        publishedTo,
       } as { _type: string; [key: string]: unknown });
     }
 
@@ -282,12 +312,18 @@ function formatDate(dateStr: string, timeStr: string) {
 }
 
 async function getComuneId(nome: string) {
-  const res = await editorClient.fetch<{ _id: string } | null>(`*[_type == "comune" && title == $nome][0]{_id}`, { nome });
+  const res = await editorClient.fetch<{ _id: string } | null>(
+    `*[_type == "comune" && lower(title) == lower($nome)][0]{_id}`,
+    { nome }
+  );
   return res?._id;
 }
 
 async function getCategoryId(nome: string) {
-  const res = await editorClient.fetch<{ _id: string } | null>(`*[_type == "category" && title == $nome][0]{_id}`, { nome });
+  const res = await editorClient.fetch<{ _id: string } | null>(
+    `*[_type == "category" && lower(title) == lower($nome)][0]{_id}`,
+    { nome }
+  );
   return res?._id;
 }
 
