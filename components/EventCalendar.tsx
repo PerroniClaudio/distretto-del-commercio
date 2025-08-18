@@ -159,6 +159,56 @@ export default function EventCalendar({ events }: EventCalendarProps) {
     return date.toDateString() === today.toDateString();
   };
 
+  const getDateStringFromTo = (evnt: PopulatedEvent | null) => {
+    if (!evnt || !evnt.date) return '';
+    const startDate = new Date(evnt.date);
+    const endDate = evnt.dateEnd ? new Date(evnt.dateEnd) : null;
+    const isStartMidnight = startDate.getHours() === 0 && startDate.getMinutes() === 0;
+    // Se la data di fine non c'è significa che è il giorno stesso a fine giornata.
+    const isClosingEndOfDay = !endDate || (endDate && endDate.getHours() === 23 && endDate.getMinutes() === 59);
+    const isSameDay = !endDate || (endDate && startDate.toDateString() === endDate.toDateString());
+    if (isSameDay) {
+      // Solo data, senza orario
+      return startDate.toLocaleDateString('it-IT', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }) + 
+      // Se inizia a mezzanotte e finisce a fine giornata o non c'è la data di fine, mette "Tutto il giorno", altrimenti mette i dati che ha
+      (isStartMidnight && isClosingEndOfDay 
+        ? ' Tutto il giorno'
+        : ` Dalle ore ${startDate.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })} ${!!endDate ? 'alle ore' + endDate.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) : ''}` 
+      );
+    }
+    return (
+      <> Da {' '}
+        {startDate.toLocaleDateString('it-IT', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}
+        {endDate && (
+          <>
+            <br />
+            {'A '}
+            {endDate.toLocaleDateString('it-IT', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })}
+          </>
+        )}
+      </>
+    );
+  };
+
   return (
     <div className="calendar-container">
       {/* Header del calendario */}
@@ -405,31 +455,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
 
                 <div className="mb-3">
                   <strong>Data:</strong> {' '}
-                  {selectedEvent.date && (
-                    <>
-                      {new Date(selectedEvent.date).toLocaleDateString('it-IT', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
-                      {selectedEvent.dateEnd && (
-                        <>
-                          {' - '}
-                          {new Date(selectedEvent.dateEnd).toLocaleDateString('it-IT', {
-                            weekday: 'long',
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </>
-                      )}
-                    </>
-                  )}
+                  {getDateStringFromTo(selectedEvent)}
                 </div>
 
                 {selectedEvent.location && (
