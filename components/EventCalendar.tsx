@@ -57,68 +57,96 @@ export default function EventCalendar({ events }: EventCalendarProps) {
           event,
           startDate: eventStartDate,
           endDate: eventEndDate,
-          level: -1 // Sarà assegnato dinamicamente
+          levels: [] as number[] // livelli per ogni giorno
         };
       })
       .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
-    // Mappa per tracciare quali eventi sono attivi in ogni livello per ogni giorno
-    const activeLevels = new Map<string, Map<number, string>>(); // dateKey -> level -> eventId
-    
-    // Processa ogni evento e assegna il livello dinamicamente
+    // Mappa per tracciare i livelli occupati per ogni giorno
+    const dayLevels = new Map<string, (string | null)[]>(); // dateKey -> [eventId|null, ...]
+
+    // Per ogni evento, assegna il livello giorno per giorno
     eventRanges.forEach(eventRange => {
-      let assignedLevel = -1;
-      
-      // Trova il primo livello disponibile al momento dell'inizio dell'evento
-      const startDateKey = `${eventRange.startDate.getFullYear()}-${eventRange.startDate.getMonth()}-${eventRange.startDate.getDate()}`;
-      
-      if (!activeLevels.has(startDateKey)) {
-        activeLevels.set(startDateKey, new Map());
-      }
-      
-      const startDayLevels = activeLevels.get(startDateKey)!;
-      
-      // Trova il primo livello libero
-      for (let level = 0; level < 10; level++) {
-        if (!startDayLevels.has(level)) {
-          assignedLevel = level;
-          break;
-        }
-      }
-      
-      // Assegna questo livello all'evento per tutta la sua durata
-      eventRange.level = assignedLevel;
+      let prevLevel: number | null = null;
       const currentDate = new Date(eventRange.startDate);
-      
+      let firstDay = true;
       while (currentDate <= eventRange.endDate) {
         const dateKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate()}`;
-        
-        if (!activeLevels.has(dateKey)) {
-          activeLevels.set(dateKey, new Map());
+        if (!dayLevels.has(dateKey)) {
+          dayLevels.set(dateKey, Array(10).fill(null));
         }
-        
-        activeLevels.get(dateKey)!.set(assignedLevel, eventRange.event._id);
+        const levelsArr = dayLevels.get(dateKey)!;
+
+        let assignedLevel = -1;
+        if (firstDay) {
+          // Primo giorno: trova il primo slot libero
+          for (let i = 0; i < 10; i++) {
+            if (!levelsArr[i]) {
+              assignedLevel = i;
+              break;
+            }
+          }
+        } else {
+          // Giorni successivi: se l'evento è già nei primi 3 livelli (0-2), mantienilo stabile
+          if (prevLevel !== null && prevLevel < 3 && !levelsArr[prevLevel]) {
+            assignedLevel = prevLevel;
+          } else if (prevLevel !== null && prevLevel < 3 && levelsArr[prevLevel]) {
+            // Se il livello precedente nei primi 3 è occupato, l'evento è in conflitto - non dovrebbe succedere
+            assignedLevel = -1;
+          } else {
+            // L'evento non era nei primi 3 livelli, cerca se c'è spazio nei primi 3 livelli (priorità assoluta)
+            for (let i = 0; i < 3; i++) {
+              if (!levelsArr[i]) {
+                assignedLevel = i;
+                break;
+              }
+            }
+            
+            // Se non c'è spazio nei primi 3, mantieni il livello precedente se libero
+            if (assignedLevel === -1 && prevLevel !== null && !levelsArr[prevLevel]) {
+              assignedLevel = prevLevel;
+            }
+            
+            // Se il livello precedente non è più disponibile, cerca un nuovo slot dal livello 3 in poi
+            if (assignedLevel === -1) {
+              for (let i = 3; i < 10; i++) {
+                if (!levelsArr[i]) {
+                  assignedLevel = i;
+                  break;
+                }
+              }
+            }
+          }
+        }
+        // Assegna l'evento allo slot trovato
+        if (assignedLevel !== -1) {
+          levelsArr[assignedLevel] = eventRange.event._id;
+        }
+        eventRange.levels.push(assignedLevel);
+        prevLevel = assignedLevel;
+        firstDay = false;
         currentDate.setDate(currentDate.getDate() + 1);
       }
     });
 
-    // Mappa eventi per data con i loro livelli
+    // Mappa eventi per data con i loro livelli (usando levels[])
     eventRanges.forEach(eventRange => {
-      const currentEventDate = new Date(eventRange.startDate);
-      
-      while (currentEventDate <= eventRange.endDate) {
+      const totalDays = Math.round((eventRange.endDate.getTime() - eventRange.startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+      for (let i = 0; i < totalDays; i++) {
+        const currentEventDate = new Date(eventRange.startDate);
+        currentEventDate.setDate(currentEventDate.getDate() + i);
         const dateKey = `${currentEventDate.getFullYear()}-${currentEventDate.getMonth()}-${currentEventDate.getDate()}`;
-
         if (!eventsMap.has(dateKey)) {
           eventsMap.set(dateKey, []);
         }
-        
-        eventsMap.get(dateKey)!.push({
-          event: eventRange.event,
-          level: eventRange.level
-        });
-
-        currentEventDate.setDate(currentEventDate.getDate() + 1);
+        // Usa il livello corretto per questo giorno
+        const level = eventRange.levels[i];
+        if (level !== -1) {
+          eventsMap.get(dateKey)!.push({
+            event: eventRange.event,
+            level
+          });
+        }
       }
     });
 
@@ -263,7 +291,7 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                     style={{ minHeight: '120px', maxHeight: '153px' }}
                   >
                     <div className="day-content py-2 h-100 d-flex flex-column">
-                      <div className="day-number mb-1 ml-2 flex-shrink-0">
+                      <div className="day-number mb-1 ms-2 flex-shrink-0">
                         {date.getDate()}
                       </div>
 
@@ -271,17 +299,17 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                         <div className="events-preview flex-grow-1 overflow-hidden">
                           {/* Calcola il numero massimo di livelli per questo giorno */}
                           {(() => {
-                            const maxLevel = Math.max(...dayEvents.map(e => e.level), -1);
-                            const levelSlots = Array.from({ length: maxLevel + 1 }, (_, levelIndex) => {
-                              const eventAtLevel = dayEvents.find(e => e.level === levelIndex);
-                              return eventAtLevel || null;
-                            });
-
+                            // Mostra sempre i primi 3 eventi per livello, anche se ci sono buchi
                             const truncateText = (text: string) => {
-                              return text.length > 13 ? text.substring(0, 13) + '...' : text;
+                              return text.length > 11 ? text.substring(0, 10) + '...' : text;
                             };
 
-                            return levelSlots.slice(0, 3).map((eventWithLevel, levelIndex) => {
+                            // Trova i primi 3 eventi con livello 0, 1, 2 (anche se ci sono buchi)
+                            const levelSlots = [0, 1, 2].map(levelIndex => {
+                              return dayEvents.find(e => e.level === levelIndex) || null;
+                            });
+
+                            return levelSlots.map((eventWithLevel, levelIndex) => {
                               // Determina lo stato dell'evento per questo giorno
                               const eventState = {
                                 isStart: false,
@@ -292,12 +320,10 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                               if (eventWithLevel) {
                                 const eventStartDate = new Date(eventWithLevel.event.date!);
                                 const eventEndDate = eventWithLevel.event.dateEnd ? new Date(eventWithLevel.event.dateEnd) : eventStartDate;
-                                
                                 // Normalizza le date per confronto (solo giorno, senza ora)
                                 const currentDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
                                 const startDay = new Date(eventStartDate.getFullYear(), eventStartDate.getMonth(), eventStartDate.getDate());
                                 const endDay = new Date(eventEndDate.getFullYear(), eventEndDate.getMonth(), eventEndDate.getDate());
-                                
                                 eventState.isStart = currentDay.getTime() === startDay.getTime();
                                 eventState.isEnd = currentDay.getTime() === endDay.getTime();
                                 eventState.isContinuation = currentDay.getTime() > startDay.getTime() && currentDay.getTime() < endDay.getTime();
@@ -306,7 +332,6 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                               // Determina la classe CSS in base allo stato
                               const getEventClass = () => {
                                 if (!eventWithLevel) return '';
-                                
                                 if (eventState.isStart && eventState.isEnd) {
                                   return 'event-start-end';
                                 } else if (eventState.isStart) {
@@ -321,7 +346,6 @@ export default function EventCalendar({ events }: EventCalendarProps) {
 
                               // Crea un ID univoco per il tooltip
                               const eventId = eventWithLevel ? `event-${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-${levelIndex}-${eventWithLevel.event._id}` : undefined;
-                              
                               return (
                                 <div
                                   key={`level-${levelIndex}`}
@@ -347,7 +371,6 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                                           const allEventDots = document.querySelectorAll(`[data-event-id="${eventId}"]`);
                                           allEventDots.forEach(dot => dot.classList.remove('event-highlighted'));
                                         }}
-                                        // title={eventWithLevel.event.title}
                                       >
                                         {truncateText(eventWithLevel.event.title || '')}
                                       </div>
