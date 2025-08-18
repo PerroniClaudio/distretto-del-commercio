@@ -4,4 +4,11 @@ export interface Comune {
   slug: {
     current: string;
   };
+  image?: {
+    asset?: {
+      url: string;
+      _id: string;
+    };
+    alt?: string;
+  };
 }

@@ -20,5 +20,13 @@ export default {
         maxLength: 96,
       },
     },
+    {
+      name: "image",
+      title: "Immagine",
+      type: "image",
+      options: {
+        hotspot: true, // Enables image cropping and focal point selection
+      },
+    },
   ],
 };

@@ -22,13 +22,13 @@ export default function EventCard({ event }: EventCardProps) {
   return (
     <Card className={`card-bg border-bottom-card ${!isUpcoming ? 'opacity-75' : ''}`}>
       {/* Header con titolo e badge stato */}
-     
+
 
       {/* Immagine evento */}
       <CardImg
         className="img-fluid event-card-image"
-        src={event.image?.asset?.url || "https://picsum.photos/1920/1080"}
-        alt={event.image?.alt || event.title}
+        src={event.image?.asset?.url || event.comune?.image?.asset?.url || "https://picsum.photos/1920/1080"}
+        alt={event.image?.alt || event.comune?.image?.alt || event.title}
         width={480}
         height={270}
       />
@@ -120,7 +120,7 @@ export default function EventCard({ event }: EventCardProps) {
 
         {/* Footer con categoria e link */}
         <div className="d-flex justify-content-end align-items-center mt-3">
-         
+
 
           <Link
             href={`/eventi/${event.slug?.current}`}

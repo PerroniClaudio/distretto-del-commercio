@@ -56,7 +56,7 @@ function ComuneContent({ data }: ComuneContentProps) {
       {/* Hero del comune */}
       <Hero overlay="dark">
         <HeroBackground
-          src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+          src={comune.image?.asset?.url || "https://picsum.photos/1920/1080"}
           alt={`Comune di ${comune.title}`}
           title={`Comune di ${comune.title}`}
         />
@@ -64,7 +64,7 @@ function ComuneContent({ data }: ComuneContentProps) {
           <HeroCategory>Comune</HeroCategory>
           <HeroTitle tag="h1">{comune.title}</HeroTitle>
           <p className="d-none d-lg-block lead">
-            Scopri tutte le notizie e gli eventi del comune di {comune.title}. 
+            Scopri tutte le notizie e gli eventi del comune di {comune.title}.
             Resta aggiornato sulle iniziative locali e le attività del territorio.
           </p>
         </HeroBody>
@@ -177,7 +177,7 @@ function ComuneContent({ data }: ComuneContentProps) {
                     icon="it-calendar"
                   />
                   <span>
-                  Eventi ({events.length})
+                    Eventi ({events.length})
                   </span>
                 </span>
               </TabNavLink>
@@ -189,132 +189,132 @@ function ComuneContent({ data }: ComuneContentProps) {
               eventKey="1"
             >
               {posts.length === 0 ? (
-                  <Card className="text-center py-5">
-                    <CardBody>
+                <Card className="text-center py-5">
+                  <CardBody>
+                    <Icon
+                      className="icon-lg mb-3"
+                      color="secondary"
+                      icon="it-file"
+                    />
+                    <h5>Nessuna notizia disponibile</h5>
+                    <p className="text-muted">
+                      Non ci sono ancora notizie pubblicate per il comune di {comune.title}.
+                    </p>
+                    <Button color="primary" href="/notizie">
                       <Icon
-                        className="icon-lg mb-3"
-                        color="secondary"
-                        icon="it-file"
+                        className="icon-sm me-2"
+                        icon="it-arrow-right"
                       />
-                      <h5>Nessuna notizia disponibile</h5>
-                      <p className="text-muted">
-                        Non ci sono ancora notizie pubblicate per il comune di {comune.title}.
-                      </p>
-                      <Button color="primary" href="/notizie">
-                        <Icon
-                          className="icon-sm me-2"
-                          icon="it-arrow-right"
-                        />
-                        Vedi tutte le notizie
-                      </Button>
-                    </CardBody>
-                  </Card>
-                ) : (
-                  <>
-                    <div className="d-flex justify-content-between align-items-center mb-4">
-                      <h3>Notizie di {comune.title}</h3>
-                      <Button color="outline-primary" size="sm" href="/notizie">
-                        <Icon
-                          className="icon-sm me-2"
-                          icon="it-external-link"
-                        />
-                        Tutte le notizie
-                      </Button>
-                    </div>
-                    
-                    <Row>
-                      {posts.map((post) => (
-                        <Col key={post._id} md={6} lg={4} className="mb-4">
-                          <PostCard post={post} />
-                        </Col>
-                      ))}
-                    </Row>
-                  </>
-                )}
+                      Vedi tutte le notizie
+                    </Button>
+                  </CardBody>
+                </Card>
+              ) : (
+                <>
+                  <div className="d-flex justify-content-between align-items-center mb-4">
+                    <h3>Notizie di {comune.title}</h3>
+                    <Button color="outline-primary" size="sm" href="/notizie">
+                      <Icon
+                        className="icon-sm me-2"
+                        icon="it-external-link"
+                      />
+                      Tutte le notizie
+                    </Button>
+                  </div>
+
+                  <Row>
+                    {posts.map((post) => (
+                      <Col key={post._id} md={6} lg={4} className="mb-4">
+                        <PostCard post={post} />
+                      </Col>
+                    ))}
+                  </Row>
+                </>
+              )}
             </TabPane>
             <TabPane
               className="p-4"
               eventKey="2"
             >
-                              {events.length === 0 ? (
-                  <Card className="text-center py-5">
-                    <CardBody>
+              {events.length === 0 ? (
+                <Card className="text-center py-5">
+                  <CardBody>
+                    <Icon
+                      className="icon-lg mb-3"
+                      color="secondary"
+                      icon="it-calendar"
+                    />
+                    <h5>Nessun evento disponibile</h5>
+                    <p className="text-muted">
+                      Non ci sono eventi programmati per il comune di {comune.title}.
+                    </p>
+                    <Button color="primary" href="/eventi">
                       <Icon
-                        className="icon-lg mb-3"
-                        color="secondary"
-                        icon="it-calendar"
+                        className="icon-sm me-2"
+                        icon="it-arrow-right"
                       />
-                      <h5>Nessun evento disponibile</h5>
-                      <p className="text-muted">
-                        Non ci sono eventi programmati per il comune di {comune.title}.
-                      </p>
-                      <Button color="primary" href="/eventi">
+                      Vedi tutti gli eventi
+                    </Button>
+                  </CardBody>
+                </Card>
+              ) : (
+                <>
+                  <div className="d-flex justify-content-between align-items-center mb-4">
+                    <h3>Eventi di {comune.title}</h3>
+                    <Button color="outline-primary" size="sm" href="/eventi">
+                      <Icon
+                        className="icon-sm me-2"
+                        icon="it-external-link"
+                      />
+                      Tutti gli eventi
+                    </Button>
+                  </div>
+
+                  {/* Eventi in programma */}
+                  {upcomingEvents.length > 0 && (
+                    <>
+                      <h4 className="mb-3 text-success">
                         <Icon
                           className="icon-sm me-2"
-                          icon="it-arrow-right"
+                          color="success"
+                          icon="it-calendar"
                         />
-                        Vedi tutti gli eventi
-                      </Button>
-                    </CardBody>
-                  </Card>
-                ) : (
-                  <>
-                    <div className="d-flex justify-content-between align-items-center mb-4">
-                      <h3>Eventi di {comune.title}</h3>
-                      <Button color="outline-primary" size="sm" href="/eventi">
+                        Prossimi Eventi
+                      </h4>
+                      <Row className="mb-5">
+                        {upcomingEvents.map((event) => (
+                          <Col key={event._id} md={6} lg={4} className="mb-4">
+                            <EventCard event={event} />
+                          </Col>
+                        ))}
+                      </Row>
+                    </>
+                  )}
+
+                  {/* Eventi passati */}
+                  {pastEvents.length > 0 && (
+                    <>
+                      <h4 className="mb-3 text-secondary">
                         <Icon
                           className="icon-sm me-2"
-                          icon="it-external-link"
+                          color="secondary"
+                          icon="it-clock"
                         />
-                        Tutti gli eventi
-                      </Button>
-                    </div>
-
-                    {/* Eventi in programma */}
-                    {upcomingEvents.length > 0 && (
-                      <>
-                        <h4 className="mb-3 text-success">
-                          <Icon
-                            className="icon-sm me-2"
-                            color="success"
-                            icon="it-calendar"
-                          />
-                          Prossimi Eventi
-                        </h4>
-                        <Row className="mb-5">
-                          {upcomingEvents.map((event) => (
-                            <Col key={event._id} md={6} lg={4} className="mb-4">
-                              <EventCard event={event} />
-                            </Col>
-                          ))}
-                        </Row>
-                      </>
-                    )}
-
-                    {/* Eventi passati */}
-                    {pastEvents.length > 0 && (
-                      <>
-                        <h4 className="mb-3 text-secondary">
-                          <Icon
-                            className="icon-sm me-2"
-                            color="secondary"
-                            icon="it-clock"
-                          />
-                          Eventi Passati
-                        </h4>
-                        <Row>
-                          {pastEvents.map((event) => (
-                            <Col key={event._id} md={6} lg={4} className="mb-4">
-                              <EventCard event={event} />
-                            </Col>
-                          ))}
-                        </Row>
-                      </>
-                    )}
-                  </>
-                )}
+                        Eventi Passati
+                      </h4>
+                      <Row>
+                        {pastEvents.map((event) => (
+                          <Col key={event._id} md={6} lg={4} className="mb-4">
+                            <EventCard event={event} />
+                          </Col>
+                        ))}
+                      </Row>
+                    </>
+                  )}
+                </>
+              )}
             </TabPane>
-           
+
           </TabContent>
         </TabContainer>
 
@@ -324,7 +324,7 @@ function ComuneContent({ data }: ComuneContentProps) {
             <Icon icon="it-arrow-left" className="me-1" />
             Indietro
           </Button>
-          
+
         </div>
       </Container>
     </>

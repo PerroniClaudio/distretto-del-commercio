@@ -26,7 +26,16 @@ async function EventList({ view = 'both' }: EventListProps) {
     location,
     description,
     category->{title},
-    comune->{title},
+    comune->{
+      title,
+      image{
+        asset->{
+          _id,
+          url
+        },
+        alt
+      }
+    },
     image{
       asset->{
         _id,

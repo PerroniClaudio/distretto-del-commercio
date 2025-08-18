@@ -12,7 +12,16 @@ async function PostList() {
     slug,
     excerpt,
     category[]->{title},
-    comuni[]->{title},
+    comuni[]->{
+      title,
+      image{
+        asset->{
+          _id,
+          url
+        },
+        alt
+      }
+    },
     publishedAt,
     image{
       asset->{
