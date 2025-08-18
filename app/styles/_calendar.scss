@@ -48,7 +48,8 @@
   
   .day-content {
     height: 100%;
-    padding: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
     position: relative;
   }
   
@@ -60,6 +61,21 @@
   
   .events-preview {
     padding-top: 1px !important;
+
+    .event-slot {
+      &:has(.event-start-end) {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+      }
+
+      &:has(.event-start) {
+        padding-left: 0.5rem !important;
+      }
+
+      &:has(.event-end) {
+        padding-right: 0.5rem !important;
+      }
+    }
 
     .event-dot {
       background-color: var(--bs-primary-bg-subtle);
@@ -128,6 +144,21 @@
         box-shadow: 0 2px 4px rgba(0,0,0,0.2);
       }
     }
+
+    .altri {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+
+    .btn-altri {
+      color: var(--bs-primary);
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+      font-size: 0.7rem;
+      width: 100%;
+    }
   }
 }
 
@@ -154,7 +185,25 @@
     }
     
     .day-content {
-      padding: 0.25rem;
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+    }
+
+    .event-slot {
+      &:has(.event-start-end) {
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+      }
+
+      /* Evento che inizia in questo giorno */
+      &:has(.event-start) {
+        padding-left: 0.25rem;
+      }
+
+      /* Evento che finisce in questo giorno */
+      &:has(.event-end) {
+        padding-right: 0.25rem;
+      }
     }
     
     .events-preview .event-dot {

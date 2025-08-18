@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { PopulatedEvent } from "@/types/event";
-import { Icon, UncontrolledTooltip } from "design-react-kit";
+import { Button, Icon, UncontrolledTooltip } from "design-react-kit";
 import Link from "next/link";
 
 interface EventCalendarProps {
@@ -19,6 +19,9 @@ const DAYS = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
 export default function EventCalendar({ events }: EventCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState<PopulatedEvent | null>(null);
+
+  // Per i casi in cui ci sono troppi eventi in un solo giorno
+  const [selectedDayEvents, setSelectedDayEvents] = useState<PopulatedEvent[] | null>(null);
 
   const { calendarDays, eventsMap } = useMemo(() => {
     const year = currentDate.getFullYear();
@@ -207,10 +210,10 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                   <div
                     key={dayIndex}
                     className={`col calendar-day ${!isCurrentMonthDay ? 'text-muted' : ''} ${isTodayDay ? 'today' : ''}`}
-                    style={{ minHeight: '120px', maxHeight: '120px' }}
+                    style={{ minHeight: '120px', maxHeight: '153px' }}
                   >
-                    <div className="day-content p-2 h-100 d-flex flex-column">
-                      <div className="day-number mb-1 flex-shrink-0">
+                    <div className="day-content py-2 h-100 d-flex flex-column">
+                      <div className="day-number mb-1 ml-2 flex-shrink-0">
                         {date.getDate()}
                       </div>
 
@@ -316,8 +319,12 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                           })()}
                           
                           {dayEvents.length > 3 && (
-                            <div className="text-muted flex-shrink-0" style={{ fontSize: '0.7rem' }}>
-                              +{dayEvents.length - 3} altri
+                            <div className="altri">
+                              <Button type="button" color="outline-primary" className="btn-altri" style={{ fontSize: '0.7rem' }}
+                                onClick={() => setSelectedDayEvents(dayEvents.map(e => e.event))}
+                              >
+                                +{dayEvents.length - 3} altri
+                              </Button>
                             </div>
                           )}
                         </div>
@@ -330,6 +337,49 @@ export default function EventCalendar({ events }: EventCalendarProps) {
           ))}
         </div>
       </div>
+
+      {/* Modal eventi del giorno (se ce ne sono troppi lo stesso giorno) */}
+      {selectedDayEvents && (
+        <div className="modal fade show d-block" tabIndex={-1} style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Tutti gli eventi del giorno</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setSelectedDayEvents(null)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <ul className="list-group">
+                  {selectedDayEvents.map(ev => (
+                    <li key={ev._id} className="list-group-item d-flex justify-content-between align-items-center">
+                      <Button type="button" color="outline-primary" style={{ width: '100%', textAlign: 'left' }}
+                        onClick={() => setSelectedEvent(ev)}
+                      >{ev.title}</Button>
+                      {/* <Link href={`/eventi/${ev.slug?.current}`} className="btn btn-outline-primary btn-sm">
+                        Dettagli
+                        <Icon className="icon-sm ms-1" icon="it-arrow-right" padding={false} />
+                      </Link> */}
+
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setSelectedDayEvents(null)}
+                >
+                  Chiudi
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal per dettagli evento */}
       {selectedEvent && (
