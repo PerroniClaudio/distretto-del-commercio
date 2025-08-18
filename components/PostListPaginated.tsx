@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { client } from "@/sanity/lib/client";
 import { PopulatedPost } from "@/types/post";
 import PostCard from "./ui/PostCard";
@@ -27,31 +27,43 @@ function PostListPaginatedContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { comuni, loading: loadingComuni, error: errorComuni } = useComuni();
-  const { categories, loading: loadingCategories, error: errorCategories } = useCategories();
+  const {
+    categories,
+    loading: loadingCategories,
+    error: errorCategories,
+  } = useCategories();
 
   const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 
-  const fetchPosts = async (page: number) => {
-    setLoading(true);
-    setError(null);
-    
-    try {
-      const offset = (page - 1) * POSTS_PER_PAGE;
+  const fetchPosts = useCallback(
+    async (page: number) => {
+      setLoading(true);
+      setError(null);
 
-      // Aggiungi i filtri per comune e categoria
-      const filters = [];
-      if (selectedComune) {
-        console.log("Selected Comune:", selectedComune);
-        filters.push(`references(*[_type == "comune" && slug.current == "${selectedComune}"]._id)`);
-      }
-      if (selectedCategory) {
-        console.log("Selected Category:", selectedCategory);
-        filters.push(`references(*[_type == "category" && slug.current == "${selectedCategory}"]._id)`);
-      }
-      const filterQuery = filters.length > 0 ? `&& ${filters.join(" && ")}` : "";
+      try {
+        const offset = (page - 1) * POSTS_PER_PAGE;
 
-      // Query per ottenere i post paginati
-      const postsQuery = `*[_type == "post"${filterQuery} && ${NEWS_VISIBILITY_CONDITIONS}] | order(publishedAt desc) [${offset}...${offset + POSTS_PER_PAGE}] {
+        // Aggiungi i filtri per comune e categoria
+        const filters = [];
+        if (selectedComune) {
+          console.log("Selected Comune:", selectedComune);
+          filters.push(
+            `references(*[_type == "comune" && slug.current == "${selectedComune}"]._id)`
+          );
+        }
+        if (selectedCategory) {
+          console.log("Selected Category:", selectedCategory);
+          filters.push(
+            `references(*[_type == "category" && slug.current == "${selectedCategory}"]._id)`
+          );
+        }
+        const filterQuery =
+          filters.length > 0 ? `&& ${filters.join(" && ")}` : "";
+
+        // Query per ottenere i post paginati
+        const postsQuery = `*[_type == "post"${filterQuery} && ${NEWS_VISIBILITY_CONDITIONS}] | order(publishedAt desc) [${offset}...${
+          offset + POSTS_PER_PAGE
+        }] {
         _id,
         title,
         slug,
@@ -68,27 +80,29 @@ function PostListPaginatedContent() {
         }
       }`;
 
-      // Query per contare il totale dei post (con gli stessi filtri)
-      const countQuery = `count(*[_type == "post"${filterQuery} && ${NEWS_VISIBILITY_CONDITIONS}])`;
+        // Query per contare il totale dei post (con gli stessi filtri)
+        const countQuery = `count(*[_type == "post"${filterQuery} && ${NEWS_VISIBILITY_CONDITIONS}])`;
 
-      const [postsData, totalCount] = await Promise.all([
-        client.fetch(postsQuery),
-        client.fetch(countQuery)
-      ]);
+        const [postsData, totalCount] = await Promise.all([
+          client.fetch(postsQuery),
+          client.fetch(countQuery),
+        ]);
 
-      setPosts(postsData);
-      setTotalPosts(totalCount);
-    } catch (err) {
-      setError("Errore nel caricamento degli articoli");
-      console.error("Errore fetch posts:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+        setPosts(postsData);
+        setTotalPosts(totalCount);
+      } catch (err) {
+        setError("Errore nel caricamento degli articoli");
+        console.error("Errore fetch posts:", err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [selectedComune, selectedCategory]
+  );
 
   useEffect(() => {
     fetchPosts(currentPage);
-  }, [currentPage, selectedCategory, selectedComune]);
+  }, [currentPage, selectedCategory, selectedComune, fetchPosts]);
 
   useEffect(() => {
     console.log({ posts });
@@ -97,7 +111,7 @@ function PostListPaginatedContent() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     // Scroll verso l'alto quando cambia pagina
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -110,10 +124,10 @@ function PostListPaginatedContent() {
   const renderPagination = () => {
     const pages = [];
     const maxVisiblePages = 5;
-    
+
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
     const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-    
+
     // Aggiusta l'inizio se siamo vicini alla fine
     if (endPage - startPage + 1 < maxVisiblePages && totalPages > 1) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
@@ -121,14 +135,21 @@ function PostListPaginatedContent() {
 
     // Pulsante "Prima pagina" (sempre visibile)
     pages.push(
-      <li key="first" className={`page-item ${currentPage === 1 || totalPages <= 1 ? 'disabled' : ''}`}>
+      <li
+        key="first"
+        className={`page-item ${
+          currentPage === 1 || totalPages <= 1 ? "disabled" : ""
+        }`}>
         <Button
           size="xs"
           className=""
-          onClick={() => currentPage !== 1 && totalPages > 1 ? handlePageChange(1) : undefined}
+          onClick={() =>
+            currentPage !== 1 && totalPages > 1
+              ? handlePageChange(1)
+              : undefined
+          }
           disabled={currentPage === 1 || totalPages <= 1}
-          aria-label="Prima pagina"
-        >
+          aria-label="Prima pagina">
           <div className="double-chevron">
             <Icon
               className="icon-sm me-2"
@@ -149,14 +170,21 @@ function PostListPaginatedContent() {
 
     // Pulsante "Precedente" (sempre visibile)
     pages.push(
-      <li key="prev" className={`page-item ${currentPage <= 1 || totalPages <= 1 ? 'disabled' : ''}`}>
+      <li
+        key="prev"
+        className={`page-item ${
+          currentPage <= 1 || totalPages <= 1 ? "disabled" : ""
+        }`}>
         <Button
           size="xs"
           className=""
-          onClick={() => currentPage > 1 && totalPages > 1 ? handlePageChange(currentPage - 1) : undefined}
+          onClick={() =>
+            currentPage > 1 && totalPages > 1
+              ? handlePageChange(currentPage - 1)
+              : undefined
+          }
           disabled={currentPage <= 1 || totalPages <= 1}
-          aria-label="Pagina precedente"
-        >
+          aria-label="Pagina precedente">
           <Icon
             className="icon-sm me-2"
             color="secondary"
@@ -182,15 +210,16 @@ function PostListPaginatedContent() {
     const actualEndPage = totalPages === 0 ? 1 : endPage;
     for (let i = startPage; i <= actualEndPage; i++) {
       pages.push(
-        <li key={i} className={`page-item ${i === currentPage ? 'active' : ''}`}>
+        <li
+          key={i}
+          className={`page-item ${i === currentPage ? "active" : ""}`}>
           <Button
-            color={`${i === currentPage ? 'secondary' : 'primary'}`}
-            size="xs" 
-            className="" 
-            onClick={() => totalPages > 1 ? handlePageChange(i) : undefined}
+            color={`${i === currentPage ? "secondary" : "primary"}`}
+            size="xs"
+            className=""
+            onClick={() => (totalPages > 1 ? handlePageChange(i) : undefined)}
             disabled={totalPages <= 1}
-            aria-current={i === currentPage ? 'page' : undefined}
-          >
+            aria-current={i === currentPage ? "page" : undefined}>
             {i}
           </Button>
         </li>
@@ -210,14 +239,21 @@ function PostListPaginatedContent() {
 
     // Pulsante "Successivo" (sempre visibile)
     pages.push(
-      <li key="next" className={`page-item ${currentPage >= totalPages || totalPages <= 1 ? 'disabled' : ''}`}>
+      <li
+        key="next"
+        className={`page-item ${
+          currentPage >= totalPages || totalPages <= 1 ? "disabled" : ""
+        }`}>
         <Button
           size="xs"
           className=""
-          onClick={() => currentPage < totalPages && totalPages > 1 ? handlePageChange(currentPage + 1) : undefined}
+          onClick={() =>
+            currentPage < totalPages && totalPages > 1
+              ? handlePageChange(currentPage + 1)
+              : undefined
+          }
           disabled={currentPage >= totalPages || totalPages <= 1}
-          aria-label="Pagina successiva"
-        >
+          aria-label="Pagina successiva">
           <Icon
             className="icon-sm me-2"
             color="secondary"
@@ -230,14 +266,21 @@ function PostListPaginatedContent() {
 
     // Pulsante "Ultima pagina" (sempre visibile)
     pages.push(
-      <li key="last" className={`page-item ${currentPage === totalPages || totalPages <= 1 ? 'disabled' : ''}`}>
+      <li
+        key="last"
+        className={`page-item ${
+          currentPage === totalPages || totalPages <= 1 ? "disabled" : ""
+        }`}>
         <Button
           size="xs"
           className=""
-          onClick={() => currentPage !== totalPages && totalPages > 1 ? handlePageChange(totalPages) : undefined}
+          onClick={() =>
+            currentPage !== totalPages && totalPages > 1
+              ? handlePageChange(totalPages)
+              : undefined
+          }
           disabled={currentPage === totalPages || totalPages <= 1}
-          aria-label="Ultima pagina"
-        >
+          aria-label="Ultima pagina">
           <div className="double-chevron">
             <Icon
               className="icon-sm me-2"
@@ -258,9 +301,7 @@ function PostListPaginatedContent() {
 
     return (
       <nav aria-label="Navigazione pagine articoli" className="mt-4">
-        <ul className="pagination justify-content-center">
-          {pages}
-        </ul>
+        <ul className="pagination justify-content-center">{pages}</ul>
       </nav>
     );
   };
@@ -298,18 +339,25 @@ function PostListPaginatedContent() {
             setSelectedCategory(value);
             setCurrentPage(1); // Reset pagina quando cambia filtro
             router.push(`/notizie?category=${encodeURIComponent(value)}`);
-          }}
-        >
+          }}>
           <>
-            {loadingCategories ? <option value="" disabled>Caricamento categorie...</option>
-              : (errorCategories ? <option value="" disabled>Errore nel caricamento categorie</option>
-                : <option value="">Scegli un&apos;opzione</option>)
-            }
-            {!!categories && categories.map(category => (
-              <option key={category._id} value={category.slug.current}>
-                {category.title}
+            {loadingCategories ? (
+              <option value="" disabled>
+                Caricamento categorie...
               </option>
-            ))}
+            ) : errorCategories ? (
+              <option value="" disabled>
+                Errore nel caricamento categorie
+              </option>
+            ) : (
+              <option value="">Scegli un&apos;opzione</option>
+            )}
+            {!!categories &&
+              categories.map((category) => (
+                <option key={category._id} value={category.slug.current}>
+                  {category.title}
+                </option>
+              ))}
           </>
         </Select>
         <Select
@@ -320,18 +368,25 @@ function PostListPaginatedContent() {
             setSelectedComune(value);
             setCurrentPage(1); // Reset pagina quando cambia filtro
             router.push(`/notizie?comune=${encodeURIComponent(value)}`);
-          }}
-        >
+          }}>
           <>
-            {loadingComuni ? <option value="" disabled>Caricamento comuni...</option>
-              : (errorComuni ? <option value="" disabled>Errore nel caricamento comuni</option>
-                : <option value="">Scegli un&apos;opzione</option>)
-            }
-            {!!comuni && comuni.map(comune => (
-              <option key={comune._id} value={comune.slug.current}>
-                {comune.title}
+            {loadingComuni ? (
+              <option value="" disabled>
+                Caricamento comuni...
               </option>
-            ))}
+            ) : errorComuni ? (
+              <option value="" disabled>
+                Errore nel caricamento comuni
+              </option>
+            ) : (
+              <option value="">Scegli un&apos;opzione</option>
+            )}
+            {!!comuni &&
+              comuni.map((comune) => (
+                <option key={comune._id} value={comune.slug.current}>
+                  {comune.title}
+                </option>
+              ))}
           </>
         </Select>
       </div>
@@ -347,17 +402,19 @@ function PostListPaginatedContent() {
                 </div>
               ))}
             </div>
-            
+
             {/* Info paginazione */}
             <div className="d-flex justify-content-between align-items-center mt-3 mb-3">
               <small className="text-muted">
-                Visualizzando {((currentPage - 1) * POSTS_PER_PAGE) + 1}-{Math.min(currentPage * POSTS_PER_PAGE, totalPosts)} di {totalPosts} articoli
+                Visualizzando {(currentPage - 1) * POSTS_PER_PAGE + 1}-
+                {Math.min(currentPage * POSTS_PER_PAGE, totalPosts)} di{" "}
+                {totalPosts} articoli
               </small>
               <small className="text-muted">
                 Pagina {currentPage} di {totalPages}
               </small>
             </div>
-            
+
             {/* Paginazione */}
             {renderPagination()}
           </>
@@ -387,4 +444,3 @@ export default function PostListPaginated() {
     </Suspense>
   );
 }
-

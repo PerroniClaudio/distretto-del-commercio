@@ -7,16 +7,22 @@ export default function ImportEventsTool() {
     <div style={{ padding: 32 }}>
       <h1>Importa eventi da Excel</h1>
       <div style={{ marginTop: "1rem" }}>
-        <p>Scarica il template e compilalo, senza modificare il formato delle celle.</p>
+        <p>
+          Scarica il template e compilalo, senza modificare il formato delle
+          celle.
+        </p>
         <a href="/template-import-eventi.xlsx" download>
           <Button color="primary" outline type="button">
-              Scarica template
+            Scarica template
           </Button>
         </a>
       </div>
       <div style={{ marginTop: "1rem" }}>
         <p>Carica il template compilato per importare gli eventi.</p>
-        <p>Immagini e allegati vanno caricati dall'evento, dopo averlo generato.</p>
+        <p>
+          Immagini e allegati vanno caricati dall&apos;evento, dopo averlo
+          generato.
+        </p>
         <ImportEventsForm />
       </div>
     </div>

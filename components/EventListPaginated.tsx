@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { PopulatedEvent } from "@/types/event";
 import EventCard from "./ui/EventCard";
 import { Button, Icon } from "design-react-kit";
@@ -19,7 +19,7 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
   const [dateFrom, setDateFrom] = useState<string>(() => {
     // Imposta la data attuale come default
     const today = new Date();
-    return today.toISOString().split('T')[0];
+    return today.toISOString().split("T")[0];
   });
   const [dateTo, setDateTo] = useState<string>("");
   const [selectedComune, setSelectedComune] = useState<string>("");
@@ -30,13 +30,13 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
   const totalEvents = filteredEvents.length;
   const totalPages = Math.ceil(totalEvents / EVENTS_PER_PAGE);
 
-  // Funzione per filtrare gli eventi
-  const filterEvents = () => {
+  // Funzione per filtrare gli eventi (memorizzata con useCallback)
+  const filterEvents = useCallback(() => {
     let filtered = [...events];
 
     // Filtro per data "da"
     if (dateFrom) {
-      filtered = filtered.filter(event => {
+      filtered = filtered.filter((event) => {
         if (!event.date) return false;
         const eventDate = new Date(event.date);
         const fromDate = new Date(dateFrom);
@@ -51,7 +51,7 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
 
     // Filtro per data "a" (data compresa)
     if (dateTo) {
-      filtered = filtered.filter(event => {
+      filtered = filtered.filter((event) => {
         if (!event.date) return false;
         const eventDate = new Date(event.date);
         const toDate = new Date(dateTo);
@@ -63,26 +63,28 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
 
     // Filtro per comune
     if (selectedComune) {
-      filtered = filtered.filter(event => 
-        event.comune?.title?.toLowerCase().includes(selectedComune.toLowerCase())
+      filtered = filtered.filter((event) =>
+        event.comune?.title
+          ?.toLowerCase()
+          .includes(selectedComune.toLowerCase())
       );
     }
 
     setFilteredEvents(filtered);
     setCurrentPage(1); // Reset alla prima pagina quando cambiano i filtri
-  };
+  }, [events, dateFrom, dateTo, selectedComune]);
 
   // Applica i filtri quando cambiano i parametri
   useEffect(() => {
     filterEvents();
-  }, [events, dateFrom, dateTo, selectedComune]);
+  }, [events, dateFrom, dateTo, selectedComune, filterEvents]);
 
   // Inizializza i filtri dai parametri URL
   useEffect(() => {
     const comune = searchParams.get("comune");
     const from = searchParams.get("from");
     const to = searchParams.get("to");
-    
+
     if (comune) setSelectedComune(comune);
     if (from) setDateFrom(from);
     if (to) setDateTo(to);
@@ -91,7 +93,7 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     // Scroll verso l'alto quando cambia pagina
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // Calcola gli eventi da mostrare nella pagina corrente
@@ -102,10 +104,10 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
   const renderPagination = () => {
     const pages = [];
     const maxVisiblePages = 5;
-    
+
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
     const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-    
+
     // Aggiusta l'inizio se siamo vicini alla fine
     if (endPage - startPage + 1 < maxVisiblePages && totalPages > 1) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
@@ -113,14 +115,21 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
 
     // Pulsante "Prima pagina"
     pages.push(
-      <li key="first" className={`page-item ${currentPage === 1 || totalPages <= 1 ? 'disabled' : ''}`}>
+      <li
+        key="first"
+        className={`page-item ${
+          currentPage === 1 || totalPages <= 1 ? "disabled" : ""
+        }`}>
         <Button
           size="xs"
           className=""
-          onClick={() => currentPage !== 1 && totalPages > 1 ? handlePageChange(1) : undefined}
+          onClick={() =>
+            currentPage !== 1 && totalPages > 1
+              ? handlePageChange(1)
+              : undefined
+          }
           disabled={currentPage === 1 || totalPages <= 1}
-          aria-label="Prima pagina"
-        >
+          aria-label="Prima pagina">
           <div className="double-chevron">
             <Icon
               className="icon-sm me-2"
@@ -141,14 +150,21 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
 
     // Pulsante "Precedente"
     pages.push(
-      <li key="prev" className={`page-item ${currentPage <= 1 || totalPages <= 1 ? 'disabled' : ''}`}>
+      <li
+        key="prev"
+        className={`page-item ${
+          currentPage <= 1 || totalPages <= 1 ? "disabled" : ""
+        }`}>
         <Button
           size="xs"
           className=""
-          onClick={() => currentPage > 1 && totalPages > 1 ? handlePageChange(currentPage - 1) : undefined}
+          onClick={() =>
+            currentPage > 1 && totalPages > 1
+              ? handlePageChange(currentPage - 1)
+              : undefined
+          }
           disabled={currentPage <= 1 || totalPages <= 1}
-          aria-label="Pagina precedente"
-        >
+          aria-label="Pagina precedente">
           <Icon
             className="icon-sm me-2"
             color="secondary"
@@ -174,15 +190,16 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
     const actualEndPage = totalPages === 0 ? 1 : endPage;
     for (let i = startPage; i <= actualEndPage; i++) {
       pages.push(
-        <li key={i} className={`page-item ${i === currentPage ? 'active' : ''}`}>
+        <li
+          key={i}
+          className={`page-item ${i === currentPage ? "active" : ""}`}>
           <Button
-            color={`${i === currentPage ? 'secondary' : 'primary'}`}
-            size="xs" 
-            className="" 
-            onClick={() => totalPages > 1 ? handlePageChange(i) : undefined}
+            color={`${i === currentPage ? "secondary" : "primary"}`}
+            size="xs"
+            className=""
+            onClick={() => (totalPages > 1 ? handlePageChange(i) : undefined)}
             disabled={totalPages <= 1}
-            aria-current={i === currentPage ? 'page' : undefined}
-          >
+            aria-current={i === currentPage ? "page" : undefined}>
             {i}
           </Button>
         </li>
@@ -202,14 +219,21 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
 
     // Pulsante "Successivo"
     pages.push(
-      <li key="next" className={`page-item ${currentPage >= totalPages || totalPages <= 1 ? 'disabled' : ''}`}>
+      <li
+        key="next"
+        className={`page-item ${
+          currentPage >= totalPages || totalPages <= 1 ? "disabled" : ""
+        }`}>
         <Button
           size="xs"
           className=""
-          onClick={() => currentPage < totalPages && totalPages > 1 ? handlePageChange(currentPage + 1) : undefined}
+          onClick={() =>
+            currentPage < totalPages && totalPages > 1
+              ? handlePageChange(currentPage + 1)
+              : undefined
+          }
           disabled={currentPage >= totalPages || totalPages <= 1}
-          aria-label="Pagina successiva"
-        >
+          aria-label="Pagina successiva">
           <Icon
             className="icon-sm me-2"
             color="secondary"
@@ -222,14 +246,21 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
 
     // Pulsante "Ultima pagina"
     pages.push(
-      <li key="last" className={`page-item ${currentPage === totalPages || totalPages <= 1 ? 'disabled' : ''}`}>
+      <li
+        key="last"
+        className={`page-item ${
+          currentPage === totalPages || totalPages <= 1 ? "disabled" : ""
+        }`}>
         <Button
           size="xs"
           className=""
-          onClick={() => currentPage !== totalPages && totalPages > 1 ? handlePageChange(totalPages) : undefined}
+          onClick={() =>
+            currentPage !== totalPages && totalPages > 1
+              ? handlePageChange(totalPages)
+              : undefined
+          }
           disabled={currentPage === totalPages || totalPages <= 1}
-          aria-label="Ultima pagina"
-        >
+          aria-label="Ultima pagina">
           <div className="double-chevron">
             <Icon
               className="icon-sm me-2"
@@ -250,9 +281,7 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
 
     return (
       <nav aria-label="Navigazione pagine eventi" className="mt-4">
-        <ul className="pagination justify-content-center">
-          {pages}
-        </ul>
+        <ul className="pagination justify-content-center">{pages}</ul>
       </nav>
     );
   };
@@ -271,11 +300,13 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
               type="date"
               className="form-control"
               value={dateFrom}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDateFrom(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setDateFrom(e.target.value)
+              }
               placeholder="Seleziona data di inizio"
             />
           </div>
-          
+
           <div className="col-12 col-md-6 col-lg-3 mb-3">
             <label htmlFor="dateTo" className="form-label">
               Data a
@@ -285,12 +316,14 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
               type="date"
               className="form-control"
               value={dateTo}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDateTo(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setDateTo(e.target.value)
+              }
               placeholder="Seleziona data di fine"
               min={dateFrom} // La data "a" non può essere precedente alla data "da"
             />
           </div>
-          
+
           <div className="col-12 col-md-6 col-lg-3 mb-3">
             <label htmlFor="selectedComune" className="form-label">
               Filtra per comune
@@ -299,30 +332,33 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
               id="selectedComune"
               className="form-select"
               value={selectedComune}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedComune(e.target.value)}
-            >
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                setSelectedComune(e.target.value)
+              }>
               <option value="">Tutti i comuni</option>
               {loadingComuni && <option disabled>Caricamento comuni...</option>}
-              {errorComuni && <option disabled>Errore nel caricamento comuni</option>}
-              {comuni && comuni.map(comune => (
-                <option key={comune._id} value={comune.title}>
-                  {comune.title}
-                </option>
-              ))}
+              {errorComuni && (
+                <option disabled>Errore nel caricamento comuni</option>
+              )}
+              {comuni &&
+                comuni.map((comune) => (
+                  <option key={comune._id} value={comune.title}>
+                    {comune.title}
+                  </option>
+                ))}
             </select>
           </div>
-          
+
           <div className="col-12 col-md-6 col-lg-3 mb-3 d-flex align-items-end">
             <Button
               color="outline-primary"
               size="sm"
               onClick={() => {
-                setDateFrom(new Date().toISOString().split('T')[0]);
+                setDateFrom(new Date().toISOString().split("T")[0]);
                 setDateTo("");
                 setSelectedComune("");
               }}
-              className="w-100"
-            >
+              className="w-100">
               <Icon
                 className="icon-sm me-2"
                 color="black"
@@ -340,10 +376,9 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
         {currentEvents.length === 0 ? (
           <div className="text-center py-5">
             <p className="text-muted">
-              {filteredEvents.length === 0 ? 
-                "Nessun evento trovato con i filtri selezionati." : 
-                "Nessun evento in questa pagina."
-              }
+              {filteredEvents.length === 0
+                ? "Nessun evento trovato con i filtri selezionati."
+                : "Nessun evento in questa pagina."}
             </p>
           </div>
         ) : (
@@ -355,17 +390,18 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
                 </div>
               ))}
             </div>
-            
+
             {/* Info paginazione */}
             <div className="d-flex justify-content-between align-items-center mt-3 mb-3">
               <small className="text-muted">
-                Visualizzando {startIndex + 1}-{Math.min(endIndex, totalEvents)} di {totalEvents} eventi
+                Visualizzando {startIndex + 1}-{Math.min(endIndex, totalEvents)}{" "}
+                di {totalEvents} eventi
               </small>
               <small className="text-muted">
                 Pagina {currentPage} di {totalPages || 1}
               </small>
             </div>
-            
+
             {/* Paginazione */}
             {renderPagination()}
           </>
@@ -388,7 +424,9 @@ function EventListPaginatedFallback() {
 }
 
 // Componente principale che avvolge il contenuto in un Suspense boundary
-export default function EventListPaginated({ events }: EventListPaginatedProps) {
+export default function EventListPaginated({
+  events,
+}: EventListPaginatedProps) {
   return (
     <Suspense fallback={<EventListPaginatedFallback />}>
       <EventListPaginatedContent events={events} />
