@@ -14,8 +14,8 @@ function PostCard({ post }: { post: PopulatedPost }) {
     <Card className="card-bg  border-bottom-card">
       <CardImg
         className="img-fluid post-card-image"
-        src={post.image?.asset.url || "https://picsum.photos/1920/1080"}
-        alt={post.image?.alt || post.title || "Titolo dell'articolo"}
+        src={post.image?.asset.url || post.comuni?.[0]?.image?.asset?.url || "https://picsum.photos/1920/1080"}
+        alt={post.image?.alt || post.comuni?.[0]?.image?.alt || post.title || "Titolo dell'articolo"}
         width={480}
         height={270}
       />
@@ -41,7 +41,7 @@ function PostCard({ post }: { post: PopulatedPost }) {
         </a>
         <CardTagsHeader>
           {(post.category && post.category.length > 0) ||
-          (post.comuni && post.comuni.length > 0) ? (
+            (post.comuni && post.comuni.length > 0) ? (
             <div className="d-flex flex-wrap gap-1 mb-2 font-sans-serif">
               {post.category && post.category.length > 0 && (
                 <>

@@ -23,6 +23,13 @@ async function getComuneData(slug: string): Promise<ComuneData | null> {
   const comuneQuery = `*[_type == "comune" && slug.current == $slug][0] {
     _id,
     title,
+    image{
+      asset->{
+        _id,
+        url
+      },
+      alt
+    },
     slug
   }`;
 
@@ -42,7 +49,16 @@ async function getComuneData(slug: string): Promise<ComuneData | null> {
     slug,
     excerpt,
     category[]->{title},
-    comuni[]->{title},
+    comuni[]->{
+      title,
+      image{
+        asset->{
+          _id,
+          url
+        },
+        alt
+      }
+    },
     publishedAt,
     image{
       asset->{
@@ -68,7 +84,16 @@ async function getComuneData(slug: string): Promise<ComuneData | null> {
     location,
     description,
     category->{title},
-    comune->{title},
+    comune->{
+      title,
+      image{
+        asset->{
+          _id,
+          url
+        },
+        alt
+      }
+    },
     image{
       asset->{
         _id,
