@@ -50,11 +50,11 @@ function PostContent({ post }: PostContentProps) {
   return (
     <>
       {/* Hero con immagine principale e titolo */}
-      {post.image && (
+      {post?.image || post?.comuni?.[0]?.image && (
         <Hero overlay="dark">
           <HeroBackground
-            src={post.image.asset.url}
-            alt={post.image.alt || post.title || "Immagine dell'articolo"}
+            src={post?.image?.asset?.url || post?.comuni?.[0]?.image?.asset?.url || ""}
+            alt={post?.image?.alt || post.title || "Immagine dell'articolo"}
             title={post.title}
           />
           <HeroBody>

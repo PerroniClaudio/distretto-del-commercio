@@ -14,7 +14,7 @@ function PostCard({ post }: { post: PopulatedPost }) {
     <Card className="card-bg  border-bottom-card">
       <CardImg
         className="img-fluid post-card-image"
-        src={post.image?.asset.url || post.comuni?.[0]?.image?.asset?.url || "https://picsum.photos/1920/1080"}
+        src={post?.image?.asset?.url || post?.comuni?.[0]?.image?.asset?.url || ""}
         alt={post.image?.alt || post.comuni?.[0]?.image?.alt || post.title || "Titolo dell'articolo"}
         width={480}
         height={270}
