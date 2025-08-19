@@ -4,7 +4,7 @@ import { sanityFetch } from "@/sanity/lib/live";
 import EventCard from "@/components/ui/EventCard";
 import { PopulatedEvent } from "@/types/event";
 import Link from "next/link";
-import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/utils";
+import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/queryUtils";
 
 // Le informazioni devono aggiornarsi dinamicamente. O così o usando il revalidate in sanityFetch
 export const dynamic = "force-dynamic";

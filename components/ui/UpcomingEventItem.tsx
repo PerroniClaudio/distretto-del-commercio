@@ -1,5 +1,6 @@
 "use client";
 
+import { getDateStringFromTo } from "@/lib/eventUtils";
 import { PopulatedEvent } from "@/types/event";
 
 import {
@@ -43,16 +44,7 @@ export default function UpcomingEventItem({
                 padding={false}
               />
               <span>
-                {eventDate.toLocaleDateString('it-IT', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: eventDate.getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined
-                })}
-                {' alle '}
-                {eventDate.toLocaleTimeString('it-IT', {
-                  hour: '2-digit',
-                  minute: '2-digit'
-                })}
+                {getDateStringFromTo(event)}
               </span>
             </div>
           )}
@@ -66,7 +58,7 @@ export default function UpcomingEventItem({
                 color="secondary"
                 padding={false}
               />
-              <span className="text-truncate">{event.location}</span>
+              <span className="">{event.location}</span>
             </div>
           )}
 

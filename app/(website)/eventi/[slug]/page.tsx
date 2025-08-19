@@ -1,7 +1,7 @@
 import { sanityFetch } from "@/sanity/lib/live";
 import { notFound } from "next/navigation";
 import EventContent from "@/components/ui/EventContent";
-import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/utils";
+import { EVENT_VISIBILITY_CONDITIONS } from "@/lib/queryUtils";
 
 interface EventPageProps {
   params: Promise<{ slug: string }>;

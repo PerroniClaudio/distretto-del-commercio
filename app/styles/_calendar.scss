@@ -64,16 +64,16 @@
 
     .event-slot {
       &:has(.event-start-end) {
-        padding-left: 0.5rem !important;
-        padding-right: 0.5rem !important;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
       }
 
       &:has(.event-start) {
-        padding-left: 0.5rem !important;
+        padding-left: 0.5rem;
       }
 
       &:has(.event-end) {
-        padding-right: 0.5rem !important;
+        padding-right: 0.5rem;
       }
     }
 
@@ -99,32 +99,32 @@
 
       /* Evento che inizia e finisce nello stesso giorno */
       &.event-start-end {
-        border-left: 3px solid !important;
-        border-right: 3px solid !important;
-        border-radius: 4px !important;
+        border-left: 3px solid;
+        border-right: 3px solid;
+        border-radius: 4px;
       }
 
       /* Evento che inizia in questo giorno */
       &.event-start {
-        border-left: 3px solid !important;
-        border-top-left-radius: 4px !important;
-        border-bottom-left-radius: 4px !important;
-        border-top-right-radius: 0 !important;
-        border-bottom-right-radius: 0 !important;
+        border-left: 3px solid;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
       }
 
       /* Evento che finisce in questo giorno */
       &.event-end {
-        border-right: 3px solid !important;
-        border-top-right-radius: 4px !important;
-        border-bottom-right-radius: 4px !important;
-        border-top-left-radius: 0 !important;
-        border-bottom-left-radius: 0 !important;
+        border-right: 3px solid;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
       }
 
       /* Evento che continua (nel mezzo di un evento multi-giorno) */
       &.event-continue {
-        border-radius: 0 !important;
+        border-radius: 0;
       }
       
       &:hover {
@@ -178,37 +178,82 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+// @media (max-width: 768px) {
+@media (max-width: 1200px) {
   .calendar-container {
     .calendar-day {
       min-height: 80px;
     }
     
     .day-content {
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
+      padding-top: 0.20rem;
+      padding-bottom: 0.20rem;
     }
 
-    .event-slot {
-      &:has(.event-start-end) {
-        padding-left: 0.25rem;
-        padding-right: 0.25rem;
+    .events-preview {
+      .event-slot {
+        &:has(.event-start-end) {
+          padding-left: 0.15rem;
+          padding-right: 0.15rem;
+        }
+  
+        /* Evento che inizia in questo giorno */
+        &:has(.event-start) {
+          padding-left: 0.15rem;
+        }
+  
+        /* Evento che finisce in questo giorno */
+        &:has(.event-end) {
+          padding-right: 0.15rem;
+        }
+      }
+      
+      .event-dot {
+        font-size: 0.6rem;
+        padding: 0.1rem 0.20rem;
       }
 
-      /* Evento che inizia in questo giorno */
-      &:has(.event-start) {
-        padding-left: 0.25rem;
+      .altri {
+        padding-left: 0.15rem;
+        padding-right: 0.15rem;
       }
 
-      /* Evento che finisce in questo giorno */
-      &:has(.event-end) {
-        padding-right: 0.25rem;
+      .btn-altri {
+        padding-left: 0.15rem;
+        padding-right: 0.15rem;
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
+        font-size: 0.6rem;
+        width: 100%;
       }
     }
-    
-    .events-preview .event-dot {
-      font-size: 0.7rem;
-      padding: 0.1rem 0.25rem;
+  }
+}
+
+@media (max-width: 570px) {
+  .calendar-container {
+    .events-preview {
+      .event-slot {
+        &:has(.event-start-end) {
+          padding-left: 0.10rem;
+          padding-right: 0.10rem;
+        }
+  
+        /* Evento che inizia in questo giorno */
+        &:has(.event-start) {
+          padding-left: 0.10rem;
+        }
+  
+        /* Evento che finisce in questo giorno */
+        &:has(.event-end) {
+          padding-right: 0.10rem;
+        }
+      }
+      
+      .event-dot {
+        font-size: 0.55rem;
+        padding: 0.1rem 0.10rem;
+      }
     }
   }
 }
@@ -221,6 +266,8 @@
 /* Stili per UpcomingEventsList */
 .upcoming-events-card {
   .upcoming-event-item {
+    // text-wrap: wrap;
+    // word-break: break-word;
     border-bottom: 1px solid var(--bs-border-color);
     transition: background-color 0.2s ease;
     

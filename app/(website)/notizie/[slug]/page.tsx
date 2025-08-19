@@ -2,7 +2,7 @@ import { sanityFetch } from "@/sanity/lib/live";
 import { PopulatedPost } from "@/types/post";
 import { notFound } from "next/navigation";
 import PostContent from "@/components/ui/PostContent";
-import { NEWS_VISIBILITY_CONDITIONS } from "@/lib/utils";
+import { NEWS_VISIBILITY_CONDITIONS } from "@/lib/queryUtils";
 
 interface PageProps {
   params: Promise<{ slug: string }>;

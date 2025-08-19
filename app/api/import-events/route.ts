@@ -21,6 +21,7 @@ export async function POST(req: Request) {
     // Validazione: tutti gli eventi devono avere nome, data inizio e comune esistente
     const errors: string[] = [];
     const eventDocs: Array<{ _type: string; [key: string]: unknown }> = [];
+    const usedSlugs: string[] = []; // Array per tracciare gli slug già generati in questa sessione
     
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
@@ -136,10 +137,13 @@ export async function POST(req: Request) {
         .replace(/^-+|-+$/g, "");
       let slug = baseSlug;
       let suffix = 1;
-      // Controlla se lo slug esiste già
-      while (await slugExists(slug)) {
+      // Controlla se lo slug esiste già (nel DB o negli slug già generati in questa sessione)
+      while (await slugExists(slug, usedSlugs)) {
         slug = `${baseSlug}-${suffix++}`;
       }
+
+      // Aggiungi lo slug all'array degli slug usati
+      usedSlugs.push(slug);
 
       eventDocs.push({
         _type: "event",
@@ -198,8 +202,14 @@ function excelTimeToString(serial: number): string {
   return `${hour}:${min}`;
 }
 
-// Controlla se esiste già uno slug per event
-async function slugExists(slug: string) {
+// Controlla se esiste già uno slug per event (nel DB o nell'array degli slug usati)
+async function slugExists(slug: string, usedSlugs: string[] = []) {
+  // Controlla prima nell'array degli slug già usati in questa sessione
+  if (usedSlugs.includes(slug)) {
+    return true;
+  }
+  
+  // Poi controlla nel database
   const res = await editorClient.fetch(
     '*[_type == "event" && slug.current == $slug][0]{_id}',
     { slug }

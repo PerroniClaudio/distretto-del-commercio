@@ -27,6 +27,7 @@ import {
 import { PortableText } from "next-sanity";
 import { PopulatedEvent } from "@/types/event";
 import Link from "next/link";
+import { getDateStringFromTo } from "@/lib/eventUtils";
 
 interface EventContentProps {
     event: PopulatedEvent;
@@ -435,18 +436,7 @@ function EventContent({ event }: EventContentProps) {
                                                 <strong>Data e Ora</strong>
                                             </div>
                                             <div className="ms-4">
-                                                <div>{eventDate.toLocaleDateString('it-IT', {
-                                                    weekday: 'long',
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric'
-                                                })}</div>
-                                                <div className="text-muted">
-                                                    {eventDate.toLocaleTimeString('it-IT', {
-                                                        hour: '2-digit',
-                                                        minute: '2-digit'
-                                                    })}
-                                                </div>
+                                                {getDateStringFromTo(event)}
                                             </div>
                                         </div>
                                     )}
