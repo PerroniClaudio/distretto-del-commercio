@@ -51,6 +51,9 @@ export default async function Home() {
       <div className="container my-5">
         <div className="row mb-5">
           <div className="col-12">
+            <h2 className="mb-4">Ultime notizie</h2>
+          </div>
+          <div className="col-12">
             <PostList />
           </div>
           <div className="col-12 text-center mt-3">

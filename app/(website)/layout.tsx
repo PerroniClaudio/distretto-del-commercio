@@ -8,10 +8,14 @@ export default function WebsiteLayout({
 }) {
   // Layout per il sito web - con Navigation
   return (
-    <>
-      <Navigation />
-      <div>{children}</div>
+    <div className="min-vh-100 d-flex flex-column justify-content-between" id="website-layout">
+      <div>
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000 }}>
+          <Navigation />
+        </div>
+        <div>{children}</div>
+      </div>
       <FooterSection />
-    </>
+    </div>
   );
 }

@@ -162,11 +162,11 @@ function EventContent({ event }: EventContentProps) {
     return (
         <>
             {/* Hero con immagine principale e titolo */}
-            {event.image && (
+            {(event?.image || event?.comune?.image) && (
                 <Hero overlay="dark">
                     <HeroBackground
-                        src={event.image.asset.url}
-                        alt={event.image.alt || event.title || "Immagine dell'evento"}
+                        src={event?.image?.asset?.url || event?.comune?.image?.asset?.url || ""}
+                        alt={event?.image?.alt || event?.comune?.image?.alt || event.title || "Immagine dell'evento"}
                         title={event.title}
                     />
                     <HeroBody>
@@ -216,7 +216,6 @@ function EventContent({ event }: EventContentProps) {
                     </HeroBody>
                 </Hero>
             )}
-
             <Container className="my-5">
                 <section>
                     <Breadcrumb>
@@ -323,6 +322,7 @@ function EventContent({ event }: EventContentProps) {
                         {event.description && (
                             <article className="mb-5">
                                 <div className="content-body">
+                                    <h2 className="mb-4">{event.title}</h2>
                                     <PortableText value={event.description} />
                                 </div>
                             </article>

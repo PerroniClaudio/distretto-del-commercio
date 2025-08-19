@@ -163,6 +163,7 @@ function PostContent({ post }: PostContentProps) {
         {post.content && (
           <article className="mb-5">
             <div className="content-body">
+              <h2>{post.title}</h2>
               <PortableText value={post.content} />
             </div>
           </article>

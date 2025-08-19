@@ -16,12 +16,12 @@ function Navigation() {
     const handleScroll = () => {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       
-      // Calcolo basato sull'altezza effettiva della sezione (164px) + un margine per evitare che finisca in loop quando si apre/chiude.
-      // Nasconde quando scroll > 194px (altezza completa), mostra quando scroll < 30px
+      // 180 sembra adatto ad evitare che si attivi troppo in basso o troppo in alto. 
+      // Può essere modificato, ma bisogna controllare sia versione mobile che desktop.
       setIsScrolled(prevIsScrolled => {
-        if (scrollTop > 194 && !prevIsScrolled) {
+        if (scrollTop > 180 && !prevIsScrolled) {
           return true;
-        } else if (scrollTop < 30 && prevIsScrolled) {
+        } else if (scrollTop < 180 && prevIsScrolled) {
           return false;
         }
         return prevIsScrolled;

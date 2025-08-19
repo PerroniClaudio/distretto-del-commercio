@@ -8,6 +8,10 @@
 /* Bootstrap Italia CSS */
 @import "bootstrap-italia/dist/css/bootstrap-italia.min.css";
 
+#website-layout {
+  padding-top: 221px;
+}
+
 .navbar .dropdown-menu a.it-heading-link,
 .navbar .dropdown-menu a.it-footer-link,
 .navbar .dropdown-menu .link-list-wrapper ul li a span {
@@ -277,6 +281,10 @@
 /* Responsive */
 
 @media (max-width: 991.98px) {
+  #website-layout {
+    padding-top: 174.8px;
+  }
+
   .navbar .navbar-collapsable .navbar-nav li a.nav-link {
     color: var(--bs-primary) !important;
   }
