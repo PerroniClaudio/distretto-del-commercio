@@ -63,7 +63,7 @@ export default async function Sitemap() {
   const data: SitemapData = await client.fetch(sitemapQuery);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-5">
       <h1 className="text-3xl font-bold mb-8">Mappa del Sito</h1>
       
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
