@@ -29,7 +29,6 @@ import { PopulatedEvent } from "@/types/event";
 import Link from "next/link";
 import { getDateStringFromTo } from "@/lib/eventUtils";
 import { portableTextComponents } from "./PortableTextComponents";
-import { useEffect } from "react";
 
 interface EventContentProps {
     event: PopulatedEvent;

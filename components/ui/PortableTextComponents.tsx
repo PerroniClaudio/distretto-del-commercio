@@ -1,8 +1,17 @@
 import { urlFor } from "@/sanity/lib/image";
 
+interface ImageValue {
+  asset?: {
+    _ref: string;
+    _type: string;
+  };
+  alt?: string;
+  caption?: string;
+}
+
 export const portableTextComponents = {
   types: {
-    image: ({ value }: any) => {
+    image: ({ value }: { value: ImageValue }) => {
       if (!value?.asset) return null;
 
       return (

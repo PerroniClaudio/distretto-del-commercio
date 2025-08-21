@@ -35,6 +35,7 @@ export default function ImportEventsForm() {
         }
       }
     } catch (error) {
+      console.log("Errore durante importazione:", error instanceof Error ? error.message : "Errore sconosciuto");
       setMessage("Errore nell'importazione");
     } finally {
       setLoading(false);
