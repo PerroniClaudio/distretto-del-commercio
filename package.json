@@ -18,7 +18,7 @@
     "@splidejs/splide": "^4.1.4",
     "bootstrap-italia": "^2.16.0",
     "copy-webpack-plugin": "^13.0.0",
-    "design-react-kit": "^5.8.2",
+    "design-react-kit": "^5.8.3",
     "formdata-node": "^6.0.3",
     "formidable": "^3.5.4",
     "next": "15.3.5",

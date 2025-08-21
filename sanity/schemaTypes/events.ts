@@ -66,7 +66,28 @@ export default {
       name: "description",
       title: "Descrizione",
       type: "array",
-      of: [{ type: "block" }],
+      of: [
+        { type: "block" },
+        {
+          type: "image",
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: "alt",
+              title: "Testo alternativo",
+              type: "string",
+              description: "Importante per l'accessibilità e SEO",
+            },
+            {
+              name: "caption",
+              title: "Didascalia",
+              type: "string",
+            },
+          ],
+        },
+      ],
     },
     {
       name: "image",

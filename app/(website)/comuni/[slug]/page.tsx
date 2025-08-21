@@ -30,7 +30,19 @@ async function getComuneData(slug: string): Promise<ComuneData | null> {
       },
       alt
     },
-    slug
+    slug,
+    description[]{
+      ...,
+      _type == "image" => {
+        ...,
+        asset->
+      }
+    },
+    contacts[] {
+      title,
+      type,
+      value
+    }
   }`;
 
   const { data: comune } = await sanityFetch({

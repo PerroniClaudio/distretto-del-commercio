@@ -2,13 +2,25 @@ import { defineQuery } from "next-sanity";
 import { draftMode } from "next/headers";
 import { client } from "@/sanity/lib/client";
 import { PortableText } from "next-sanity";
+import { portableTextComponents } from "@/components/ui/PortableTextComponents";
 
 // Le informazioni devono aggiornarsi dinamicamente. O così o usando il revalidate in sanityFetch
 export const dynamic = "force-dynamic";
 
 const staticPageQuery = defineQuery(
-  `*[_type == "static_page" && slug.current == $slug][0]{title, content}`
+  `*[_type == "static_page" && slug.current == $slug][0]{
+    title, 
+    content[]{
+      ...,
+      _type == "image" => {
+        ...,
+        asset->
+      }
+    }
+  }`
 );
+
+// Rimuovo la definizione locale dei componenti
 
 export default async function Page({
   params,
@@ -23,10 +35,10 @@ export default async function Page({
     { slug },
     isEnabled
       ? {
-        perspective: "previewDrafts",
-        useCdn: false,
-        stega: true,
-      }
+          perspective: "previewDrafts",
+          useCdn: false,
+          stega: true,
+        }
       : undefined
   );
 
@@ -44,7 +56,7 @@ export default async function Page({
       <h1 className="text-3xl font-bold mb-6">{data.title}</h1>
       {data.content && (
         <div className="prose max-w-none">
-          <PortableText value={data.content} />
+          <PortableText value={data.content} components={portableTextComponents} />
         </div>
       )}
     </div>

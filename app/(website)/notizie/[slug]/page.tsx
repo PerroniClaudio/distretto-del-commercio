@@ -14,7 +14,13 @@ async function getPost(slug: string): Promise<PopulatedPost | null> {
     title,
     slug,
     excerpt,
-    content,
+    content[]{
+      ...,
+      _type == "image" => {
+        ...,
+        asset->
+      }
+    },
     category[]->{title},
     comuni[]->{
       title,

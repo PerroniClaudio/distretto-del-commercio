@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "design-react-kit";
 import { useState } from "react";
 
 export default function ImportEventsForm() {
@@ -38,9 +37,22 @@ export default function ImportEventsForm() {
     <form onSubmit={handleSubmit} className="mb-4">
       <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>  {/* dopo aver risolto l'errore nell'api allineare questi elementi. */}
         <input type="file" accept=".xlsx,.xls" onChange={e => setFile(e.target.files?.[0] || null)} />
-        <Button color="primary" outline type="submit" disabled={loading || !file} >
+        {/* <Button color="primary" outline type="submit" disabled={loading || !file} > */}
+        <button
+            className="btn btn-primary btn-outline"
+            type="submit"
+            disabled={loading || !file} 
+            style={{
+              padding: "8px 16px",
+              border: "1px solid #0066cc",
+              backgroundColor: "transparent",
+              color: "#0066cc",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+          >
           {loading ? "Importazione..." : "Importa eventi"}
-        </Button>
+        </button>
       </div>
       {message && <div className="mt-2">{message}</div>}
     </form>

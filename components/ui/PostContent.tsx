@@ -15,6 +15,7 @@ import {
 import { PortableText } from "next-sanity";
 import { PopulatedPost } from "@/types/post";
 import Link from "next/link";
+import { portableTextComponents } from "./PortableTextComponents";
 
 interface PostContentProps {
   post: PopulatedPost;
@@ -164,7 +165,7 @@ function PostContent({ post }: PostContentProps) {
           <article className="mb-5">
             <div className="content-body">
               <h2>{post.title}</h2>
-              <PortableText value={post.content} />
+              <PortableText value={post.content} components={portableTextComponents} />
             </div>
           </article>
         )}

@@ -28,6 +28,8 @@ import { PortableText } from "next-sanity";
 import { PopulatedEvent } from "@/types/event";
 import Link from "next/link";
 import { getDateStringFromTo } from "@/lib/eventUtils";
+import { portableTextComponents } from "./PortableTextComponents";
+import { useEffect } from "react";
 
 interface EventContentProps {
     event: PopulatedEvent;
@@ -157,7 +159,6 @@ function EventContent({ event }: EventContentProps) {
             return `https://outlook.office.com/calendar/0/deeplink/compose?${params.toString()}`;
         }
     };
-  
 
     return (
         <>
@@ -317,13 +318,12 @@ function EventContent({ event }: EventContentProps) {
                                 </Badge>
                             )}
                         </div>
-
                         {/* Contenuto dell'evento */}
-                        {event.description && (
+                        {event.description && event.description.length > 0 && (
                             <article className="mb-5">
                                 <div className="content-body">
                                     <h2 className="mb-4">{event.title}</h2>
-                                    <PortableText value={event.description} />
+                                    <PortableText value={event.description} components={portableTextComponents} />
                                 </div>
                             </article>
                         )}

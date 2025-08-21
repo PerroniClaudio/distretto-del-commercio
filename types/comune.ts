@@ -1,3 +1,11 @@
+import { PortableTextBlock } from "next-sanity";
+
+export interface ComuneContatto {
+  title?: string;
+  type: 'email' | 'phone' | 'fax' | 'whatsapp' | 'website' | 'instagram' | 'facebook';
+  value: string;
+}
+
 export interface Comune {
   _id: string;
   title: string;
@@ -11,4 +19,6 @@ export interface Comune {
     };
     alt?: string;
   };
+  description?: PortableTextBlock[];
+  contacts?: ComuneContatto[];
 }

@@ -28,7 +28,7 @@ import { PopulatedEvent } from "@/types/event";
 import PostCard from "./PostCard";
 import EventCard from "./EventCard";
 import Link from "next/link";
-
+import Contact from "./Contact";
 
 interface ComuneContentProps {
   data: {
@@ -41,12 +41,12 @@ interface ComuneContentProps {
 function ComuneContent({ data }: ComuneContentProps) {
   const { comune, posts, events } = data;
   // Filtra eventi futuri e passati
-  const upcomingEvents = events.filter(event => {
+  const upcomingEvents = events.filter((event) => {
     if (!event.date) return false;
     return new Date(event.date) >= new Date();
   });
 
-  const pastEvents = events.filter(event => {
+  const pastEvents = events.filter((event) => {
     if (!event.date) return false;
     return new Date(event.date) < new Date();
   });
@@ -157,37 +157,30 @@ function ComuneContent({ data }: ComuneContentProps) {
             <TabNavItem>
               <TabNavLink eventKey="1">
                 <span>
-                  <Icon
-                    aria-hidden
-                    className="icon-lg"
-                    icon="it-file"
-                  />
-                  <span>
-                    Notizie ({posts.length})
-                  </span>
+                  <Icon aria-hidden className="icon-lg" icon="it-file" />
+                  <span>Notizie ({posts.length})</span>
                 </span>
               </TabNavLink>
             </TabNavItem>
             <TabNavItem>
               <TabNavLink eventKey="2">
                 <span>
-                  <Icon
-                    aria-hidden
-                    className="icon-lg"
-                    icon="it-calendar"
-                  />
-                  <span>
-                    Eventi ({events.length})
-                  </span>
+                  <Icon aria-hidden className="icon-lg" icon="it-calendar" />
+                  <span>Eventi ({events.length})</span>
+                </span>
+              </TabNavLink>
+            </TabNavItem>
+            <TabNavItem>
+              <TabNavLink eventKey="3">
+                <span>
+                  <Icon aria-hidden className="icon-lg" icon="it-telephone" />
+                  <span>Contatti</span>
                 </span>
               </TabNavLink>
             </TabNavItem>
           </TabNav>
           <TabContent>
-            <TabPane
-              className="p-4"
-              eventKey="1"
-            >
+            <TabPane className="p-4" eventKey="1">
               {posts.length === 0 ? (
                 <Card className="text-center py-5">
                   <CardBody>
@@ -198,13 +191,11 @@ function ComuneContent({ data }: ComuneContentProps) {
                     />
                     <h5>Nessuna notizia disponibile</h5>
                     <p className="text-muted">
-                      Non ci sono ancora notizie pubblicate per il comune di {comune.title}.
+                      Non ci sono ancora notizie pubblicate per il comune di{" "}
+                      {comune.title}.
                     </p>
                     <Button color="primary" href="/notizie">
-                      <Icon
-                        className="icon-sm me-2"
-                        icon="it-arrow-right"
-                      />
+                      <Icon className="icon-sm me-2" icon="it-arrow-right" />
                       Vedi tutte le notizie
                     </Button>
                   </CardBody>
@@ -232,10 +223,7 @@ function ComuneContent({ data }: ComuneContentProps) {
                 </>
               )}
             </TabPane>
-            <TabPane
-              className="p-4"
-              eventKey="2"
-            >
+            <TabPane className="p-4" eventKey="2">
               {events.length === 0 ? (
                 <Card className="text-center py-5">
                   <CardBody>
@@ -314,7 +302,32 @@ function ComuneContent({ data }: ComuneContentProps) {
                 </>
               )}
             </TabPane>
-
+            <TabPane className="p-4" eventKey="3">
+              {!comune.contacts || comune.contacts.length === 0 ? (
+                <Card className="text-center py-5">
+                  <CardBody>
+                    <Icon
+                      className="icon-lg mb-3"
+                      color="secondary"
+                      icon="it-telephone"
+                    />
+                    <h5>Nessun contatto disponibile</h5>
+                    <p className="text-muted">
+                      Non ci sono contatti disponibili per il comune di {comune.title}.
+                    </p>
+                  </CardBody>
+                </Card>
+              ) : (
+                <>
+                  <h3 className="mb-4">Contatti di {comune.title}</h3>
+                  <div className="d-flex flex-column gap-3">
+                    {comune.contacts.map((contatto, index) => (
+                      <Contact key={index} contact={contatto} />
+                    ))}
+                  </div>
+                </>
+              )}
+            </TabPane>
           </TabContent>
         </TabContainer>
 
@@ -324,7 +337,6 @@ function ComuneContent({ data }: ComuneContentProps) {
             <Icon icon="it-arrow-left" className="me-1" />
             Indietro
           </Button>
-
         </div>
       </Container>
     </>

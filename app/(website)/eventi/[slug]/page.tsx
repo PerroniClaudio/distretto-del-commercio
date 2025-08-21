@@ -17,7 +17,13 @@ export default async function EventPage({ params }: EventPageProps) {
     date,
     dateEnd,
     location,
-    description,
+    description[]{
+      ...,
+      _type == "image" => {
+        ...,
+        asset->
+      }
+    },
     category->{title},
     comune->{
       title,

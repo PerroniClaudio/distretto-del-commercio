@@ -1,5 +1,6 @@
 import ImportEventsForm from "@/components/ImportEventsForm";
-import { Button } from "design-react-kit";
+// Non usare design-react-kit nei tool di sanity perchè dà problemi con typegen. 
+// Se si vuole usare vanno disabilitati i tool in sanity.config prima di usare typegen.
 
 // Pagina di import eventi da Excel
 export default function ImportEventsTool() {
@@ -12,9 +13,20 @@ export default function ImportEventsTool() {
           celle.
         </p>
         <a href="/template-import-eventi.xlsx" download>
-          <Button color="primary" outline type="button">
+          <button
+            className="btn btn-primary btn-outline"
+            type="button"
+            style={{
+              padding: "8px 16px",
+              border: "1px solid #0066cc",
+              backgroundColor: "transparent",
+              color: "#0066cc",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+          >
             Scarica template
-          </Button>
+          </button>
         </a>
       </div>
       <div style={{ marginTop: "1rem" }}>
