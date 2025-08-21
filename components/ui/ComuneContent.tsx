@@ -63,7 +63,7 @@ function ComuneContent({ data }: ComuneContentProps) {
         <HeroBody>
           <HeroCategory>Comune</HeroCategory>
           <HeroTitle tag="h1">{comune.title}</HeroTitle>
-          <p className="d-none d-lg-block lead">
+          <p className="d-none d-lg-block font-sans-serif fs-5">
             Scopri tutte le notizie e gli eventi del comune di {comune.title}.
             Resta aggiornato sulle iniziative locali e le attività del territorio.
           </p>

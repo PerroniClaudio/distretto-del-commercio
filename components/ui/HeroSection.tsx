@@ -21,7 +21,7 @@ function HeroSection() {
       <HeroBody>
         <HeroCategory>Notizie e Attività</HeroCategory>
         <HeroTitle tag="h2">Distretto del Commercio</HeroTitle>
-        <p className="d-none d-lg-block font-sans-serif">
+        <p className="d-none d-lg-block font-sans-serif fs-5">
           Il Distretto, che rappresenterà un vero e proprio marchio di qualità negli eventi e nelle proposte dei 
           cinque Comuni di Pessano con Bornago, Cambiago, Gessate, Bellinzago Lombardo, Pozzuolo Martesana, si pone 
           come obiettivo quello di mettere in rete il patrimonio commerciale, culturale e storico di tutto il territorio.

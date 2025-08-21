@@ -116,19 +116,33 @@
 
 /* Footer */
 .it-footer {
-  background-color: var(--bs-primary-dark);
+  // background-color: var(--bs-primary-dark);
+  background-color: var(--bs-light);
 
-  .footer-link {
-    color: white;
-
-    &:hover {
-      color: color-mix(in srgb, var(--bs-primary) 70%, white);
+  .it-footer-main {
+    // background-color: var(--bs-primary);
+    background-color: var(--bs-light);
+    border-top: 5px solid var(--bs-secondary-dark);
+    color: var(--bs-primary);
+    a {
+      color: var(--bs-primary);
+    }
+    .it-brand-wrapper {
+      padding: 1rem 0;
     }
   }
-}
 
-.it-footer-main {
-  background-color: var(--bs-primary);
+  .it-footer-small-prints {
+    background-color: var(--bs-secondary-dark) !important;
+    .footer-link {
+      color: white;
+  
+      &:hover {
+        color: color-mix(in srgb, var(--bs-primary) 70%, white);
+      }
+    }
+  }
+
 }
 
 /* Menu wrapper - questo è il più problematico con i colori hardcodati */

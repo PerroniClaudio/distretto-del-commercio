@@ -46,10 +46,6 @@
   opacity: 0.8;
 }
 
-.it-footer-small-prints {
-  background-color: var(--bs-primary-dark) !important;
-}
-
 .card.border-bottom-card::before {
   background-color: var(--bs-primary) !important;
 }
@@ -73,7 +69,7 @@
 }
 
 .link-list-wrapper ul li a span {
-  color: var(--bs-secondary) !important;
+  color: hsl(0, 0%, 10%) !important;
   text-decoration: none !important;
 }
 
@@ -108,7 +104,7 @@
   width: 100%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-  .header-logo {
+  .header-logo-regione {
     display: flex;
     align-items: center;
     height: 1.5rem;
@@ -121,16 +117,34 @@
     // }
   }
 
-  .header-left-zone {
+  .header-regione-wrapper {
     display: flex;
     align-items: center;
     gap: 1rem;
   }
 }
 
+.header-logo-regione {
+  display: flex;
+  align-items: center;
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.header-regione-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .it-header-wrapper .it-header-center-wrapper {
-  background-color: var(--bs-primary) !important;
-  color: white;
+  // background-color: var(--bs-primary) !important;
+  // color: white;
+  background-color: var(--bs-light) !important;
+  color: var(--bs-primary);
+  height: 125px; 
 }
 
 /* Contenuto dell'header */
@@ -147,8 +161,7 @@
 
 /* Testo dell'header */
 .header-text-lg {
-  font-size: 1.2rem;
-  font-weight: bold;
+  color: var(--bs-primary);
 }
 
 /* Wrapper del logo */
@@ -160,7 +173,7 @@
 
 /* Immagine del logo */
 .logo-image {
-  max-height: 7rem;
+  max-height: 9.813rem;
   width: auto;
   object-fit: contain;
 }
@@ -191,7 +204,8 @@
   font-size: 0.9rem;
   font-weight: 600;
   // color: #666;
-  color: white;
+  // color: white;
+  color: var(--bs-primary);
   text-wrap: nowrap;
 }
 
@@ -280,9 +294,18 @@
 
 /* Responsive */
 
+@media (max-width: 1220px) {
+  .header-brand-custom h2 {
+    font-size: 1.5rem !important;
+  }
+  .header-text-lg {
+    font-size: 1rem !important;
+  }
+}
+
 @media (max-width: 991.98px) {
   #website-layout {
-    padding-top: 174.8px;
+    padding-top: 175px;
   }
 
   .navbar .navbar-collapsable .navbar-nav li a.nav-link {
@@ -309,8 +332,12 @@
     display: none;
   }
 
+  .it-right-zone .header-right-wrapper {
+    display: none !important;
+  }
+
   .logo-image {
-    max-height: 5rem;
+    max-height: 125px;
   }
 }
 
@@ -331,10 +358,6 @@
     }
   }
 
-  .logo-image {
-    max-height: 4rem;
-  }
-
   .header-brand-custom h2 {
     font-size: 1.5rem;
   }
@@ -345,8 +368,8 @@
     height: 4rem;
     padding: .5rem;
   }
-
-  .it-header-center-wrapper {
+.it-header-wrapper .it-header-center-wrapper {
+    height: 164px; 
     padding: 0 0 6px 0;
   }
 

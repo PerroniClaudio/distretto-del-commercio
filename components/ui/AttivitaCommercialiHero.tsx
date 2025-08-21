@@ -21,7 +21,7 @@ function AttivitaCommercialiHero() {
       <HeroBody>
         <HeroCategory>Commercio</HeroCategory>
         <HeroTitle tag="h2">Attività Commerciali</HeroTitle>
-        <p className="d-none d-lg-block font-sans-serif">
+        <p className="d-none d-lg-block font-sans-serif fs-5">
           Scopri le attività commerciali e le aziende di
           Pessano, Cambiago, Gessate, Bellinzago e Pozzuolo Martesana.
         </p>

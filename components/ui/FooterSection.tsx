@@ -18,7 +18,7 @@ function FooterSection() {
               <Col sm={12}>
                 <div className="it-brand-wrapper">
                   <a className="" href="#">
-                    <Logo width={160} height={90} />
+                    <Logo width={220} height={122} />
                     <div className="it-brand-text mx-4">
                       <h2>Distretto del commercio</h2>
                       <h3 className="d-none d-md-block">

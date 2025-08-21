@@ -21,7 +21,7 @@ function PostsHero() {
       <HeroBody>
         <HeroCategory>Notizie</HeroCategory>
         <HeroTitle tag="h2">Notizie del distretto</HeroTitle>
-        <p className="d-none d-lg-block font-sans-serif">
+        <p className="d-none d-lg-block font-sans-serif fs-5">
           Scopri le notizie delle aziende e attività commerciali di
           Pessano, Cambiago, Gessate, Bellinzago e Pozzuolo Martesana.
         </p>
