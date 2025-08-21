@@ -7,6 +7,9 @@ interface EventPageProps {
   params: Promise<{ slug: string }>;
 }
 
+// Le informazioni devono aggiornarsi dinamicamente. O così o usando il revalidate in sanityFetch
+export const dynamic = "force-dynamic";
+
 export default async function EventPage({ params }: EventPageProps) {
   const { slug } = await params;
   

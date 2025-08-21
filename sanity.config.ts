@@ -13,9 +13,8 @@ import { itITLocale } from "@sanity/locale-it-it";
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
 import { apiVersion, dataset, projectId } from "./sanity/env";
 import { schema } from "./sanity/schemaTypes";
-import { structure } from "./sanity/structure";
-import ImportEventsTool from "./components/tools/ImportEventsTool";
-
+// import { structure } from "./sanity/structure";
+// import ImportEventsTool from "./components/tools/ImportEventsTool";
 
 export default defineConfig({
   basePath: "/admin",
@@ -25,7 +24,8 @@ export default defineConfig({
   schema,
   plugins: [
     itITLocale(),
-    structureTool({ structure }),
+    // structureTool({ structure }), // Riprova con la struttura personalizzata
+    structureTool(),
     presentationTool({
       previewUrl: {
         preview: "/",
@@ -37,12 +37,13 @@ export default defineConfig({
     // Vision is for querying with GROQ from inside the Studio
     // https://www.sanity.io/docs/the-vision-plugin
     visionTool({ defaultApiVersion: apiVersion }),
+    // ImportEventsTool, // Register your custom tool here
   ],
-  tools: [
-    {
-      name: 'import-events',
-      title: 'Importa Eventi',
-      component: ImportEventsTool,
-    },
-  ],
+  // tools: [
+  //   {
+  //     name: 'import-events',
+  //     title: 'Importa Eventi',
+  //     component: ImportEventsTool,
+  //   },
+  // ],
 });

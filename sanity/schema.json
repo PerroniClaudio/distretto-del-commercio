@@ -1605,7 +1605,7 @@
                     },
                     {
                       "type": "string",
-                      "value": "telefono"
+                      "value": "phone"
                     },
                     {
                       "type": "string",

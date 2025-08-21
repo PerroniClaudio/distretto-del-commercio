@@ -40,13 +40,30 @@ export default {
               title: "Testo alternativo",
               type: "string",
               description: "Importante per l'accessibilità e SEO",
+              initialValue: "", // Valore iniziale per evitare undefined
             },
             {
               name: "caption",
               title: "Didascalia",
               type: "string",
+              initialValue: "", // Valore iniziale per evitare undefined
             },
           ],
+          preview: {
+            select: {
+              alt: "alt",
+              caption: "caption",
+              asset: "asset"
+            },
+            prepare(selection: any): any {
+              const { alt, caption, asset } = selection;
+              return {
+              title: alt || caption || "Immagine",
+              subtitle: caption || alt || undefined,
+              media: asset
+              };
+            }
+          }
         },
       ],
       validation: (Rule: any) => Rule.required(),

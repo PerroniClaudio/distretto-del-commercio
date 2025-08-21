@@ -230,6 +230,12 @@ function Navigation() {
                   </NavLink>
                 </NavItem>
                 
+                <NavItem>
+                  <NavLink href="/contatti">
+                    <span>Contatti</span>
+                  </NavLink>
+                </NavItem>
+                
                 <div className="social-links">
                   <span className="follow-text">Seguici su</span>
                   <Link

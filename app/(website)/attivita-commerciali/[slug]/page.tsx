@@ -3,6 +3,9 @@ import { notFound } from "next/navigation";
 import AttivitaCommercialeDetail from "@/components/ui/AttivitaCommercialeDetail";
 import type { AttivitaCommerciale } from "@/sanity/types";
 
+// Le informazioni devono aggiornarsi dinamicamente. O così o usando il revalidate in sanityFetch
+export const dynamic = "force-dynamic";
+
 // Tipo esteso per dati popolati dalla query GROQ
 type PopulatedAttivitaCommerciale = Omit<AttivitaCommerciale, 'mainImage' | 'comune' | 'settore'> & {
   mainImage?: {

@@ -1,6 +1,7 @@
-import ImportEventsForm from "@/components/ImportEventsForm";
 // Non usare design-react-kit nei tool di sanity perchè dà problemi con typegen. 
 // Se si vuole usare vanno disabilitati i tool in sanity.config prima di usare typegen.
+
+import ImportEventsForm from "../ImportEventsForm";
 
 // Pagina di import eventi da Excel
 export default function ImportEventsTool() {

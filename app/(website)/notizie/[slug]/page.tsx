@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import PostContent from "@/components/ui/PostContent";
 import { NEWS_VISIBILITY_CONDITIONS } from "@/lib/queryUtils";
 
+// Le informazioni devono aggiornarsi dinamicamente. O così o usando il revalidate in sanityFetch
+export const dynamic = "force-dynamic";
 interface PageProps {
   params: Promise<{ slug: string }>;
 }

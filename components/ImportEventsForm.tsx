@@ -1,23 +1,30 @@
 "use client";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 export default function ImportEventsForm() {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string>("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setFile(e.target.files?.[0] || null);
+  }, []);
+
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) return;
+    
     setLoading(true);
     setMessage("");
-    const formData = new FormData();
-    formData.append("file", file);
-    const res = await fetch("/api/import-events", { method: "POST", body: formData });
-    if (res.ok) {
-      setMessage("Importazione completata!");
-    } else {
-      try {
+    
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/import-events", { method: "POST", body: formData });
+      
+      if (res.ok) {
+        setMessage("Importazione completata!");
+      } else {
         const data = await res.json();
         if (data?.errors && Array.isArray(data.errors)) {
           setMessage("Errore:\n" + data.errors.join("\n"));
@@ -26,18 +33,22 @@ export default function ImportEventsForm() {
         } else {
           setMessage("Errore nell'importazione");
         }
-      } catch {
-        setMessage("Errore nell'importazione");
       }
+    } catch (error) {
+      setMessage("Errore nell'importazione");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
+  }, [file]);
 
   return (
     <form onSubmit={handleSubmit} className="mb-4">
-      <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>  {/* dopo aver risolto l'errore nell'api allineare questi elementi. */}
-        <input type="file" accept=".xlsx,.xls" onChange={e => setFile(e.target.files?.[0] || null)} />
-        {/* <Button color="primary" outline type="submit" disabled={loading || !file} > */}
+      <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+        <input 
+          type="file" 
+          accept=".xlsx,.xls" 
+          onChange={handleFileChange}
+        />
         <button
             className="btn btn-primary btn-outline"
             type="submit"
@@ -54,7 +65,7 @@ export default function ImportEventsForm() {
           {loading ? "Importazione..." : "Importa eventi"}
         </button>
       </div>
-      {message && <div className="mt-2">{message}</div>}
+      {message && <div className="mt-2" style={{ whiteSpace: 'pre-line' }}>{message}</div>}
     </form>
   );
 }

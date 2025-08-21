@@ -468,7 +468,7 @@ export type AllSanitySchemaTypes = StaticPage | AttivitaCommerciale | Settore | 
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./app/(website)/[slug]/page.tsx
 // Variable: staticPageQuery
-// Query: *[_type == "static_page" && slug.current == $slug][0]{title, content}
+// Query: *[_type == "static_page" && slug.current == $slug][0]{    title,     content[]{      ...,      _type == "image" => {        ...,        asset->      }    }  }
 export type StaticPageQueryResult = {
   title: string | null;
   content: Array<{
@@ -489,12 +489,28 @@ export type StaticPageQueryResult = {
     _type: "block";
     _key: string;
   } | {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset: {
+      _id: string;
+      _type: "sanity.imageAsset";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      originalFilename?: string;
+      label?: string;
+      title?: string;
+      description?: string;
+      altText?: string;
+      sha1hash?: string;
+      extension?: string;
+      mimeType?: string;
+      size?: number;
+      assetId?: string;
+      uploadId?: string;
+      path?: string;
+      url?: string;
+      metadata?: SanityImageMetadata;
+      source?: SanityAssetSourceData;
+    } | null;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -509,6 +525,6 @@ export type StaticPageQueryResult = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"static_page\" && slug.current == $slug][0]{title, content}": StaticPageQueryResult;
+    "*[_type == \"static_page\" && slug.current == $slug][0]{\n    title, \n    content[]{\n      ...,\n      _type == \"image\" => {\n        ...,\n        asset->\n      }\n    }\n  }": StaticPageQueryResult;
   }
 }
