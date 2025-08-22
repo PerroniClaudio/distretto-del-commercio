@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, Suspense } from "react";
+import { useState, useEffect, useCallback, Suspense, useRef } from "react";
 import { client } from "@/sanity/lib/client";
 import { PopulatedPost } from "@/types/post";
 import PostCard from "./ui/PostCard";
@@ -23,6 +23,8 @@ function PostListPaginatedContent() {
   // const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
   const [selectedComune, setSelectedComune] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
+
+  const paginationTopRef = useRef<HTMLDivElement | null>(null);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -120,7 +122,12 @@ function PostListPaginatedContent() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     // Scroll verso l'alto quando cambia pagina
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // window.scrollTo({ top: 0, behavior: "smooth" });
+    if (paginationTopRef.current) {
+      paginationTopRef.current.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   useEffect(() => {
@@ -338,7 +345,8 @@ function PostListPaginatedContent() {
   }
 
   return (
-    <div>
+    <div className="position-relative">
+      <div ref={paginationTopRef} id="post-pagination-top" className="d-hidden position-absolute" style={{ top: '-8rem' }}></div>
       <div className="article-filters-wrapper">
         <Select
           id="select-category"

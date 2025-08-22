@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, Suspense } from "react";
+import { useState, useEffect, useCallback, Suspense, useRef } from "react";
 import { PopulatedEvent } from "@/types/event";
 import EventCard from "./ui/EventCard";
 import { Button, Icon } from "design-react-kit";
@@ -23,6 +23,8 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
   });
   const [dateTo, setDateTo] = useState<string>("");
   const [selectedComune, setSelectedComune] = useState<string>("");
+
+  const paginationTopRef = useRef<HTMLDivElement>(null);
 
   const searchParams = useSearchParams();
   const { comuni, loading: loadingComuni, error: errorComuni } = useComuni();
@@ -93,7 +95,12 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     // Scroll verso l'alto quando cambia pagina
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Scroll verso l'alto quando cambia pagina
+    if (paginationTopRef && paginationTopRef.current) {
+      paginationTopRef.current.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   // Calcola gli eventi da mostrare nella pagina corrente
@@ -289,7 +296,8 @@ function EventListPaginatedContent({ events }: EventListPaginatedProps) {
   return (
     <div>
       {/* Filtri */}
-      <div className="event-filters-wrapper mb-4">
+      <div className="event-filters-wrapper mb-4 position-relative">
+        <div ref={paginationTopRef} id="event-pagination-top" className="d-hidden position-absolute" style={{ top: '-8rem' }}></div>
         <div className="row">
           <div className="col-12 col-md-6 col-lg-3 mb-3">
             <label htmlFor="dateFrom" className="form-label">

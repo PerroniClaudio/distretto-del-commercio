@@ -20,7 +20,7 @@ function FooterSection() {
                   <a className="" href="#">
                     <Logo width={220} height={122} />
                     <div className="it-brand-text mx-4">
-                      <h2>Distretto del commercio</h2>
+                      <h2>Distretto del Commercio della Martesana</h2>
                       <h3 className="d-none d-md-block">
                       Novità delle aziende e attività commerciali di
                       Pessano, Cambiago, Gessate, Bellinzago e Pozzuolo Martesana
