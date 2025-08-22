@@ -146,7 +146,7 @@ function PostListPaginatedContent() {
     pages.push(
       <li
         key="first"
-        className={`page-item ${
+        className={`page-item arrow ${
           currentPage === 1 || totalPages <= 1 ? "disabled" : ""
         }`}>
         <Button
@@ -181,7 +181,7 @@ function PostListPaginatedContent() {
     pages.push(
       <li
         key="prev"
-        className={`page-item ${
+        className={`page-item arrow ${
           currentPage <= 1 || totalPages <= 1 ? "disabled" : ""
         }`}>
         <Button
@@ -195,7 +195,7 @@ function PostListPaginatedContent() {
           disabled={currentPage <= 1 || totalPages <= 1}
           aria-label="Pagina precedente">
           <Icon
-            className="icon-sm me-2"
+            className="icon-sm me-md-2"
             color="secondary"
             icon="it-chevron-left"
             padding={false}
@@ -250,7 +250,7 @@ function PostListPaginatedContent() {
     pages.push(
       <li
         key="next"
-        className={`page-item ${
+        className={`page-item arrow ${
           currentPage >= totalPages || totalPages <= 1 ? "disabled" : ""
         }`}>
         <Button
@@ -264,7 +264,7 @@ function PostListPaginatedContent() {
           disabled={currentPage >= totalPages || totalPages <= 1}
           aria-label="Pagina successiva">
           <Icon
-            className="icon-sm me-2"
+            className="icon-sm me-md-2"
             color="secondary"
             icon="it-chevron-right"
             padding={false}
@@ -277,7 +277,7 @@ function PostListPaginatedContent() {
     pages.push(
       <li
         key="last"
-        className={`page-item ${
+        className={`page-item arrow ${
           currentPage === totalPages || totalPages <= 1 ? "disabled" : ""
         }`}>
         <Button
@@ -310,7 +310,7 @@ function PostListPaginatedContent() {
 
     return (
       <nav aria-label="Navigazione pagine articoli" className="mt-4">
-        <ul className="pagination justify-content-center">{pages}</ul>
+        <ul className="pagination justify-content-center align-items-center">{pages}</ul>
       </nav>
     );
   };

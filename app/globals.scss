@@ -296,7 +296,7 @@
 
 @media (max-width: 1220px) {
   .header-brand-custom h2 {
-    font-size: 1.5rem !important;
+    font-size: 1.5rem ;
   }
   .header-text-lg {
     font-size: 1rem !important;
@@ -324,8 +324,8 @@
     }
   }
 
-  .header-brand-custom h2 {
-    font-size: 2rem;
+  .header-brand-custom .logo-wrapper .logo-image {
+    height: 7rem;
   }
 
   .center-header-wrapper .social-links{
@@ -358,8 +358,21 @@
     }
   }
 
+  .header-brand-custom {
+    gap: 1rem;
+  }
+  
   .header-brand-custom h2 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+  }
+
+  ul li.page-item button {
+    padding: 8px 10px;
+  }
+  
+  ul li.page-item.arrow button {
+    padding: 8px 0;
   }
 }
 
@@ -368,7 +381,8 @@
     height: 4rem;
     padding: .5rem;
   }
-.it-header-wrapper .it-header-center-wrapper {
+
+  .it-header-wrapper .it-header-center-wrapper {
     height: 164px; 
     padding: 0 0 6px 0;
   }

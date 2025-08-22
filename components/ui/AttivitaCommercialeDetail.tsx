@@ -37,7 +37,7 @@ export default function AttivitaCommercialeDetail({ attivita }: AttivitaCommerci
   return (
     <>
       {/* Hero section */}
-      <div className="it-hero-wrapper it-dark it-overlay it-bottom-overlapping-content">
+      <div className="it-hero-wrapper it-dark it-overlay">
         <div className="img-responsive-wrapper">
           <div className="img-responsive">
             <div className="img-wrapper">
