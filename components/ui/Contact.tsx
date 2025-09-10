@@ -51,7 +51,8 @@ export default function Contact({ contact, className = "" }: ContactProps) {
       case 'whatsapp':
         return (
           <a 
-            href={`https://wa.me/${contact.value.replace(/\D/g, '')}`} 
+            // href={`https://wa.me/${contact.value.replace(/\D/g, '')}`} 
+            href={`${contact.value}`} 
             target="_blank" 
             rel="noopener noreferrer"
             className="text-decoration-none"
