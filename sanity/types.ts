@@ -57,6 +57,17 @@ export type StaticPage = {
   lastModified?: string;
 };
 
+export type Settore = {
+  _id: string;
+  _type: "settore";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: string;
+};
+
 export type AttivitaCommerciale = {
   _id: string;
   _type: "attivita_commerciale";
@@ -89,23 +100,20 @@ export type AttivitaCommerciale = {
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "comune";
   };
-  settore?: {
+  settori?: Array<{
     _ref: string;
     _type: "reference";
     _weak?: boolean;
+    _key: string;
     [internalGroqTypeReferenceTo]?: "settore";
-  };
-};
-
-export type Settore = {
-  _id: string;
-  _type: "settore";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  slug?: Slug;
-  description?: string;
+  }>;
+  apertaAlPubblico?: boolean;
+  contacts?: Array<{
+    title?: string;
+    type?: "email" | "phone" | "fax" | "whatsapp" | "website" | "instagram" | "facebook";
+    value?: string;
+    _key: string;
+  }>;
 };
 
 export type Event = {
@@ -464,7 +472,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = StaticPage | AttivitaCommerciale | Settore | Event | Comune | Category | Post | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = StaticPage | Settore | AttivitaCommerciale | Event | Comune | Category | Post | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./app/(website)/[slug]/page.tsx
 // Variable: staticPageQuery

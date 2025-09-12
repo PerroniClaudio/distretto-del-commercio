@@ -1,13 +1,14 @@
 import { sanityFetch } from "@/sanity/lib/live";
 import { notFound } from "next/navigation";
 import AttivitaCommercialeDetail from "@/components/ui/AttivitaCommercialeDetail";
-import type { AttivitaCommerciale } from "@/sanity/types";
+import { AttivitaCommerciale } from "@/types/attivita-commerciale";
+// import type { AttivitaCommerciale } from "@/sanity/types";
 
 // Le informazioni devono aggiornarsi dinamicamente. O così o usando il revalidate in sanityFetch
 export const dynamic = "force-dynamic";
 
 // Tipo esteso per dati popolati dalla query GROQ
-type PopulatedAttivitaCommerciale = Omit<AttivitaCommerciale, 'mainImage' | 'comune' | 'settore'> & {
+type PopulatedAttivitaCommerciale = Omit<AttivitaCommerciale, 'mainImage' | 'comune' | 'settori'> & {
   mainImage?: {
     asset?: {
       _id: string;
@@ -22,13 +23,14 @@ type PopulatedAttivitaCommerciale = Omit<AttivitaCommerciale, 'mainImage' | 'com
       current: string;
     };
   };
-  settore?: {
+  settori?: Array<{
     _id: string;
     title: string;
     slug: {
       current: string;
     };
-  };
+  }>;
+  apertaAlPubblico: boolean;
 };
 
 interface PageProps {
@@ -53,13 +55,15 @@ async function getAttivitaCommerciale(slug: string): Promise<PopulatedAttivitaCo
       title,
       slug
     },
-    settore->{
+    settori[]->{
       _id,
       title,
       slug
-    }
-  }`;
-
+    },
+    apertaAlPubblico,
+    contacts
+  }`;  
+  
   const { data: attivita } = await sanityFetch({
     query: query,
     params: { slug },

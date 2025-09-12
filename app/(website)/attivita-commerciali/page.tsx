@@ -31,11 +31,12 @@ export default async function AttivitaCommercialiPage() {
       title,
       slug
     },
-    settore->{
+    settori[]->{
       _id,
       title,
       slug
-    }
+    },
+    apertaAlPubblico
   }`;
 
   // Query per ottenere tutti i settori e comuni per i filtri

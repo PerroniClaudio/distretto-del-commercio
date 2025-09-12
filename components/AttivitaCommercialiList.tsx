@@ -2,9 +2,9 @@
 
 import { Card, CardBody, CardText, CardTitle, Col, Row, Button, Icon, CardImg } from "design-react-kit";
 import Link from "next/link";
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-
+import type { AttivitaCommerciale } from '@/types/attivita-commerciale';
 interface Settore {
   _id: string;
   title: string;
@@ -15,42 +15,7 @@ interface Comune {
   title: string;
 }
 
-interface AttivitaCommerciale {
-  _id: string;
-  title: string;
-  slug: {
-    current: string;
-  };
-  description?: string;
-  mainImage?: {
-    asset?: {
-      _id: string;
-      url: string;
-    };
-    alt?: string;
-  };
-  indirizzo?: {
-    via?: string;
-    civico?: string;
-    cap?: string;
-  };
-  comune?: {
-    _id: string;
-    title: string;
-    slug: {
-      current: string;
-    };
-  };
-  settore?: {
-    _id: string;
-    title: string;
-    slug: {
-      current: string;
-    };
-  };
-}
-
-interface AttivitaCommercialiListProps {
+interface Props {
   attivitaCommerciali: AttivitaCommerciale[];
   settori: Settore[];
   comuni: Comune[];
@@ -61,10 +26,11 @@ function AttivitaCommercialiListContent({
   attivitaCommerciali, 
   settori, 
   comuni 
-}: AttivitaCommercialiListProps) {
+}: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   
+  const [textSearch, setTextSearch] = useState<string>("");
   const [selectedSettore, setSelectedSettore] = useState<string>(
     searchParams.get("settore") || ""
   );
@@ -72,7 +38,7 @@ function AttivitaCommercialiListContent({
     searchParams.get("comune") || ""
   );
   
-  const [filteredAttivita, setFilteredAttivita] = useState<AttivitaCommerciale[]>(attivitaCommerciali);
+  // const [filteredAttivita, setFilteredAttivita] = useState<AttivitaCommerciale[]>(attivitaCommerciali);
 
   // Aggiorna l'URL quando cambiano i filtri
   useEffect(() => {
@@ -84,25 +50,6 @@ function AttivitaCommercialiListContent({
     router.push(queryString ? `?${queryString}` : "", { scroll: false });
   }, [selectedSettore, selectedComune, router]);
 
-  // Filtra le attività quando cambiano i filtri
-  useEffect(() => {
-    let filtered = [...attivitaCommerciali];
-    
-    if (selectedSettore) {
-      filtered = filtered.filter(
-        (attivita) => attivita.settore?.title === selectedSettore
-      );
-    }
-    
-    if (selectedComune) {
-      filtered = filtered.filter(
-        (attivita) => attivita.comune?.title === selectedComune
-      );
-    }
-    
-    setFilteredAttivita(filtered);
-  }, [attivitaCommerciali, selectedSettore, selectedComune]);
-
   // Funzione per gestire il click su un settore
   const handleSettoreClick = (settoreTitle: string) => {
     setSelectedSettore(selectedSettore === settoreTitle ? "" : settoreTitle);
@@ -112,6 +59,31 @@ function AttivitaCommercialiListContent({
   const handleComuneClick = (comuneTitle: string) => {
     setSelectedComune(selectedComune === comuneTitle ? "" : comuneTitle);
   };
+
+  const filteredAttivita = useMemo(() => {
+    return attivitaCommerciali.filter((attivita) => {
+      // Filtro per settore
+      if (selectedSettore && selectedSettore !== '') {
+        const hasSettore = attivita.settori?.some(settore => settore.title === selectedSettore);
+        if (!hasSettore) return false;
+      }
+      
+      // Filtro per comune
+      if (selectedComune && selectedComune !== '') {
+        if (attivita.comune?.title !== selectedComune) return false;
+      }
+      
+      // Filtro per testo
+      if (textSearch) {
+        const searchText = textSearch.toLowerCase();
+        const titleMatch = attivita.title.toLowerCase().includes(searchText);
+        const descriptionMatch = attivita.description?.toLowerCase().includes(searchText);
+        if (!titleMatch && !descriptionMatch) return false;
+      }
+      
+      return true;
+    });
+  }, [attivitaCommerciali, selectedSettore, selectedComune, textSearch]);
 
   return (
     <Row>
@@ -250,8 +222,15 @@ function AttivitaCommercialiListContent({
                   <CardBody>
                     <CardTitle tag="h5">{attivita.title}</CardTitle>
                     <div className="category-top">
-                      <span className="category">{attivita.settore?.title}</span>
-                      <span className="data">{attivita.comune?.title}</span>
+                      {Array.isArray(attivita.settori) && attivita.settori.length > 0 && 
+                        attivita.settori.map((settore) => (
+                          // <span key={settore._id} className="category">{settore.title}</span>
+                          <span key={settore._id} className="badge bg-primary me-1">{settore.title}</span>
+                        )
+                      )}
+                      {attivita.comune?.title && (
+                        <span className="badge bg-secondary">{attivita?.comune?.title}</span>
+                      )}
                     </div>
                     <CardText>{attivita.description?.substring(0, 100)}{attivita.description && attivita.description.length > 100 ? '...' : ''}</CardText>
                     <Link href={`/attivita-commerciali/${attivita.slug.current}`} passHref>
@@ -283,7 +262,7 @@ function AttivitaCommercialiListFallback() {
 }
 
 // Componente principale che avvolge il contenuto in un Suspense boundary
-export default function AttivitaCommercialiList(props: AttivitaCommercialiListProps) {
+export default function AttivitaCommercialiList(props: Props) {
   return (
     <Suspense fallback={<AttivitaCommercialiListFallback />}>
       <AttivitaCommercialiListContent {...props} />
