@@ -125,9 +125,10 @@ function PostContent({ post }: PostContentProps) {
             </div>
           </div>
 
-          {/* Badge per categorie e comuni */}
+          {/* Badge per categorie, comuni ed enti */}
           {((post.category && post.category.length > 0) ||
-            (post.comuni && post.comuni.length > 0)) && (
+            (post.comuni && post.comuni.length > 0) ||
+            (post.enti && post.enti.length > 0)) && (
             <div className="d-flex flex-wrap gap-2 mb-3">
               {post.category && post.category.length > 0 && (
                 <>
@@ -147,6 +148,17 @@ function PostContent({ post }: PostContentProps) {
                       key={`comune-${index}`}
                       className="badge bg-primary fs-6">
                       {comune.title}
+                    </span>
+                  ))}
+                </>
+              )}
+              {post.enti && post.enti.length > 0 && (
+                <>
+                  {post.enti.map((ente, index) => (
+                    <span
+                      key={`ente-${index}`}
+                      className="badge bg-success fs-6">
+                      {ente.title}
                     </span>
                   ))}
                 </>

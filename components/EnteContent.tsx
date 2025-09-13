@@ -49,17 +49,13 @@ interface EnteContentProps {
   };
   news: any[];
   events: any[];
-  newsCount: number;
-  eventsCount: number;
   enteSlug: string;
 }
 
 export default function EnteContent({ 
   ente, 
   news, 
-  events, 
-  newsCount, 
-  eventsCount, 
+  events,
   enteSlug 
 }: EnteContentProps) {
   // Filtra eventi futuri e passati
@@ -148,7 +144,7 @@ export default function EnteContent({
                   color="secondary"
                   icon="it-file"
                 />
-                <h4 className="fw-bold">{newsCount}</h4>
+                <h4 className="fw-bold">{news.length}</h4>
                 <p className="text-muted mb-0">Notizie pubblicate</p>
               </CardBody>
             </Card>
@@ -187,7 +183,7 @@ export default function EnteContent({
               <TabNavLink eventKey="1">
                 <span>
                   <Icon aria-hidden className="icon-lg" icon="it-file" />
-                  <span>Notizie ({newsCount})</span>
+                  <span>Notizie ({news.length})</span>
                 </span>
               </TabNavLink>
             </TabNavItem>
@@ -195,7 +191,7 @@ export default function EnteContent({
               <TabNavLink eventKey="2">
                 <span>
                   <Icon aria-hidden className="icon-lg" icon="it-calendar" />
-                  <span>Eventi ({eventsCount})</span>
+                  <span>Eventi ({events.length})</span>
                 </span>
               </TabNavLink>
             </TabNavItem>

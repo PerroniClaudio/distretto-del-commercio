@@ -115,6 +115,19 @@ export default function EventCard({ event }: EventCardProps) {
                   <span>{event.comune.title}</span>
                 </div>
               )}
+              
+              {/* Enti */}
+              {event.enti && event.enti?.length > 0 && (
+                <div className="d-flex align-items-center mb-3 text-muted">
+                  <Icon
+                    className="icon-sm me-2"
+                    color="secondary"
+                    icon="it-pa"
+                    padding={false}
+                  />
+                  <span>{event.enti.map(ente => ente.title).join(', ')}</span>
+                </div>
+              )}
 
               {event.category && (
                 <span className="badge bg-primary">{event.category.title}</span>

@@ -41,7 +41,8 @@ function PostCard({ post }: { post: PopulatedPost }) {
         </a>
         <CardTagsHeader>
           {(post.category && post.category.length > 0) ||
-            (post.comuni && post.comuni.length > 0) ? (
+            (post.comuni && post.comuni.length > 0) ||
+            (post.enti && post.enti.length > 0) ? (
             <div className="d-flex flex-wrap gap-1 mb-2 font-sans-serif">
               {post.category && post.category.length > 0 && (
                 <>
@@ -50,7 +51,7 @@ function PostCard({ post }: { post: PopulatedPost }) {
                       {cat.title}
                     </span>
                   ))}
-                  {post.comuni && post.comuni.length > 0 && (
+                  {(post.comuni && post.comuni.length > 0 || (post.enti && post.enti.length > 0)) && (
                     <span className="text-muted mx-1">•</span>
                   )}
                 </>
@@ -62,6 +63,20 @@ function PostCard({ post }: { post: PopulatedPost }) {
                       key={`comune-${index}`}
                       className="badge bg-primary font-sans-serif">
                       <span>{comune.title}</span>
+                    </div>
+                  ))}
+                  {post.enti && post.enti.length > 0 && (
+                    <span className="text-muted mx-1">•</span>
+                  )}
+                </>
+              )}
+              {post.enti && post.enti.length > 0 && (
+                <>
+                  {post.enti.map((ente, index) => (
+                    <div
+                      key={`ente-${index}`}
+                      className="badge bg-success font-sans-serif">
+                      <span>{ente.title}</span>
                     </div>
                   ))}
                 </>

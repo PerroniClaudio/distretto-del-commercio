@@ -42,6 +42,11 @@ async function EventList({ view = 'both' }: EventListProps) {
         url
       },
       alt
+    },
+    enti[]->{
+      _id,
+      title,
+      slug
     }
   }`;
 

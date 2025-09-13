@@ -38,6 +38,11 @@ export default async function Home() {
         url
       },
       alt
+    },
+    enti[]->{
+      _id,
+      title,
+      slug
     }
   }`;
 

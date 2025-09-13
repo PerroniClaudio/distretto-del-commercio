@@ -51,6 +51,11 @@ async function getPost(slug: string): Promise<PopulatedPost | null> {
         url,
         originalFilename
       }
+    },
+    enti[]->{
+      _id,
+      title,
+      slug
     }
   }`;
 

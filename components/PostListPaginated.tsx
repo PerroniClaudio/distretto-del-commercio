@@ -88,6 +88,11 @@ function PostListPaginatedContent() {
             url
           },
           alt
+        },
+        enti[]->{
+          _id,
+          title,
+          slug
         }
       }`;
 

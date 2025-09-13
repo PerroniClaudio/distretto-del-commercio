@@ -29,6 +29,11 @@ export async function GET() {
           url
         },
         alt
+      },
+      enti[]->{
+        _id,
+        title,
+        slug
       }
     }`;
 

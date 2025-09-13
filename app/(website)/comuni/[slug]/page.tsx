@@ -78,6 +78,11 @@ async function getComuneData(slug: string): Promise<ComuneData | null> {
         url
       },
       alt
+    },
+    enti[]->{
+      _id,
+      title,
+      slug
     }
   }`;
 
@@ -112,6 +117,11 @@ async function getComuneData(slug: string): Promise<ComuneData | null> {
         url
       },
       alt
+    },
+    enti[]->{
+      _id,
+      title,
+      slug
     }
   }`;
 

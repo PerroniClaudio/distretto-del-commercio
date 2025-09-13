@@ -29,6 +29,11 @@ async function PostList() {
         url
       },
       alt
+    },
+    enti[]->{
+      _id,
+      title,
+      slug
     }
   }`;
 

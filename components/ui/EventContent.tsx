@@ -512,6 +512,28 @@ function EventContent({ event }: EventContentProps) {
                                         </div>
                                     )}
 
+                                    {/* Enti */}
+                                    {event.enti && event.enti.length > 0 && (
+                                        <div className="mb-3">
+                                            <div className="d-flex align-items-center mb-2">
+                                                <Icon
+                                                    className="icon-sm me-2"
+                                                    color="secondary"
+                                                    icon="it-pa"
+                                                />
+                                                <strong>Ent{event.enti.length > 1 ? 'i' : 'e'}</strong>
+                                            </div>
+                                            <div className="ms-4">
+                                                {event.enti.map((ente, index) => (
+                                                    <div key={ente._id}>
+                                                        {ente.title}
+                                                        {index < event.enti!.length - 1 && <br />}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
                                     {/* Categoria */}
                                     {event.category && (
                                         <div className="mb-3">

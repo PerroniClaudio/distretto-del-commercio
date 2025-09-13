@@ -5,12 +5,14 @@ import Logo from "./Logo";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useComuni } from "../../hooks/useComuni";
+import { useEnti } from "@/hooks/useEnti";
 
 function Navigation() {
 
   const [openNav, setOpenNav] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { comuni, loading, error } = useComuni();
+  const { comuni, loading: loadingComuni, error: errorComuni } = useComuni();
+  const { enti, loading: loadingEnti, error: errorEnti } = useEnti();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -167,14 +169,20 @@ function Navigation() {
                     <span>Home</span>
                   </NavLink>
                 </NavItem>
+                
+                <NavItem>
+                  <NavLink href="/enti/distretto-del-commercio">
+                    <span>Chi siamo</span>
+                  </NavLink>
+                </NavItem>
 
-                {loading ? (
+                {loadingComuni ? (
                   <NavItem>
                     <NavLink disabled href="#">
                       <span>Caricamento...</span>
                     </NavLink>
                   </NavItem>
-                ) : error ? (
+                ) : errorComuni ? (
                   <NavItem>
                     <NavLink disabled href="#">
                       <span>Errore nel caricamento</span>
@@ -198,13 +206,55 @@ function Navigation() {
                       </LinkList>
                     </DropdownMenu>
                   </Dropdown>
-                ) : (
+                ) : (<></>)
+                }
+
+                <NavItem>
+                  <NavLink href="/enti/confcommercio">
+                    <span>Confcommercio</span>
+                  </NavLink>
+                </NavItem>
+
+                {loadingEnti ? (
                   <NavItem>
                     <NavLink disabled href="#">
-                      <span>Nessun comune trovato</span>
+                      <span>Caricamento enti...</span>
                     </NavLink>
                   </NavItem>
-                )}
+                ) : errorEnti ? (
+                  <NavItem>
+                    <NavLink disabled href="#">
+                      <span>Errore nel caricamento enti</span>
+                    </NavLink>
+                  </NavItem>
+                ) : enti.filter(ente => 
+                    ente.slug.current !== 'confcommercio' && 
+                    ente.slug.current !== 'distretto-del-commercio'
+                  ).length > 0 ? (
+                  <Dropdown inNavbar tag="li" theme="">
+                    <DropdownToggle caret>
+                      <span>Enti</span>
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      <LinkList>
+                        {enti
+                          .filter(ente => 
+                            ente.slug.current !== 'confcommercio' && 
+                            ente.slug.current !== 'distretto-del-commercio'
+                          )
+                          .map((ente) => (
+                            <LinkListItem
+                              key={ente._id}
+                              href={`/enti/${ente.slug.current}`}
+                              inDropdown>
+                              <span>{ente.title}</span>
+                            </LinkListItem>
+                          ))}
+                      </LinkList>
+                    </DropdownMenu>
+                  </Dropdown>
+                ) : (<></>)
+                }
 
                 <NavItem>
                   <NavLink href="/eventi">
@@ -221,12 +271,6 @@ function Navigation() {
                 <NavItem>
                   <NavLink href="/attivita-commerciali">
                     <span>Attività commerciali</span>
-                  </NavLink>
-                </NavItem>
-                
-                <NavItem>
-                  <NavLink href="/chi-siamo">
-                    <span>Chi siamo</span>
                   </NavLink>
                 </NavItem>
                 

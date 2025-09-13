@@ -74,6 +74,19 @@ export default function UpcomingEventItem({
               <span>{event.comune.title}</span>
             </div>
           )}
+          
+          {/* Enti */}
+          {event.enti && event.enti?.length > 0 && !compact && (
+            <div className="d-flex align-items-center mb-2 text-secondary small">
+              <Icon
+                className="icon-xs me-1"
+                icon="it-pa"
+                color="secondary"
+                padding={false}
+              />
+              <span>{event.enti.map(ente => ente.title).join(', ')}</span>
+            </div>
+          )}
 
           {/* Categoria */}
           {event.category && (

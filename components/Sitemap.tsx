@@ -28,6 +28,10 @@ const sitemapQuery = defineQuery(`{
   "comuni": *[_type == "comune" && defined(slug.current)] | order(title asc) {
     title,
     "slug": slug.current
+  },
+  "enti": *[_type == "ente" && defined(slug.current)] | order(title asc) {
+    title,
+    "slug": slug.current
   }
 }`);
 
@@ -54,6 +58,10 @@ interface SitemapData {
     slug: string;
   }>;
   comuni: Array<{
+    title: string;
+    slug: string;
+  }>;
+  enti: Array<{
     title: string;
     slug: string;
   }>;
@@ -121,9 +129,24 @@ export default async function Sitemap() {
             </ul>
           </section>
         )}
+        {/* Enti */}
+        {data.enti.length > 0 && (
+          <section>
+            <h2 className="text-xl font-semibold mb-4 text-teal-600">Enti</h2>
+            <ul className="space-y-2 max-h-64 overflow-y-auto">
+              {data.enti.map((ente) => (
+                <li key={ente.slug}>
+                  <Link href={`/enti/${ente.slug}`} className="text-blue-500 hover:underline">
+                    {ente.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {/* Categorie */}
-        {data.categories.length > 0 && (
+        {/* {data.categories.length > 0 && (
           <section>
             <h2 className="text-xl font-semibold mb-4 text-orange-600">Categorie</h2>
             <ul className="space-y-2">
@@ -136,7 +159,7 @@ export default async function Sitemap() {
               ))}
             </ul>
           </section>
-        )}
+        )} */}
 
         {/* Notizie Recenti */}
         {data.posts.length > 0 && (
