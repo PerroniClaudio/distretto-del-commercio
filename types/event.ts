@@ -2,7 +2,7 @@ import { Event } from "@/sanity/types";
 import { PortableTextBlock } from "next-sanity";
 
 // Tipo basato su Event ma con le reference popolate dalla query GROQ
-export type PopulatedEvent = Omit<Event, "category" | "comune" | "image" | "files"> & {
+export type PopulatedEvent = Omit<Event, "category" | "comune" | "image" | "files" | "enti"> & {
   category?: { title: string };
   comune?: { 
     title: string;
@@ -32,4 +32,9 @@ export type PopulatedEvent = Omit<Event, "category" | "comune" | "image" | "file
     _type: "file";
   }>;
   description?: PortableTextBlock[];
+  enti?: Array<{
+    _id: string;
+    title: string;
+    slug: { current: string };
+  }>;
 };

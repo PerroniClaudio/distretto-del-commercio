@@ -34,6 +34,13 @@ export default {
       of: [{ type: "reference", to: [{ type: "comune" }] }],
     },
     {
+      name: "enti",
+      title: "Enti",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "ente" }] }],
+      validation: (Rule: any) => Rule.unique(),
+    },
+    {
       name: "excerpt",
       title: "Estratto",
       type: "text",

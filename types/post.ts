@@ -1,7 +1,7 @@
 import { Post } from "@/sanity/types";
 
 // Tipo basato su Post ma con le reference popolate dalla query GROQ
-export type PopulatedPost = Omit<Post, "category" | "comuni" | "image" | "files"> & {
+export type PopulatedPost = Omit<Post, "category" | "comuni" | "image" | "files" | "enti"> & {
   category?: Array<{ title: string }>;
   comuni?: Array<{ 
     title: string;
@@ -12,6 +12,11 @@ export type PopulatedPost = Omit<Post, "category" | "comuni" | "image" | "files"
       };
       alt?: string;
     };
+  }>;
+  enti?: Array<{
+    _id: string;
+    title: string;
+    slug: { current: string };
   }>;
   image?: {
     asset: {

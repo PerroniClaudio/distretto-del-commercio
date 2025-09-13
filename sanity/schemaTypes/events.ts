@@ -34,6 +34,13 @@ export default {
       to: [{ type: "comune" }],
     },
     {
+      name: "enti",
+      title: "Enti",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "ente" }] }],
+      validation: (Rule: any) => Rule.unique(),
+    },
+    {
       name: "date",
       title: "Data di inizio",
       type: "datetime",

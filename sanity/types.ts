@@ -13,6 +13,68 @@
  */
 
 // Source: schema.json
+export type Ente = {
+  _id: string;
+  _type: "ente";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  description?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    caption?: string;
+    _type: "image";
+    _key: string;
+  }>;
+  raggruppaInNavbar?: boolean;
+  canPublishAlone?: boolean;
+  contacts?: Array<{
+    title?: string;
+    type?: "email" | "phone" | "fax" | "whatsapp" | "website" | "instagram" | "facebook";
+    value?: string;
+    _key: string;
+  }>;
+};
+
 export type StaticPage = {
   _id: string;
   _type: "static_page";
@@ -136,6 +198,13 @@ export type Event = {
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "comune";
   };
+  enti?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "ente";
+  }>;
   date?: string;
   dateEnd?: string;
   publishedFrom?: string;
@@ -291,6 +360,13 @@ export type Post = {
     _weak?: boolean;
     _key: string;
     [internalGroqTypeReferenceTo]?: "comune";
+  }>;
+  enti?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "ente";
   }>;
   excerpt?: string;
   content?: Array<{
@@ -472,7 +548,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = StaticPage | Settore | AttivitaCommerciale | Event | Comune | Category | Post | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = Ente | StaticPage | Settore | AttivitaCommerciale | Event | Comune | Category | Post | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./app/(website)/[slug]/page.tsx
 // Variable: staticPageQuery
