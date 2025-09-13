@@ -159,6 +159,48 @@ function EventContent({ event }: EventContentProps) {
         }
     };
 
+    const handleShare = async () => {
+        const shareData = {
+            title: event.title || 'Evento',
+            text: `Scopri questo evento: ${event.title}${event.location ? ` presso ${event.location}` : ''}`,
+            url: window.location.href
+        };
+
+        try {
+            // Verifica se il browser supporta l'API Web Share
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else {
+                // Fallback per browser che non supportano Web Share API
+                if (navigator.clipboard) {
+                    await navigator.clipboard.writeText(window.location.href);
+                    alert('Link copiato negli appunti!');
+                } else {
+                    // Fallback ulteriore per browser molto vecchi
+                    const textArea = document.createElement('textarea');
+                    textArea.value = window.location.href;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    // eslint-disable-next-line deprecation/deprecation
+                    document.execCommand('copy'); //
+                    document.body.removeChild(textArea);
+                    alert('Link copiato negli appunti!');
+                }
+            }
+        } catch (error) {
+            console.error('Errore durante la condivisione:', error);
+            // Fallback: copia negli appunti
+            try {
+                if (navigator.clipboard) {
+                    await navigator.clipboard.writeText(window.location.href);
+                    alert('Link copiato negli appunti!');
+                }
+            } catch (clipboardError) {
+                console.error('Errore copia negli appunti:', clipboardError);
+            }
+        }
+    };
+
     return (
         <>
             {/* Hero con immagine principale e titolo */}
@@ -552,7 +594,12 @@ function EventContent({ event }: EventContentProps) {
                                                     </LinkList>
                                                 </DropdownMenu>
                                             </Dropdown>
-                                            <Button color="outline-primary" size="sm" className="w-100">
+                                            <Button 
+                                                color="outline-primary" 
+                                                size="sm" 
+                                                className="w-100"
+                                                onClick={handleShare}
+                                            >
                                                 <Icon icon="it-share" className="me-1" />
                                                 Condividi evento
                                             </Button>
