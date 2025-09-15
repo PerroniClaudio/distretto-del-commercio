@@ -55,7 +55,14 @@ async function getPost(slug: string): Promise<PopulatedPost | null> {
     enti[]->{
       _id,
       title,
-      slug
+      slug,
+      image{
+        asset->{
+          _id,
+          url
+        },
+        alt
+      }
     }
   }`;
 

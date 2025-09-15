@@ -12,13 +12,43 @@ import { PopulatedPost } from "@/types/post";
 function PostCard({ post }: { post: PopulatedPost }) {
   return (
     <Card className="card-bg  border-bottom-card">
-      <CardImg
-        className="img-fluid post-card-image"
-        src={post?.image?.asset?.url || post?.comuni?.[0]?.image?.asset?.url || ""}
-        alt={post.image?.alt || post.comuni?.[0]?.image?.alt || post.title || "Titolo dell'articolo"}
-        width={480}
-        height={270}
-      />
+      {/* Immagine post con gerarchia di fallback */}
+      {post?.image?.asset?.url ? (
+        <CardImg
+          className="img-fluid post-card-image"
+          src={post.image.asset.url}
+          alt={post.image.alt || post.title || "Immagine della notizia"}
+          width={480}
+          height={270}
+        />
+      ) : post?.comuni?.[0]?.image?.asset?.url ? (
+        <CardImg
+          className="img-fluid post-card-image"
+          src={post.comuni[0].image.asset.url}
+          alt={post.comuni[0].image.alt || `Immagine di ${post.comuni[0].title}` || "Immagine del comune"}
+          width={480}
+          height={270}
+        />
+      ) : post?.enti?.[0]?.image?.asset?.url ? (
+        <CardImg
+          className="img-fluid post-card-image"
+          src={post.enti[0].image.asset.url}
+          alt={post.enti[0].image.alt || `Immagine di ${post.enti[0].title}` || "Immagine dell'ente"}
+          width={480}
+          height={270}
+        />
+      ) : (
+        <div 
+          className="placeholder-image bg-light d-flex align-items-center justify-content-center text-dark fw-bold text-center p-3" 
+          style={{ 
+            height: "270px", 
+            wordWrap: "break-word", 
+            wordBreak: "break-word" 
+          }}
+        >
+          <span className="fs-5">{post.title}</span>
+        </div>
+      )}
       <CardBody>
         <div className="text-muted d-flex align-items-center gap-1">
           {/* <Icon

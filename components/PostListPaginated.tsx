@@ -92,7 +92,14 @@ function PostListPaginatedContent() {
         enti[]->{
           _id,
           title,
-          slug
+          slug,
+          image{
+            asset->{
+              _id,
+              url
+            },
+            alt
+          }
         }
       }`;
 

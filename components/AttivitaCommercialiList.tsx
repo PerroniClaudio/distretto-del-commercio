@@ -5,6 +5,23 @@ import Link from "next/link";
 import { useState, useEffect, Suspense, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { AttivitaCommerciale } from '@/types/attivita-commerciale';
+
+// Estendo il tipo per includere l'immagine del comune
+type AttivitaCommercialeWithComuneImage = AttivitaCommerciale & {
+  comune?: {
+    _id: string;
+    title: string;
+    slug: { current: string };
+    image?: {
+      asset?: {
+        _id: string;
+        url: string;
+      };
+      alt?: string;
+    };
+  };
+};
+
 interface Settore {
   _id: string;
   title: string;
@@ -13,10 +30,17 @@ interface Settore {
 interface Comune {
   _id: string;
   title: string;
+  image?: {
+    asset?: {
+      _id: string;
+      url: string;
+    };
+    alt?: string;
+  };
 }
 
 interface Props {
-  attivitaCommerciali: AttivitaCommerciale[];
+  attivitaCommerciali: AttivitaCommercialeWithComuneImage[];
   settori: Settore[];
   comuni: Comune[];
 }
@@ -210,14 +234,22 @@ function AttivitaCommercialiListContent({
                   {attivita.mainImage?.asset?.url ? (
                     <CardImg
                       className="img-fluid"
-                      src={attivita.mainImage.asset.url || "https://picsum.photos/1920/1080"}
-                      alt={attivita.mainImage.alt || attivita.title || "Titolo dell'articolo"}
+                      src={attivita.mainImage.asset.url}
+                      alt={attivita.mainImage.alt || attivita.title || "Immagine dell'attività"}
+                      width={480}
+                      height={270}
+                    />
+                  ) : attivita.comune?.image?.asset?.url ? (
+                    <CardImg
+                      className="img-fluid"
+                      src={attivita.comune.image.asset.url}
+                      alt={attivita.comune.image.alt || `Immagine di ${attivita.comune.title}` || "Immagine del comune"}
                       width={480}
                       height={270}
                     />
                   ) : (
-                    <div className="placeholder-image bg-light d-flex align-items-center justify-content-center" style={{ height: "200px" }}>
-                      <Icon icon="it-image" size="xl" />
+                    <div className="placeholder-image bg-light d-flex align-items-center justify-content-center text-dark fw-bold text-center p-3" style={{ height: "200px", wordWrap: "break-word", wordBreak: "break-word" }}>
+                      <span className="fs-5">{attivita.title}</span>
                     </div>
                   )}
                   <CardBody>

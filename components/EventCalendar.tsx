@@ -444,6 +444,18 @@ export default function EventCalendar({ events }: EventCalendarProps) {
                   </div>
                 )}
 
+                {selectedEvent.enti && selectedEvent.enti.length > 0 && (
+                  <div className="mb-3">
+                    <strong>Enti:</strong>{" "}
+                    {selectedEvent.enti.map((ente, idx) => (
+                      // <span key={ente._id || idx} className="badge bg-secondary me-1">
+                      //   {ente.title}
+                      // </span>
+                      ente.title + (idx < selectedEvent.enti!.length - 1 ? ", " : "")
+                    ))}
+                  </div>
+                )}
+
                 {selectedEvent.category && (
                   <div className="mb-3">
                     <span className="badge bg-primary">{selectedEvent.category.title}</span>

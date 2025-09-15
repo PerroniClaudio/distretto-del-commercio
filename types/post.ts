@@ -17,6 +17,13 @@ export type PopulatedPost = Omit<Post, "category" | "comuni" | "image" | "files"
     _id: string;
     title: string;
     slug: { current: string };
+    image?: {
+      asset?: {
+        _id: string;
+        url: string;
+      };
+      alt?: string;
+    };
   }>;
   image?: {
     asset: {

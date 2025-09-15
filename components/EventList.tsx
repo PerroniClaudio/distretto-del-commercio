@@ -46,7 +46,14 @@ async function EventList({ view = 'both' }: EventListProps) {
     enti[]->{
       _id,
       title,
-      slug
+      slug,
+      image{
+        asset->{
+          _id,
+          url
+        },
+        alt
+      }
     }
   }`;
 

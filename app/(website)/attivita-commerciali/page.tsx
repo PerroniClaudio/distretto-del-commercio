@@ -29,7 +29,14 @@ export default async function AttivitaCommercialiPage() {
     comune->{
       _id,
       title,
-      slug
+      slug,
+      image {
+        asset -> {
+          _id,
+          url
+        },
+        alt
+      }
     },
     settori[]->{
       _id,
@@ -47,7 +54,14 @@ export default async function AttivitaCommercialiPage() {
   
   const comuniQuery = `*[_type == "comune"] | order(title asc) {
     _id,
-    title
+    title,
+    image {
+      asset -> {
+        _id,
+        url
+      },
+      alt
+    }
   }`;
 
   const [

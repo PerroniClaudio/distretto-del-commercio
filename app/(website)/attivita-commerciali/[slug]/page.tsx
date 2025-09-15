@@ -19,8 +19,13 @@ type PopulatedAttivitaCommerciale = Omit<AttivitaCommerciale, 'mainImage' | 'com
   comune?: {
     _id: string;
     title: string;
-    slug: {
-      current: string;
+    slug: { current: string };
+    image?: {
+      asset?: {
+        _id: string;
+        url: string;
+      };
+      alt?: string;
     };
   };
   settori?: Array<{
@@ -53,7 +58,14 @@ async function getAttivitaCommerciale(slug: string): Promise<PopulatedAttivitaCo
     comune->{
       _id,
       title,
-      slug
+      slug,
+      image {
+        asset -> {
+          _id,
+          url
+        },
+        alt
+      }
     },
     settori[]->{
       _id,

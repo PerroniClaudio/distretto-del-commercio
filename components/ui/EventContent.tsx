@@ -203,11 +203,11 @@ function EventContent({ event }: EventContentProps) {
     return (
         <>
             {/* Hero con immagine principale e titolo */}
-            {(event?.image || event?.comune?.image) && (
+            {(event?.image || event?.comune?.image || event?.enti?.[0]?.image) && (
                 <Hero overlay="dark">
                     <HeroBackground
-                        src={event?.image?.asset?.url || event?.comune?.image?.asset?.url || ""}
-                        alt={event?.image?.alt || event?.comune?.image?.alt || event.title || "Immagine dell'evento"}
+                        src={event?.image?.asset?.url || event?.comune?.image?.asset?.url || event?.enti?.[0]?.image?.asset?.url || ""}
+                        alt={event?.image?.alt || event?.comune?.image?.alt || event?.enti?.[0]?.image?.alt || event.title || "Immagine dell'evento"}
                         title={event.title}
                     />
                     <HeroBody>

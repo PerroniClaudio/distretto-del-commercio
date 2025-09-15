@@ -56,7 +56,14 @@ export default async function EventPage({ params }: EventPageProps) {
     enti[]->{
       _id,
       title,
-      slug
+      slug,
+      image{
+        asset->{
+          _id,
+          url
+        },
+        alt
+      }
     }
   }`;
 

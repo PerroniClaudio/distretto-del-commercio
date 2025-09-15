@@ -12,8 +12,24 @@ import {
 } from "design-react-kit";
 import { getDateStringFromTo } from "@/lib/eventUtils";
 
+// Estendo il tipo per includere l'immagine negli enti
+type PopulatedEventWithEntiImage = PopulatedEvent & {
+  enti?: Array<{
+    _id: string;
+    title: string;
+    slug: { current: string };
+    image?: {
+      asset?: {
+        _id: string;
+        url: string;
+      };
+      alt?: string;
+    };
+  }>;
+};
+
 interface EventCardProps {
-  event: PopulatedEvent;
+  event: PopulatedEventWithEntiImage;
 }
 
 export default function EventCard({ event }: EventCardProps) {
@@ -26,13 +42,42 @@ export default function EventCard({ event }: EventCardProps) {
 
 
       {/* Immagine evento */}
-      <CardImg
-        className="img-fluid event-card-image"
-        src={event.image?.asset?.url || event.comune?.image?.asset?.url || "https://picsum.photos/1920/1080"}
-        alt={event.image?.alt || event.comune?.image?.alt || event.title}
-        width={480}
-        height={270}
-      />
+      {event.image?.asset?.url ? (
+        <CardImg
+          className="img-fluid event-card-image"
+          src={event.image.asset.url}
+          alt={event.image.alt || event.title}
+          width={480}
+          height={270}
+        />
+      ) : event.comune?.image?.asset?.url ? (
+        <CardImg
+          className="img-fluid event-card-image"
+          src={event.comune.image.asset.url}
+          alt={event.comune.image.alt || `Immagine di ${event.comune.title}`}
+          width={480}
+          height={270}
+        />
+      ) : event.enti?.[0]?.image?.asset?.url ? (
+        <CardImg
+          className="img-fluid event-card-image"
+          src={event.enti[0].image.asset.url}
+          alt={event.enti[0].image.alt || `Immagine di ${event.enti[0].title}` || "Immagine dell'ente"}
+          width={480}
+          height={270}
+        />
+      ) : (
+        <div 
+          className="placeholder-image bg-light d-flex align-items-center justify-content-center text-dark fw-bold text-center p-3" 
+          style={{ 
+            aspectRatio: "4/3",
+            wordWrap: "break-word", 
+            wordBreak: "break-word" 
+          }}
+        >
+          <span className="fs-5">{event.title}</span>
+        </div>
+      )}
 
       <CardBody>
         <div className="d-flex flex-column justify-content-between h-100">

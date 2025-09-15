@@ -17,8 +17,13 @@ type PopulatedAttivitaCommerciale = Omit<AttivitaCommerciale, 'mainImage' | 'com
   comune?: {
     _id: string;
     title: string;
-    slug: {
-      current: string;
+    slug: { current: string };
+    image?: {
+      asset?: {
+        _id: string;
+        url: string;
+      };
+      alt?: string;
     };
   };
   settori?: Array<{
@@ -43,19 +48,15 @@ export default function AttivitaCommercialeDetail({ attivita }: AttivitaCommerci
         <div className="img-responsive-wrapper">
           <div className="img-responsive">
             <div className="img-wrapper">
-              {attivita.mainImage?.asset?.url ? (
-                <img
-                  src={attivita.mainImage.asset.url}
-                  title={attivita.title}
-                  alt={attivita.mainImage.alt || attivita.title}
-                />
-              ) : (
-                <img
-                  src="/images/attivita-commerciali-hero.jpg"
-                  title={attivita.title}
-                  alt={attivita.title}
-                />
-              )}
+                {attivita.comune?.image?.asset?.url ? (
+                  <img
+                    src={attivita.comune.image.asset.url}
+                    title={attivita.comune.title}
+                    alt={attivita.comune.title}
+                  />
+                ) : (
+                  <></>
+                )}
             </div>
           </div>
         </div>
