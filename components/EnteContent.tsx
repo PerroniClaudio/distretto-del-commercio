@@ -11,7 +11,6 @@ import {
   Hero,
   HeroBackground,
   HeroBody,
-  HeroCategory,
   HeroTitle,
   Card,
   CardBody,
@@ -27,13 +26,15 @@ import PostCard from "./ui/PostCard";
 import EventCard from "./ui/EventCard";
 import Contact from "./ui/Contact";
 import Link from "next/link";
+import { PopulatedPost } from "@/types/post";
+import { PopulatedEvent } from "@/types/event";
 
 interface EnteContentProps {
   ente: {
     _id: string;
     title: string;
     slug: { current: string };
-    description?: any;
+    description?: never;
     image?: {
       asset?: {
         _id: string;
@@ -47,8 +48,8 @@ interface EnteContentProps {
       value: string;
     }>;
   };
-  news: any[];
-  events: any[];
+  news: PopulatedPost[];
+  events: PopulatedEvent[];
   enteSlug: string;
 }
 
@@ -83,7 +84,7 @@ export default function EnteContent({
           <HeroTitle tag="h1">{ente.title}</HeroTitle>
           <p className="d-none d-lg-block font-sans-serif fs-5">
             Scopri tutte le notizie e gli eventi di {ente.title}.
-            Resta aggiornato sulle iniziative e le attività dell'ente.
+            Resta aggiornato sulle iniziative e le attività dell&apos;ente.
           </p>
         </HeroBody>
       </Hero>
@@ -130,7 +131,7 @@ export default function EnteContent({
         {/* Descrizione */}
         {ente.description && (
           <div className="it-page-section mb-5">
-            <PortableText value={ente.description} />
+            <PortableText value={ente.description as never} />
           </div>
         )}
 

@@ -181,8 +181,7 @@ function EventContent({ event }: EventContentProps) {
                     textArea.value = window.location.href;
                     document.body.appendChild(textArea);
                     textArea.select();
-                    // eslint-disable-next-line deprecation/deprecation
-                    document.execCommand('copy'); //
+                    document.execCommand('copy');
                     document.body.removeChild(textArea);
                     alert('Link copiato negli appunti!');
                 }

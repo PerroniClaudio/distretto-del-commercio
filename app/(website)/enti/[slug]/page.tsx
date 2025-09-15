@@ -71,13 +71,14 @@ const eventsQuery = `*[_type == "event" && references($enteId) && ${EVENT_VISIBI
 }`;
 
 interface PageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
   const { data: ente } = await sanityFetch({
     query: enteQuery,
-    params: { slug: params.slug },
+    params: { slug: slug },
   });
 
   if (!ente) {
@@ -93,10 +94,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function EntePage({ params }: PageProps) {
+  const { slug } = await params;
+  
   // Recupera i dati dell'ente
   const { data: ente } = await sanityFetch({
     query: enteQuery,
-    params: { slug: params.slug },
+    params: { slug },
   });
 
   if (!ente) {
@@ -123,7 +126,7 @@ export default async function EntePage({ params }: PageProps) {
       ente={ente}
       news={news}
       events={events}
-      enteSlug={params.slug}
+      enteSlug={slug}
     />
   );
 }

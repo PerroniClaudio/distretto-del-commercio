@@ -30,7 +30,7 @@ function AttivitaCommercialiListContent({
   const router = useRouter();
   const searchParams = useSearchParams();
   
-  const [textSearch, setTextSearch] = useState<string>("");
+  // const [textSearch, setTextSearch] = useState<string>("");
   const [selectedSettore, setSelectedSettore] = useState<string>(
     searchParams.get("settore") || ""
   );
@@ -74,16 +74,17 @@ function AttivitaCommercialiListContent({
       }
       
       // Filtro per testo
-      if (textSearch) {
-        const searchText = textSearch.toLowerCase();
-        const titleMatch = attivita.title.toLowerCase().includes(searchText);
-        const descriptionMatch = attivita.description?.toLowerCase().includes(searchText);
-        if (!titleMatch && !descriptionMatch) return false;
-      }
+      // if (textSearch) {
+      //   const searchText = textSearch.toLowerCase();
+      //   const titleMatch = attivita.title.toLowerCase().includes(searchText);
+      //   const descriptionMatch = attivita.description?.toLowerCase().includes(searchText);
+      //   if (!titleMatch && !descriptionMatch) return false;
+      // }
       
       return true;
     });
-  }, [attivitaCommerciali, selectedSettore, selectedComune, textSearch]);
+  // }, [attivitaCommerciali, selectedSettore, selectedComune, textSearch]);
+  }, [attivitaCommerciali, selectedSettore, selectedComune]);
 
   return (
     <Row>
