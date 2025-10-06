@@ -2,6 +2,7 @@ import { sanityFetch } from "@/sanity/lib/live";
 import { ComuneContatto } from "@/types/comune";
 import ContactsContent from "@/components/ui/ContactsContent";
 
+export const dynamic = "force-dynamic";
 interface ComuneWithContacts {
   _id: string;
   title: string;
@@ -28,7 +29,24 @@ async function getContacts(): Promise<ComuneWithContacts[]> {
   });
 }
 
+async function getEntiContacts(): Promise<ComuneWithContacts[]> {
+  const entiContactsQuery = `*[_type == "ente" && defined(contacts) && count(contacts) > 0 && (title == "Confcommercio" || title == "Distretto del Commercio")] | order(id asc) {
+    _id,
+    title,
+    contacts
+  }`;
+
+  const { data } = await sanityFetch({
+    query: entiContactsQuery,
+    params: {},
+  });
+
+  // Ordina i comuni mettendo Pessano con Bornago per primo
+  return data;
+}
+
 export default async function ContactsPage() {
   const comuni = await getContacts();
-  return <ContactsContent comuni={comuni} />;
+  const enti = await getEntiContacts();
+  return <ContactsContent comuni={comuni} enti={enti} />;
 }
