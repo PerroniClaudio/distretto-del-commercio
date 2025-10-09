@@ -1,3 +1,5 @@
+import { PortableTextBlock } from "next-sanity";
+
 export interface AttivitaCommercialeContatto {
   title?: string;
   type: 'email' | 'phone' | 'fax' | 'whatsapp' | 'website' | 'instagram' | 'facebook';
@@ -12,7 +14,7 @@ export interface AttivitaCommerciale {
   _rev: string;
   title: string;
   slug: { current: string };
-  description?: string;
+  description?: PortableTextBlock[];
   mainImage?: {
     asset: {
       _id: string;

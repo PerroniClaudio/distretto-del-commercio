@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState, useEffect, Suspense, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { AttivitaCommerciale } from '@/types/attivita-commerciale';
+import { PortableTextBlock, toPlainText } from "next-sanity";
 
 // Estendo il tipo per includere l'immagine del comune
 type AttivitaCommercialeWithComuneImage = AttivitaCommerciale & {
@@ -63,6 +64,15 @@ function AttivitaCommercialiListContent({
   );
   
   // const [filteredAttivita, setFilteredAttivita] = useState<AttivitaCommerciale[]>(attivitaCommerciali);
+
+  const getDescriptionPreview = (description?: PortableTextBlock[]) => {
+    if (!description || description.length === 0) return '';
+    
+    const plainText = toPlainText(description);
+    return plainText.length > 100 
+      ? plainText.substring(0, 100) + '...' 
+      : plainText;
+  };
 
   // Aggiorna l'URL quando cambiano i filtri
   useEffect(() => {
@@ -265,7 +275,10 @@ function AttivitaCommercialiListContent({
                         <span className="badge bg-secondary">{attivita?.comune?.title}</span>
                       )}
                     </div>
-                    <CardText>{attivita.description?.substring(0, 100)}{attivita.description && attivita.description.length > 100 ? '...' : ''}</CardText>
+                    <CardText>
+                      {/* {attivita.description?.substring(0, 100)}{attivita.description && attivita.description.length > 100 ? '...' : ''} */}
+                      {getDescriptionPreview(attivita.description)}
+                    </CardText>
                     <Link href={`/attivita-commerciali/${attivita.slug.current}`} passHref>
                       <Button color="primary" outline className="mt-2">
                         Scopri di più

@@ -4,6 +4,8 @@ import { Row, Col, Icon, Button } from "design-react-kit";
 import Link from "next/link";
 import type { AttivitaCommerciale } from "@/types/attivita-commerciale";
 import Contact from "./Contact";
+import { portableTextComponents } from "./PortableTextComponents";
+import { PortableText } from "next-sanity";
 
 // Tipo esteso per dati popolati dalla query GROQ
 type PopulatedAttivitaCommerciale = Omit<AttivitaCommerciale, 'mainImage' | 'comune' | 'settori'> & {
@@ -82,7 +84,7 @@ export default function AttivitaCommercialeDetail({ attivita }: AttivitaCommerci
               <div className="card card-bg">
                 <div className="card-body">
                   <h5 className="card-title">Descrizione</h5>
-                  <p className="card-text">{attivita.description}</p>
+                  <PortableText value={attivita.description ?? []} components={portableTextComponents} />
 
                   {attivita?.contacts && attivita.contacts.length > 0 && (
                     <div>
