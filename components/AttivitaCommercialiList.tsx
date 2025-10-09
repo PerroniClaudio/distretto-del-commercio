@@ -233,7 +233,7 @@ function AttivitaCommercialiListContent({
                 <Card className="card-bg">
                   {attivita.mainImage?.asset?.url ? (
                     <CardImg
-                      className="img-fluid"
+                      className="img-fluid attivita-card-image"
                       src={attivita.mainImage.asset.url}
                       alt={attivita.mainImage.alt || attivita.title || "Immagine dell'attività"}
                       width={480}
@@ -241,7 +241,7 @@ function AttivitaCommercialiListContent({
                     />
                   ) : attivita.comune?.image?.asset?.url ? (
                     <CardImg
-                      className="img-fluid"
+                      className="img-fluid attivita-card-image"
                       src={attivita.comune.image.asset.url}
                       alt={attivita.comune.image.alt || `Immagine di ${attivita.comune.title}` || "Immagine del comune"}
                       width={480}
