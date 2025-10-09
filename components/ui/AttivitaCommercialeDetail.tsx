@@ -83,6 +83,15 @@ export default function AttivitaCommercialeDetail({ attivita }: AttivitaCommerci
             <div className="card-wrapper card-space">
               <div className="card card-bg">
                 <div className="card-body">
+                    {attivita?.mainImage?.asset?.url && 
+                    <img
+                      src={attivita.mainImage.asset.url}
+                      title={attivita.mainImage.alt}
+                      alt={attivita.mainImage.alt}
+                      className="img-fluid mb-4"
+                      style={{ maxHeight: 300, objectFit: "contain" }}
+                    />
+                    }
                   <h5 className="card-title">Descrizione</h5>
                   <PortableText value={attivita.description ?? []} components={portableTextComponents} />
 
