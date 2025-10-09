@@ -46,7 +46,7 @@ export default function AttivitaCommercialeDetail({ attivita }: AttivitaCommerci
   return (
     <>
       {/* Hero section */}
-      <div className="it-hero-wrapper it-dark it-overlay">
+      {/* <div className="it-hero-wrapper it-dark it-overlay">
         <div className="img-responsive-wrapper">
           <div className="img-responsive">
             <div className="img-wrapper">
@@ -74,7 +74,7 @@ export default function AttivitaCommercialeDetail({ attivita }: AttivitaCommerci
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Content section */}
       <div className="container my-5">
@@ -83,7 +83,8 @@ export default function AttivitaCommercialeDetail({ attivita }: AttivitaCommerci
             <div className="card-wrapper card-space">
               <div className="card card-bg">
                 <div className="card-body">
-                    {attivita?.mainImage?.asset?.url && 
+                  <h1 className="fs-2">{attivita.title}</h1>
+                  {attivita?.mainImage?.asset?.url && 
                     <img
                       src={attivita.mainImage.asset.url}
                       title={attivita.mainImage.alt}
@@ -91,7 +92,7 @@ export default function AttivitaCommercialeDetail({ attivita }: AttivitaCommerci
                       className="img-fluid mb-4"
                       style={{ maxHeight: 300, objectFit: "contain" }}
                     />
-                    }
+                  }
                   <h5 className="card-title">Descrizione</h5>
                   <PortableText value={attivita.description ?? []} components={portableTextComponents} />
 
