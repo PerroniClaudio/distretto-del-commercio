@@ -18,18 +18,25 @@ export function useComuni() {
     async function fetchComuni() {
       try {
         setLoading(true);
-        const query = `*[_type == "comune"]{
+        const query = `*[_type == "comune"] | order(
+          title asc
+        ){
           _id,
           title,
           slug
         }`;
-        const data = await client.fetch(query);
+        let data = await client.fetch(query);
+        data = data?.sort((a: Comune, b: Comune) => {
+          if (a.slug.current === "pessano-con-bornago") return -1;
+          if (b.slug.current === "pessano-con-bornago") return 1;
+          return 0;
+        });
         setComuni(data);
       } catch (err) {
         setError(
           err instanceof Error
             ? err.message
-            : "Errore nel caricamento dei comuni"
+            : "Errore nel caricamento dei comuni" + (err as any)?.toString()
         );
       } finally {
         setLoading(false);

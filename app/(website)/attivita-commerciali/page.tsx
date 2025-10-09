@@ -61,7 +61,8 @@ export default async function AttivitaCommercialiPage() {
         url
       },
       alt
-    }
+    },
+    slug
   }`;
 
   const [

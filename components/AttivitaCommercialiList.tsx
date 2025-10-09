@@ -38,6 +38,7 @@ interface Comune {
     };
     alt?: string;
   };
+  slug: { current: string };
 }
 
 interface Props {
@@ -143,7 +144,11 @@ function AttivitaCommercialiListContent({
                     {!selectedComune && <Icon icon="it-check" size="sm" />}
                   </a>
                 </li>
-                {comuni.map((comune) => (
+                {comuni.sort((a, b) => {
+                  if (a.slug.current === "pessano-con-bornago") return -1;
+                  if (b.slug.current === "pessano-con-bornago") return 1;
+                  return 0;
+                }).map((comune) => (
                   <li key={comune._id}>
                     <a 
                       href="#" 
