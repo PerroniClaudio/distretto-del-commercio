@@ -113,7 +113,7 @@ function Navigation() {
                     Regione lombardia
                   </div>
                 </div>
-                <div className="social-links">
+                {/* <div className="social-links">
                   <span className="follow-text">Seguici su</span>
                   <Link
                     aria-label="Facebook"
@@ -131,7 +131,7 @@ function Navigation() {
                   >
                     <Icon icon="it-instagram" />
                   </Link>
-                </div>
+                </div> */}
               </div>
               {/* <HeaderSearch
                 iconName="it-search"
@@ -280,7 +280,7 @@ function Navigation() {
                   </NavLink>
                 </NavItem>
                 
-                <div className="social-links">
+                {/* <div className="social-links">
                   <span className="follow-text">Seguici su</span>
                   <Link
                     aria-label="Facebook"
@@ -298,7 +298,7 @@ function Navigation() {
                   >
                     <Icon icon="it-instagram" />
                   </Link>
-                </div>
+                </div> */}
               </Nav>
             </div>
           </Collapse>
