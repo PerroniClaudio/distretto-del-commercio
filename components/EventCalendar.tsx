@@ -132,7 +132,9 @@ export default function EventCalendar({ events }: EventCalendarProps) {
 
     // Mappa eventi per data con i loro livelli (usando levels[])
     eventRanges.forEach(eventRange => {
-      const totalDays = Math.round((eventRange.endDate.getTime() - eventRange.startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+      const startDay = new Date(eventRange.startDate.getFullYear(), eventRange.startDate.getMonth(), eventRange.startDate.getDate());
+      const endDay = new Date(eventRange.endDate.getFullYear(), eventRange.endDate.getMonth(), eventRange.endDate.getDate());
+      const totalDays = Math.floor((endDay.getTime() - startDay.getTime()) / (1000 * 60 * 60 * 24)) + 1;
       for (let i = 0; i < totalDays; i++) {
         const currentEventDate = new Date(eventRange.startDate);
         currentEventDate.setDate(currentEventDate.getDate() + i);
