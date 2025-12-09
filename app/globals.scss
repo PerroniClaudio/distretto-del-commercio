@@ -6,7 +6,8 @@
 @use "styles" as *;
 
 /* Bootstrap Italia CSS */
-@import "bootstrap-italia/dist/css/bootstrap-italia.min.css";
+// @import "bootstrap-italia/dist/css/bootstrap-italia.min.css";
+@import "../lib/automodificato-bootstrap-italia.min.css";
 
 #website-layout {
   padding-top: 221px;
