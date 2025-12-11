@@ -1,12 +1,13 @@
 // Querying with "sanityFetch" will keep content automatically updated
-// Using client.fetch directly for compatibility with next-sanity 11.x
+// Before using it, import and render "<SanityLive />" in your layout, see
+// https://github.com/sanity-io/next-sanity#live-content-api for more information.
+import { defineLive } from "next-sanity/live";
 import { client } from './client'
 
-// Simple fallback implementation for compatibility
-export const sanityFetch = async ({ query, params = {} }: { query: string; params?: any }) => {
-  const data = await client.fetch(query, params);
-  return { data };
-};
-
-// Empty component since VisualEditing/SanityLive is handled differently in v11
-export const SanityLive = () => null;
+export const { sanityFetch, SanityLive } = defineLive({ 
+  client: client.withConfig({ 
+    // Live content is currently only available on the experimental API
+    // https://www.sanity.io/docs/api-versioning
+    apiVersion: 'vX' 
+  }) 
+});

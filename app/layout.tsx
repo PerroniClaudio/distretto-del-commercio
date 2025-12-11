@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
+import { VisualEditing } from "next-sanity/visual-editing";
 import { DisableDraftMode } from "@/components/DisableDraftMode";
 import "typeface-titillium-web";
 import "typeface-roboto-mono";
@@ -25,6 +26,7 @@ export default async function RootLayout({
 
         {(await draftMode()).isEnabled && (
           <>
+            <VisualEditing />
             <DisableDraftMode />
           </>
         )}
