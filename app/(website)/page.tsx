@@ -49,6 +49,36 @@ export default async function Home() {
   const { data: events } = await sanityFetch({
     query: eventsQuery,
   }) as { data: PopulatedEvent[] };
+  const now = new Date();
+  const isOngoing = (event: PopulatedEvent) => {
+    if (!event.date || !event.dateEnd) return false;
+    const start = new Date(event.date);
+    const end = new Date(event.dateEnd);
+
+    return start <= now && end >= now;
+  };
+  const upcomingEvents = events
+    .filter((event: PopulatedEvent) => {
+      if (!event.date) return false;
+      const start = new Date(event.date);
+      const end = event.dateEnd ? new Date(event.dateEnd) : null;
+
+      if (start >= now) return true;
+      if (end && start <= now && end >= now) return true;
+
+      return false;
+    })
+    .sort((a, b) => {
+      const aOngoing = isOngoing(a);
+      const bOngoing = isOngoing(b);
+
+      if (aOngoing !== bOngoing) return aOngoing ? -1 : 1;
+
+      const aStart = a.date ? new Date(a.date).getTime() : 0;
+      const bStart = b.date ? new Date(b.date).getTime() : 0;
+
+      return aStart - bStart;
+    });
 
   return (
     <div>
@@ -73,8 +103,7 @@ export default async function Home() {
             <h2 className="mb-4">Prossimi Eventi</h2>
           </div>
 
-          {events
-            .filter((event: PopulatedEvent) => event.date ? new Date(event.date) >= new Date() : false)
+          {upcomingEvents
             .slice(0, 6)
             .map((event: PopulatedEvent) => (
               <div key={event._id} className="col-md-4 mb-4">

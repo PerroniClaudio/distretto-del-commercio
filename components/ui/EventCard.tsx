@@ -33,11 +33,18 @@ interface EventCardProps {
 }
 
 export default function EventCard({ event }: EventCardProps) {
+  const now = new Date();
   const eventDate = event.date ? new Date(event.date) : null;
-  const isUpcoming = eventDate ? eventDate >= new Date() : false;
+  const eventEnd = event.dateEnd ? new Date(event.dateEnd) : null;
+  const isOngoing = !!(eventDate && eventEnd && eventDate <= now && eventEnd >= now);
+  const isPast = !!(
+    eventDate &&
+    eventDate < now &&
+    (!eventEnd || eventEnd < now)
+  );
 
   return (
-    <Card className={`card-bg border-bottom-card ${!isUpcoming ? 'opacity-75' : ''}`}>
+    <Card className={`card-bg border-bottom-card ${isPast ? 'opacity-75' : ''}`}>
       {/* Header con titolo e badge stato */}
 
 
@@ -89,7 +96,7 @@ export default function EventCard({ event }: EventCardProps) {
                 </Link>
               </CardTitle>
 
-              {!isUpcoming && (
+              {isPast && (
                 <span className="badge bg-secondary">Passato</span>
               )}
             </div>
