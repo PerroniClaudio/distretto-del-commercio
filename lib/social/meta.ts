@@ -1,0 +1,267 @@
+import { client } from "@/sanity/lib/client";
+import { editorClient } from "@/sanity/lib/editorClient";
+
+export type SanitySocialPost = {
+  _id: string;
+  title?: string;
+  excerpt?: string;
+  slug?: string;
+  imageUrl?: string;
+  facebookPostId?: string;
+  facebookMediaId?: string;
+  instagramMediaId?: string;
+};
+
+type MetaGraphError = {
+  error?: {
+    message?: string;
+    type?: string;
+    code?: number;
+    error_subcode?: number;
+    fbtrace_id?: string;
+  };
+};
+
+const DEFAULT_GRAPH_VERSION = "v22.0";
+const SANITY_POST_SOCIAL_QUERY = `*[_type == "post" && _id == $postId][0]{
+  _id,
+  title,
+  excerpt,
+  "slug": slug.current,
+  "imageUrl": image.asset->url,
+  facebookPostId,
+  facebookMediaId,
+  instagramMediaId
+}`;
+
+function getRequiredEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+  return value;
+}
+
+function getSiteUrl(): string | null {
+  const siteUrl =
+    process.env.SITE_URL ||
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.NEXT_PUBLIC_SANITY_STUDIO_URL;
+
+  if (!siteUrl) {
+    return null;
+  }
+
+  return siteUrl.replace(/\/+$/, "");
+}
+
+function getGraphVersion(): string {
+  return process.env.META_GRAPH_VERSION || DEFAULT_GRAPH_VERSION;
+}
+
+function getFacebookCommentPrivacyValue(): string {
+  return process.env.FACEBOOK_COMMENT_PRIVACY_VALUE || "TAGGED_ONLY";
+}
+
+function getMetaErrorMessage(payload: MetaGraphError, fallback: string): string {
+  if (!payload?.error) {
+    return fallback;
+  }
+
+  const parts = [
+    payload.error.message,
+    payload.error.type,
+    typeof payload.error.code === "number" ? `code=${payload.error.code}` : undefined,
+    typeof payload.error.error_subcode === "number"
+      ? `subcode=${payload.error.error_subcode}`
+      : undefined,
+    payload.error.fbtrace_id ? `trace=${payload.error.fbtrace_id}` : undefined,
+  ].filter(Boolean);
+
+  if (parts.length === 0) {
+    return fallback;
+  }
+
+  return parts.join(" | ");
+}
+
+function buildPostPublicUrl(post: SanitySocialPost): string | null {
+  if (!post.slug) {
+    return null;
+  }
+  const siteUrl = getSiteUrl();
+  if (!siteUrl) {
+    return null;
+  }
+  return `${siteUrl}/notizie/${post.slug}`;
+}
+
+function buildCaption(post: SanitySocialPost, maxLength: number): string {
+  const excerpt = post.excerpt?.trim();
+  const fallbackTitle = post.title?.trim() || "Nuovo aggiornamento";
+  const mainText = excerpt || fallbackTitle;
+  const postUrl = buildPostPublicUrl(post);
+  const composed = postUrl ? `${mainText}\n\n${postUrl}` : mainText;
+
+  if (composed.length <= maxLength) {
+    return composed;
+  }
+
+  return composed.slice(0, maxLength - 1).trimEnd() + "…";
+}
+
+async function fetchGraph(
+  endpoint: string,
+  params: Record<string, string>,
+  fallbackError: string
+) {
+  const body = new URLSearchParams(params);
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body,
+  });
+
+  const json = (await response.json()) as Record<string, unknown> & MetaGraphError;
+
+  if (!response.ok) {
+    throw new Error(getMetaErrorMessage(json, fallbackError));
+  }
+
+  return json;
+}
+
+export async function getSanityPostForSocial(postId: string): Promise<SanitySocialPost> {
+  const post = await client.fetch<SanitySocialPost | null>(SANITY_POST_SOCIAL_QUERY, { postId });
+
+  if (!post?._id) {
+    throw new Error(`Sanity post not found for id: ${postId}`);
+  }
+
+  if (!post.imageUrl) {
+    throw new Error("The selected post has no main image attached.");
+  }
+
+  return post;
+}
+
+export async function publishPostToFacebook(post: SanitySocialPost) {
+  const graphVersion = getGraphVersion();
+  const accessToken = getRequiredEnv("META_ACCESS_TOKEN");
+  const facebookPageId = getRequiredEnv("FACEBOOK_PAGE_ID");
+
+  const endpoint = `https://graph.facebook.com/${graphVersion}/${facebookPageId}/photos`;
+
+  return fetchGraph(
+    endpoint,
+    {
+      access_token: accessToken,
+      url: post.imageUrl || "",
+      caption: buildCaption(post, 2000),
+      comment_privacy_value: getFacebookCommentPrivacyValue(),
+    },
+    "Facebook publish failed"
+  );
+}
+
+export async function publishPostToInstagram(post: SanitySocialPost) {
+  const graphVersion = getGraphVersion();
+  const accessToken = getRequiredEnv("META_ACCESS_TOKEN");
+  const instagramUserId = getRequiredEnv("INSTAGRAM_USER_ID");
+
+  const createMediaEndpoint = `https://graph.facebook.com/${graphVersion}/${instagramUserId}/media`;
+  const createMediaResponse = (await fetchGraph(
+    createMediaEndpoint,
+    {
+      access_token: accessToken,
+      image_url: post.imageUrl || "",
+      caption: buildCaption(post, 2200),
+    },
+    "Instagram media creation failed"
+  )) as { id?: string };
+
+  if (!createMediaResponse?.id) {
+    throw new Error("Instagram media creation failed: missing creation id.");
+  }
+
+  const publishEndpoint = `https://graph.facebook.com/${graphVersion}/${instagramUserId}/media_publish`;
+  const publishResponse = await fetchGraph(
+    publishEndpoint,
+    {
+      access_token: accessToken,
+      creation_id: createMediaResponse.id,
+    },
+    "Instagram publish failed"
+  );
+
+  const mediaId = typeof (publishResponse as { id?: string })?.id === "string"
+    ? (publishResponse as { id?: string }).id
+    : undefined;
+
+  if (!mediaId) {
+    throw new Error("Instagram publish failed: missing media id.");
+  }
+
+  const disableCommentsEndpoint = `https://graph.facebook.com/${graphVersion}/${mediaId}`;
+  await fetchGraph(
+    disableCommentsEndpoint,
+    {
+      access_token: accessToken,
+      comment_enabled: "false",
+    },
+    "Instagram publish succeeded but disabling comments failed"
+  );
+
+  return publishResponse;
+}
+
+type SocialPublishPatch = {
+  facebookPostId?: string;
+  facebookMediaId?: string;
+  instagramMediaId?: string;
+  socialSyncStatus?: "published" | "updated" | "error";
+  socialPublishedAt?: string;
+  socialLastError?: string;
+};
+
+export function extractFacebookIds(result: Record<string, unknown>) {
+  const mediaId = typeof result?.id === "string" ? result.id : undefined;
+  const postId = typeof result?.post_id === "string" ? result.post_id : undefined;
+  return { facebookPostId: postId, facebookMediaId: mediaId };
+}
+
+export function extractInstagramMediaId(result: Record<string, unknown>) {
+  return typeof result?.id === "string" ? result.id : undefined;
+}
+
+export async function patchSanitySocialData(postId: string, patch: SocialPublishPatch) {
+  if (!process.env.SANITY_EDITOR_TOKEN) {
+    return;
+  }
+
+  const setPatch: Record<string, string> = {};
+  const unsetPatch: string[] = [];
+
+  if (patch.facebookPostId) setPatch.facebookPostId = patch.facebookPostId;
+  if (patch.facebookMediaId) setPatch.facebookMediaId = patch.facebookMediaId;
+  if (patch.instagramMediaId) setPatch.instagramMediaId = patch.instagramMediaId;
+  if (patch.socialSyncStatus) setPatch.socialSyncStatus = patch.socialSyncStatus;
+  if (patch.socialPublishedAt) setPatch.socialPublishedAt = patch.socialPublishedAt;
+
+  if (typeof patch.socialLastError === "string" && patch.socialLastError.trim().length > 0) {
+    setPatch.socialLastError = patch.socialLastError.trim();
+  } else {
+    unsetPatch.push("socialLastError");
+  }
+
+  let mutation = editorClient.patch(postId);
+  if (Object.keys(setPatch).length > 0) {
+    mutation = mutation.set(setPatch);
+  }
+  if (unsetPatch.length > 0) {
+    mutation = mutation.unset(unsetPatch);
+  }
+  await mutation.commit();
+}
