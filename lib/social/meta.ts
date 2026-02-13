@@ -63,7 +63,10 @@ function getFacebookCommentPrivacyValue(): string {
   return process.env.FACEBOOK_COMMENT_PRIVACY_VALUE || "TAGGED_ONLY";
 }
 
-function getMetaErrorMessage(payload: MetaGraphError, fallback: string): string {
+function getMetaErrorMessage(
+  payload: MetaGraphError,
+  fallback: string,
+): string {
   if (!payload?.error) {
     return fallback;
   }
@@ -71,7 +74,9 @@ function getMetaErrorMessage(payload: MetaGraphError, fallback: string): string 
   const parts = [
     payload.error.message,
     payload.error.type,
-    typeof payload.error.code === "number" ? `code=${payload.error.code}` : undefined,
+    typeof payload.error.code === "number"
+      ? `code=${payload.error.code}`
+      : undefined,
     typeof payload.error.error_subcode === "number"
       ? `subcode=${payload.error.error_subcode}`
       : undefined,
@@ -113,7 +118,7 @@ function buildCaption(post: SanitySocialPost, maxLength: number): string {
 async function fetchGraph(
   endpoint: string,
   params: Record<string, string>,
-  fallbackError: string
+  fallbackError: string,
 ) {
   const body = new URLSearchParams(params);
   const response = await fetch(endpoint, {
@@ -124,7 +129,8 @@ async function fetchGraph(
     body,
   });
 
-  const json = (await response.json()) as Record<string, unknown> & MetaGraphError;
+  const json = (await response.json()) as Record<string, unknown> &
+    MetaGraphError;
 
   if (!response.ok) {
     throw new Error(getMetaErrorMessage(json, fallbackError));
@@ -159,8 +165,13 @@ function getErrorSubcode(error: unknown): number | undefined {
   return Number(match[1]);
 }
 
-export async function getSanityPostForSocial(postId: string): Promise<SanitySocialPost> {
-  const post = await client.fetch<SanitySocialPost | null>(SANITY_POST_SOCIAL_QUERY, { postId });
+export async function getSanityPostForSocial(
+  postId: string,
+): Promise<SanitySocialPost> {
+  const post = await client.fetch<SanitySocialPost | null>(
+    SANITY_POST_SOCIAL_QUERY,
+    { postId },
+  );
 
   if (!post?._id) {
     throw new Error(`Sanity post not found for id: ${postId}`);
@@ -188,7 +199,7 @@ export async function publishPostToFacebook(post: SanitySocialPost) {
       caption: buildCaption(post, 2000),
       comment_privacy_value: getFacebookCommentPrivacyValue(),
     },
-    "Facebook publish failed"
+    "Facebook publish failed",
   );
 }
 
@@ -205,7 +216,7 @@ export async function publishPostToInstagram(post: SanitySocialPost) {
       image_url: post.imageUrl || "",
       caption: buildCaption(post, 2200),
     },
-    "Instagram media creation failed"
+    "Instagram media creation failed",
   )) as { id?: string };
 
   if (!createMediaResponse?.id) {
@@ -223,7 +234,7 @@ export async function publishPostToInstagram(post: SanitySocialPost) {
           access_token: accessToken,
           creation_id: createMediaResponse.id,
         },
-        "Instagram publish failed"
+        "Instagram publish failed",
       )) as Record<string, unknown>;
       break;
     } catch (error) {
@@ -240,12 +251,15 @@ export async function publishPostToInstagram(post: SanitySocialPost) {
   }
 
   if (!publishResponse) {
-    throw new Error("Instagram publish failed: no response from media_publish.");
+    throw new Error(
+      "Instagram publish failed: no response from media_publish.",
+    );
   }
 
-  const mediaId = typeof (publishResponse as { id?: string })?.id === "string"
-    ? (publishResponse as { id?: string }).id
-    : undefined;
+  const mediaId =
+    typeof (publishResponse as { id?: string })?.id === "string"
+      ? (publishResponse as { id?: string }).id
+      : undefined;
 
   if (!mediaId) {
     throw new Error("Instagram publish failed: missing media id.");
@@ -258,7 +272,7 @@ export async function publishPostToInstagram(post: SanitySocialPost) {
       access_token: accessToken,
       comment_enabled: "false",
     },
-    "Instagram publish succeeded but disabling comments failed"
+    "Instagram publish succeeded but disabling comments failed",
   );
 
   return publishResponse;
@@ -275,7 +289,8 @@ type SocialPublishPatch = {
 
 export function extractFacebookIds(result: Record<string, unknown>) {
   const mediaId = typeof result?.id === "string" ? result.id : undefined;
-  const postId = typeof result?.post_id === "string" ? result.post_id : undefined;
+  const postId =
+    typeof result?.post_id === "string" ? result.post_id : undefined;
   return { facebookPostId: postId, facebookMediaId: mediaId };
 }
 
@@ -283,8 +298,11 @@ export function extractInstagramMediaId(result: Record<string, unknown>) {
   return typeof result?.id === "string" ? result.id : undefined;
 }
 
-export async function patchSanitySocialData(postId: string, patch: SocialPublishPatch) {
-  if (!process.env.SANITY_VIEWER_TOKEN) {
+export async function patchSanitySocialData(
+  postId: string,
+  patch: SocialPublishPatch,
+) {
+  if (!process.env.SANITY_EDITOR_TOKEN) {
     return;
   }
 
@@ -293,11 +311,17 @@ export async function patchSanitySocialData(postId: string, patch: SocialPublish
 
   if (patch.facebookPostId) setPatch.facebookPostId = patch.facebookPostId;
   if (patch.facebookMediaId) setPatch.facebookMediaId = patch.facebookMediaId;
-  if (patch.instagramMediaId) setPatch.instagramMediaId = patch.instagramMediaId;
-  if (patch.socialSyncStatus) setPatch.socialSyncStatus = patch.socialSyncStatus;
-  if (patch.socialPublishedAt) setPatch.socialPublishedAt = patch.socialPublishedAt;
+  if (patch.instagramMediaId)
+    setPatch.instagramMediaId = patch.instagramMediaId;
+  if (patch.socialSyncStatus)
+    setPatch.socialSyncStatus = patch.socialSyncStatus;
+  if (patch.socialPublishedAt)
+    setPatch.socialPublishedAt = patch.socialPublishedAt;
 
-  if (typeof patch.socialLastError === "string" && patch.socialLastError.trim().length > 0) {
+  if (
+    typeof patch.socialLastError === "string" &&
+    patch.socialLastError.trim().length > 0
+  ) {
     setPatch.socialLastError = patch.socialLastError.trim();
   } else {
     unsetPatch.push("socialLastError");

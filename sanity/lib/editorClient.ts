@@ -7,7 +7,7 @@ export const editorClient = createClient({
   dataset,
   apiVersion,
   useCdn: false,
-  token: process.env.SANITY_VIEWER_TOKEN,
+  token: process.env.SANITY_EDITOR_TOKEN,
   stega: {
     studioUrl: process.env.NEXT_PUBLIC_SANITY_STUDIO_URL,
   },
