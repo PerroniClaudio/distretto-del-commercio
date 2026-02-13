@@ -284,7 +284,7 @@ export function extractInstagramMediaId(result: Record<string, unknown>) {
 }
 
 export async function patchSanitySocialData(postId: string, patch: SocialPublishPatch) {
-  if (!process.env.SANITY_EDITOR_TOKEN) {
+  if (!process.env.SANITY_VIEWER_TOKEN) {
     return;
   }
 
