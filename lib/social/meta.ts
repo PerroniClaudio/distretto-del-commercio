@@ -133,6 +133,32 @@ async function fetchGraph(
   return json;
 }
 
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function getErrorCode(error: unknown): number | undefined {
+  if (!(error instanceof Error)) {
+    return undefined;
+  }
+  const match = error.message.match(/code=(\d+)/);
+  if (!match) {
+    return undefined;
+  }
+  return Number(match[1]);
+}
+
+function getErrorSubcode(error: unknown): number | undefined {
+  if (!(error instanceof Error)) {
+    return undefined;
+  }
+  const match = error.message.match(/subcode=(\d+)/);
+  if (!match) {
+    return undefined;
+  }
+  return Number(match[1]);
+}
+
 export async function getSanityPostForSocial(postId: string): Promise<SanitySocialPost> {
   const post = await client.fetch<SanitySocialPost | null>(SANITY_POST_SOCIAL_QUERY, { postId });
 
@@ -187,14 +213,35 @@ export async function publishPostToInstagram(post: SanitySocialPost) {
   }
 
   const publishEndpoint = `https://graph.facebook.com/${graphVersion}/${instagramUserId}/media_publish`;
-  const publishResponse = await fetchGraph(
-    publishEndpoint,
-    {
-      access_token: accessToken,
-      creation_id: createMediaResponse.id,
-    },
-    "Instagram publish failed"
-  );
+  let publishResponse: Record<string, unknown> | null = null;
+
+  for (let attempt = 1; attempt <= 6; attempt++) {
+    try {
+      publishResponse = (await fetchGraph(
+        publishEndpoint,
+        {
+          access_token: accessToken,
+          creation_id: createMediaResponse.id,
+        },
+        "Instagram publish failed"
+      )) as Record<string, unknown>;
+      break;
+    } catch (error) {
+      const code = getErrorCode(error);
+      const subcode = getErrorSubcode(error);
+      const isMediaNotReady = code === 9007 || subcode === 2207027;
+
+      if (!isMediaNotReady || attempt === 6) {
+        throw error;
+      }
+
+      await sleep(2000 * attempt);
+    }
+  }
+
+  if (!publishResponse) {
+    throw new Error("Instagram publish failed: no response from media_publish.");
+  }
 
   const mediaId = typeof (publishResponse as { id?: string })?.id === "string"
     ? (publishResponse as { id?: string }).id
