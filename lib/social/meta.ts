@@ -72,7 +72,7 @@ function getSiteUrl(): string | null {
   const siteUrl =
     process.env.SITE_URL ||
     process.env.NEXT_PUBLIC_SITE_URL ||
-    process.env.NEXT_PUBLIC_SANITY_STUDIO_URL;
+    "https://www.distrettocommerciomartesana.it";
 
   if (!siteUrl) {
     return null;
@@ -498,43 +498,14 @@ export async function publishEventToInstagram(event: SanitySocialEvent) {
 }
 
 export async function updateEventOnFacebook(event: SanitySocialEvent) {
-  if (!event.facebookMediaId) {
-    throw new Error("Cannot update Facebook event post: missing facebookMediaId.");
-  }
-
-  const graphVersion = getGraphVersion();
-  const accessToken = getRequiredEnv("META_ACCESS_TOKEN");
-  const endpoint = `https://graph.facebook.com/${graphVersion}/${event.facebookMediaId}`;
-
-  return fetchGraph(
-    endpoint,
-    {
-      access_token: accessToken,
-      caption: buildEventCaption(event, 2000),
-      comment_privacy_value: getFacebookCommentPrivacyValue(),
-    },
-    "Facebook event update failed",
-  );
+  // Meta API does not support replacing the image of an already published photo post.
+  // Repost to apply image/content updates and store new IDs in Sanity.
+  return publishEventToFacebook(event);
 }
 
 export async function updateEventOnInstagram(event: SanitySocialEvent) {
-  if (!event.instagramMediaId) {
-    throw new Error("Cannot update Instagram event post: missing instagramMediaId.");
-  }
-
-  const graphVersion = getGraphVersion();
-  const accessToken = getRequiredEnv("META_ACCESS_TOKEN");
-  const endpoint = `https://graph.facebook.com/${graphVersion}/${event.instagramMediaId}`;
-
-  return fetchGraph(
-    endpoint,
-    {
-      access_token: accessToken,
-      caption: buildEventCaption(event, 2200),
-      comment_enabled: "false",
-    },
-    "Instagram event update failed",
-  );
+  // Instagram media image is immutable after publish; repost to apply updates.
+  return publishEventToInstagram(event);
 }
 
 type SocialPublishPatch = {

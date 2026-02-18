@@ -102,8 +102,12 @@ export async function POST(req: NextRequest) {
           updateEventOnFacebook(event),
           updateEventOnInstagram(event),
         ]);
+        const facebookIds = extractFacebookIds(facebookUpdateResult);
+        const instagramMediaId = extractInstagramMediaId(instagramUpdateResult);
 
         await patchSanitySocialData(event._id, {
+          ...facebookIds,
+          instagramMediaId,
           socialSyncStatus: "updated",
           socialPublishedAt: new Date().toISOString(),
           socialLastError: "",
@@ -164,11 +168,28 @@ export async function POST(req: NextRequest) {
     const post = await getSanityPostForSocial(sanityDocumentId);
 
     if (post.facebookPostId && post.instagramMediaId) {
+      const [facebookUpdateResult, instagramUpdateResult] = await Promise.all([
+        publishPostToFacebook(post),
+        publishPostToInstagram(post),
+      ]);
+      const facebookIds = extractFacebookIds(facebookUpdateResult);
+      const instagramMediaId = extractInstagramMediaId(instagramUpdateResult);
+
+      await patchSanitySocialData(post._id, {
+        ...facebookIds,
+        instagramMediaId,
+        socialSyncStatus: "updated",
+        socialPublishedAt: new Date().toISOString(),
+        socialLastError: "",
+      });
+
       return NextResponse.json({
         success: true,
-        skipped: true,
-        reason: "Post already published on both channels",
+        mode: "updated",
         sanityPostId: post._id,
+        channels: ["facebook", "instagram"],
+        facebook: facebookUpdateResult,
+        instagram: instagramUpdateResult,
       });
     }
 
