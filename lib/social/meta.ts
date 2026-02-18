@@ -86,7 +86,8 @@ function getGraphVersion(): string {
 }
 
 function getFacebookCommentPrivacyValue(): string {
-  return process.env.FACEBOOK_COMMENT_PRIVACY_VALUE || "TAGGED_ONLY";
+  // Requirement: comments enabled only for mentioned profiles/pages.
+  return "TAGGED_ONLY";
 }
 
 function getMetaErrorMessage(
