@@ -19,9 +19,22 @@ type SanityWebhookBody = {
   sanityEventId?: string;
   documentId?: string;
   _type?: string;
+  changedFields?: string[];
+  fields?: string[];
+  transition?: {
+    changedFields?: string[];
+  };
 };
 
 type SupportedWebhookType = "post" | "event";
+const SOCIAL_TECHNICAL_FIELDS = new Set([
+  "facebookPostId",
+  "facebookMediaId",
+  "instagramMediaId",
+  "socialPublishedAt",
+  "socialSyncStatus",
+  "socialLastError",
+]);
 
 function getWebhookPostId(body: SanityWebhookBody): string | null {
   const value = body?.sanityPostId || body?.sanityEventId || body?._id || body?.documentId;
@@ -59,6 +72,33 @@ function isMetaAutopostingEnabled(): boolean {
   return (process.env.META_AUTOPOSTING_ENABLED || "").toLowerCase() === "true";
 }
 
+function normalizeChangedField(field: string): string {
+  return field.replace(/^\$?\./, "").trim();
+}
+
+function getChangedFields(body: SanityWebhookBody): string[] {
+  const candidates = [
+    ...(Array.isArray(body.changedFields) ? body.changedFields : []),
+    ...(Array.isArray(body.fields) ? body.fields : []),
+    ...(Array.isArray(body.transition?.changedFields) ? body.transition.changedFields : []),
+  ];
+
+  return [...new Set(candidates.map(normalizeChangedField).filter(Boolean))];
+}
+
+function hasOnlyTechnicalFieldChanges(changedFields: string[]): boolean {
+  return (
+    changedFields.length > 0 &&
+    changedFields.every((field) => SOCIAL_TECHNICAL_FIELDS.has(field))
+  );
+}
+
+function hasChangedField(changedFields: string[], fieldName: string): boolean {
+  return changedFields.some(
+    (field) => field === fieldName || field.startsWith(`${fieldName}.`) || field.startsWith(`${fieldName}[`)
+  );
+}
+
 export async function POST(req: NextRequest) {
   if (!isAuthorized(req)) {
     return NextResponse.json({ success: false, error: "Unauthorized webhook request" }, { status: 401 });
@@ -84,6 +124,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, skipped: true, reason: "Unsupported document type" });
   }
 
+  const changedFields = getChangedFields(body);
+  if (hasOnlyTechnicalFieldChanges(changedFields)) {
+    return NextResponse.json({
+      success: true,
+      skipped: true,
+      reason: "Ignored technical social sync mutation",
+      changedFields,
+    });
+  }
+
   const sanityDocumentId = getWebhookPostId(body);
   if (!sanityDocumentId) {
     return NextResponse.json(
@@ -98,6 +148,16 @@ export async function POST(req: NextRequest) {
 
       const isAlreadyPublished = Boolean(event.facebookMediaId) && Boolean(event.instagramMediaId);
       if (isAlreadyPublished) {
+        if (!hasChangedField(changedFields, "socialDescription")) {
+          return NextResponse.json({
+            success: true,
+            skipped: true,
+            reason: "Event update ignored because socialDescription did not change",
+            sanityEventId: event._id,
+            changedFields,
+          });
+        }
+
         const [facebookUpdateResult, instagramUpdateResult] = await Promise.all([
           updateEventOnFacebook(event),
           updateEventOnInstagram(event),
